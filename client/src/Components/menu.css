@@ -1,0 +1,80 @@
+/* Footer.css */
+
+.menu {
+    background-color: #333;
+    color: white;
+    padding: 40px;
+    display: flex;
+}
+
+.menu-content {
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    /* Align items with space in between */
+    align-items: center;
+    /* Center items vertically within the flex container */
+}
+
+p {
+    margin: 0;
+    font-size: larger;
+    /* Remove default margin for paragraphs */
+}
+
+
+.search-bar {
+    margin-left: 200px;
+    /* Add some space between the copyright notice and the search bar */
+}
+
+.search-bar input {
+    padding: 20px;
+    margin-right: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 250px;
+}
+
+.search-bar button {
+    padding: 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.navigation-buttons {
+    margin-left: 200px;
+    display: flex;
+   flex-direction: row;
+   justify-content: center;
+}
+
+.icon-text{
+    display: flex;
+    flex-direction: row;
+}
+
+.icon-text span{
+    margin-right: 5px;
+    padding-top: 10px;
+}
+
+.navigation-buttons button {
+
+    text-decoration: none;
+    border: none;
+    background-color: transparent;
+    color: #ea0000;
+    /* Initial text color */
+    transition: color 0.3s;
+    margin-right: 40px;
+    /* Add transition for smooth color change */
+
+    &:hover {
+        color: #000501;
+        /* Change text color on hover */
+    }
+}
