@@ -1,0 +1,127 @@
+/* src/components/OrderDetailsForm.css */
+
+.order-details {
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  h2, h3 {
+    color: #2c3e50;
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  .section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #e8f4ff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  select,
+  textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  textarea {
+    resize: vertical;
+    height: 100px;
+  }
+  
+  .delivery-method h4 {
+    margin-bottom: 10px;
+  }
+  
+  .delivery-options {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .delivery-options label {
+    display: flex;
+    align-items: center;
+  }
+  
+  .delivery-options input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  .payment-methods label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .payment-methods input[type="radio"] {
+    margin-right: 10px;
+  }
+  
+  .badge {
+    background-color: #4caf50;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+  
+  .order-summary {
+    background-color: #f0f8ff;
+  }
+  
+  .summary-details {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+  
+  .next-step {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #0044cc;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .next-step:hover {
+    background-color: #003399;
+  }
+  
+  .arrow {
+    margin-left: 10px;
+  }
+  

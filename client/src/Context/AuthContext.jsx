@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [user, setUser] = useState(null); // State to store user information
 
   const login = (token) => {
     // Set the JWT token in both state and localStorage
@@ -16,6 +17,7 @@ export const AuthProvider = ({ children }) => {
     // Remove the JWT token from both state and localStorage
     setToken(null);
     localStorage.removeItem('token');
+    setUser(null);
   };
 
   return (

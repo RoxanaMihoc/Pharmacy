@@ -1,12 +1,15 @@
 // models/userModel.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const { usersDB } = require('../config/database');
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
+  CNP: { type: String, required: true },
+  cart:{type: Array, required: true}
 });
 
 userSchema.pre('save', async function (next) {
@@ -23,6 +26,6 @@ userSchema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+const User = usersDB.model('User', userSchema, 'patients');
 
 module.exports = User;

@@ -1,5 +1,6 @@
 // backend/models/productModel.js
 const mongoose = require('mongoose');
+const { usersDB, productsDB } = require('../config/database');
 
 const productSchema = new mongoose.Schema({
   category: String,
@@ -10,4 +11,4 @@ const productSchema = new mongoose.Schema({
   // ... other fields ...
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = productsDB.model('Product', productSchema, 'products');

@@ -1,80 +1,142 @@
-/* Footer.css */
 
+/* Styles for the entire menu */
 .menu {
     background-color: #333;
     color: white;
-    padding: 40px;
+    padding: 10px;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Styles for the content inside the menu */
 .menu-content {
     display: flex;
     flex-direction: row;
-    justify-content:center;
-    /* Align items with space in between */
+    justify-content: space-between;
     align-items: center;
-    /* Center items vertically within the flex container */
+    width: 100%;
+    max-width: 1200px;
+    flex-wrap: wrap;
 }
 
+/* Copyright text */
 p {
     margin: 0;
-    font-size: larger;
-    /* Remove default margin for paragraphs */
+    font-size: 1.2rem;
+    flex: 1 1 200px;
+    text-align: center;
 }
-
 
 .search-bar {
-    margin-left: 200px;
-    /* Add some space between the copyright notice and the search bar */
-}
-
-.search-bar input {
-    padding: 20px;
-    margin-right: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 250px;
-}
-
-.search-bar button {
-    padding: 20px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.navigation-buttons {
-    margin-left: 200px;
     display: flex;
-   flex-direction: row;
-   justify-content: center;
-}
-
-.icon-text{
+    align-items: center;
+    background-color: #4b4444;
+    border-radius: 30px;
+    padding: 5px 10px;
+    width: 500px; /* Adjust the width as needed */
+  }
+  
+  .search-bar .inputSearch {
+    font-family: "Poppins", sans-serif;
+    background: none;
+    outline: none;
+    font-size: 14px;
+    padding: 10px;
+    border: none;
+    border-radius: 30px;
+  }
+  
+  .search-bar input::placeholder {
+    color: #bbb;
+  }
+  
+  .searchButton {
+    background-color: #333;
+    border: none;
+    border-radius: 30px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 50px;
+    color: #bbb;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Tranziție lină pentru culoare și fundal */
+  }
+  
+  .searchButton:hover {
+    background-color: #444;
+    
+  }
+  
+  .searchButton .icon {
+    color: #fff;
+    font-size: 16px;
+  }
+/* Navigation buttons container */
+.navigation-buttons {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 200px;
 }
 
-.icon-text span{
-    margin-right: 5px;
-    padding-top: 10px;
-}
-
+/* Individual navigation buttons */
 .navigation-buttons button {
-
+    display: flex;
+    align-items: center;
     text-decoration: none;
     border: none;
     background-color: transparent;
     color: #ea0000;
-    /* Initial text color */
     transition: color 0.3s;
-    margin-right: 40px;
-    /* Add transition for smooth color change */
+    margin: 0 10px;
+    cursor: pointer;
+}
 
-    &:hover {
-        color: #000501;
-        /* Change text color on hover */
+.navigation-buttons button:hover {
+    color: #ff4500;
+}
+
+.icon {
+    font-size: 30px;
+    margin-right: 5px;
+}
+
+.cart-dropdown {
+    position: relative;
+  }
+  
+  .cart-dropdown:hover .cart-summary-dropdown {
+    display: block; /* Show dropdown on hover */
+  }
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .menu-content {
+        flex-direction: column;
+    }
+
+    .search-bar {
+        margin: 10px 0;
+        flex: 1 1 100%;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .navigation-buttons button {
+        margin: 5px 0;
+    }
+
+    p {
+        margin: 10px 0;
     }
 }

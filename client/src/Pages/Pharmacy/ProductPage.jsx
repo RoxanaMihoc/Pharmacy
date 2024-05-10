@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Menu from "../Components/Menu";
+import Menu from "../../Components/Menu";
+import Footer from "../../Components/Footer";
+import { useAuth } from '../../Context/AuthContext';
+import {addToCart, addToCartF} from '../../Components/CartButton';
 import "./styles/product-page.css"; // Import your CSS file
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
@@ -15,8 +18,9 @@ const ProductPage = () => {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([10, 1000]);
   const [displayedPriceRange, setDisplayedPriceRange] = useState([10, 1000]);
+  const {token} = useAuth();
 
-  const { category, subcategory} = useParams();
+  const { category, subcategory } = useParams();
   const [products, setProducts] = useState([]);
   console.log(category + " " + subcategory);
 
@@ -24,7 +28,7 @@ const ProductPage = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/home/${category}/${subcategory}`
+          `http://localhost:3000/home/product/${category}/${subcategory}`
         );
         const data = await response.json();
         console.log(data);
@@ -64,6 +68,29 @@ const ProductPage = () => {
 
     return isCategorySelected && isPriceInRange;
   });
+
+  const handleAddToCart = async (productId) => {
+    try {
+    const [header, payload, signature] = token.split('.');
+    const decodedPayload = JSON.parse(atob(payload));
+
+    if (decodedPayload && decodedPayload.userId) {
+      const currentUser = decodedPayload.userId;
+    
+      const result = await addToCart(currentUser, productId, category, subcategory);
+      console.log('Product added to cart:', result);
+      if(result.success)
+      {
+        const result = addToCartF(productId);
+        console.log(result);
+      }
+      // Handle success, update UI or show a message
+    }
+    } catch (error) {
+      console.error('Failed to add product to cart:', error.message);
+      // Handle error, show an error message to the user
+    }
+  };
 
   return (
     <div>
@@ -120,16 +147,24 @@ const ProductPage = () => {
               {filteredProducts.map((product) => (
                 <Col key={product._id} md={4} className="mb-4">
                   <Card>
-                    <Card.Img variant="top" src={product.photo} style={{ height: '200px', objectFit: 'cover' }}/>
+                    <Card.Img
+                      variant="top"
+                      src={product.photo}
+                      style={{ height: "200px", objectFit: "cover" }}
+                    />
                     <Card.Body>
-                      <Card.Title style={{textAlign: "center" }} >
+                      <Card.Title style={{ textAlign: "center" }}>
                         {product.title}
                       </Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">
                         {product.brand}
                       </Card.Subtitle>
                       <Card.Text>{`Price: $${product.price}`}</Card.Text>
-                      <Button variant="primary" className="mr-2">
+                      <Button
+                        variant="primary"
+                        className="mr-2"
+                        onClick={() => handleAddToCart(product._id)}
+                      >
                         Add to Cart
                       </Button>
                       <Button variant="secondary">Add to Wishlist</Button>
@@ -141,6 +176,7 @@ const ProductPage = () => {
           </Col>
         </Row>
       </Container>
+      <Footer/>
     </div>
   );
 };

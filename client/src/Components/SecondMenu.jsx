@@ -4,6 +4,7 @@ import React from "react";
 import HoverButton from "./HoverButton";
 import "./second-menu.css";
 import "./hoover-button.css";
+import { faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 const SecondaryMenu = () => {
   const contentForButton1 = [
@@ -20,14 +21,15 @@ const SecondaryMenu = () => {
         <button className="dropbtn">Categories</button>
         <div className="dropdown-content">
           <div className="button">
-            <HoverButton buttonText="Medicamente fara reteta"  />
+            <HoverButton buttontext="Medicamente fara reteta"  />
             <div className="additional-content-container">
               <div className="sub-additional-content-container1">
                 <div className="sub-div">
-                <HoverButton buttonText="Afectiuni Digestive"  />
-                  Afectiuni ale cavitatii bucale Antiacide Antispastice Balonare
-                  Constipatie Diaree Enzime Digestive Gastrita si ulcer Greata
-                  si varsaturi
+                <h3> Afectiuni Digestive  </h3>
+                  <HoverButton buttontext="Afectiuni ale cavitatii bucale" /> 
+                  <HoverButton buttontext="Antiacide, Antispastice, Balonare"/>
+                  <HoverButton buttontext="Enzime Digestive" />
+                  <HoverButton buttontext="Gastrita si ulcer, Greata si varsaturi"/>
                 </div>
                 <div className="sub-div">
                   <h2>Afectiuni dermatologice</h2>
@@ -53,35 +55,35 @@ const SecondaryMenu = () => {
           </div>
 
           <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">LALALA</div>
           </div>
           {/* <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">NU</div>
           </div>
           <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">BLA BLA</div>
           </div>
           <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">LALALA</div>
           </div>
           <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">LALALA</div>
           </div>
           <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">LALALA</div>
           </div>
           <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">LALALA</div>
           </div>
           <div className="button">
-            <HoverButton buttonText="Button 1" />
+            <HoverButton buttontext="Button 1" />
             <div className="additional-content-container">LALALA</div>
           </div> */}
         </div>

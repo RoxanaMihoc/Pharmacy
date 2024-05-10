@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const HoverButton = ({ buttonText, additionalContent }) => {
+const HoverButton = ({ buttontext, additionalContent }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -14,12 +14,17 @@ const HoverButton = ({ buttonText, additionalContent }) => {
   };
 
   const getButtonLink = () => {
-    // Add conditions for different buttonText values
-    if (buttonText === 'Medicamente fara reteta') {
-      return '/home/medicamente-otc';
-    } else if (buttonText === 'Afectiuni Digestive') {
-      return '/home/medicamente-otc/afectiuni-digestive';
-    }
+    // Add conditions for different buttontext values
+    const linkMap = {
+      'Medicamente fara reteta': '/home/medicamente-otc',
+      'Afectiuni ale cavitatii bucale': '/home/medicamente-otc/afectiuni-ale-cavitatii-bucale',
+      'Antiacide, Antispastice, Balonare': '/home/medicamente-otc/antispastice-balonare-constipatie',
+      'Enzime Digestive': '/home/medicamente-otc/enzime-digestive',
+      'Gastrita si ulcer, Greata si varsaturi': '/home/medicamente-otc/greata-gastrita'
+      // Add more mappings as needed
+    };
+    // Return the link for the current buttontext value or default to '/'
+    return linkMap[buttontext];
     // Add more conditions as needed
 
     // Default to '/' if no specific link is defined
@@ -29,13 +34,13 @@ const HoverButton = ({ buttonText, additionalContent }) => {
   return (
     <div className="hover-button-container">
       <Link to={getButtonLink()}>
-        <button
+        <div
           className="hover-button"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          {buttonText}
-        </button>
+          {buttontext}
+        </div>
       </Link>
     </div>
   );

@@ -1,0 +1,28 @@
+.cart-button {
+  position: relative;
+  padding: 10px;
+  &:hover {
+    color: #000501;
+    /* Change text color on hover */
+}
+}
+
+.cart-preview {
+  position: absolute;
+  top: 10vh; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px; /* Increase padding for inner content */
+  width: 600px; /* Set width to make it wider */
+  max-height: 400px; /* Set max-height to limit height */
+  overflow-y: auto; /* Add vertical scroll when content exceeds max height */
+  display: none;
+  z-index: 999; /* Set a high z-index to ensure it appears on top */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a box shadow for depth */
+  }
+  
+  .cart-button:hover .cart-preview {
+    display: block;
+  }
+  

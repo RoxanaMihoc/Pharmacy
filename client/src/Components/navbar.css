@@ -1,0 +1,11 @@
+.navbar{
+    background-color: #ffffff;
+    display: flex;
+    border-bottom: 2px solid blue; /* Color and style of the border bottom */
+   padding: 1px 0;
+}
+
+.login-button{
+    display: flex;
+    flex-direction: row;
+}

@@ -1,7 +1,7 @@
 // Gallery.jsx
 
 import React, { useState } from 'react';
-import './Gallery.css';
+import './gallery.css';
 
 const images = [
   'https://th.bing.com/th/id/OIP.0pJkvGg99CrhiaNREWzg2gHaEN?rs=1&pid=ImgDetMain',

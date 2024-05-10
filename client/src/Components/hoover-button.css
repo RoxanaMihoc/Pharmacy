@@ -1,20 +1,12 @@
-.hover-button-container {
-  position: relative;
-  display: inline-block;
-}
 
-.hover-button {
+.hover-button-container {
   font-size: 16px;
   border: none;
   outline: none;
   color: white;
-  padding: 14px 16px;
-  background-color: #333;
   font-family: inherit;
   margin: 0;
   cursor: pointer;
-  width: 300px;
-  border-style: double;
 }
 
 
@@ -46,3 +38,9 @@
 .additional-content-container .sub-additional-content-container2{
   background-color: rgb(255, 140, 0);
   }
+
+.hover-button:hover {
+  transform: translateX(5%);
+  transition: background-color 0.5s ease;
+}
+  
