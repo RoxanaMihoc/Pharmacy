@@ -10,9 +10,10 @@ const addToCart = async (req, res) => {
     // Update user's cart in the database
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $push: { cart: productId } },
+      { $addToSet: { cart: productId } },
       { new: true }
     );
+    
 
     res.status(200).json({ success: true, message: 'Product added to cart successfully', productId });
   } catch (error) {

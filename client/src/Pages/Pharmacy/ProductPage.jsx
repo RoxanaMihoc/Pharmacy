@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Menu from "../../Components/Menu";
 import Footer from "../../Components/Footer";
 import { useAuth } from '../../Context/AuthContext';
@@ -153,9 +153,11 @@ const ProductPage = () => {
                       style={{ height: "200px", objectFit: "cover" }}
                     />
                     <Card.Body>
+                    <Link to={`/home/product/details/${product._id}`}>
                       <Card.Title style={{ textAlign: "center" }}>
                         {product.title}
                       </Card.Title>
+                      </Link>
                       <Card.Subtitle className="mb-2 text-muted">
                         {product.brand}
                       </Card.Subtitle>

@@ -1,6 +1,7 @@
 // src/components/menu.js
 import React, { useState } from "react";
 import CartPreview from "./CartPreview";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -12,25 +13,17 @@ import {
 import "./menu.css";
 
 const Menu = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      image: "path/to/image.jpg",
-      title: "Un om mai bun - Louise Penny",
-      quantity: 1,
-      price: 14.7,
-      originalPrice: 55.0,
-    },
-    // Add more items here for testing
-  ]);
   const [showCartPreview, setShowCartPreview] = useState(false);
 
-  const handleShowCartPreview = () => setShowCartPreview(true);
+  const location = useLocation();
+
+  const handleShowCartPreview = async() => {
+    if (location.pathname !== "/home/cart-page") {
+      setShowCartPreview(true);
+    }
+  };
   const handleCloseCartPreview = () => setShowCartPreview(false);
 
-  const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
 
   return (
     <>
@@ -67,7 +60,7 @@ const Menu = () => {
                 style={{ marginRight: "5px", fontSize: "30px" }}
               />
             </button>
-            <button onClick={handleShowCartPreview}>
+            <button onClick={handleShowCartPreview} disabled={location.pathname === "/home/cart-page"}>
               <FontAwesomeIcon icon={faCartShopping} 
                style={{ marginRight: "5px", fontSize: "30px" }}/>
             </button>
@@ -75,8 +68,6 @@ const Menu = () => {
           <CartPreview
             show={showCartPreview}
             handleClose={handleCloseCartPreview}
-            cartItems={cartItems}
-            onRemoveItem={handleRemoveItem}
           />
         </div>
       </div>

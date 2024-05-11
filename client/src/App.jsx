@@ -7,6 +7,7 @@ import ProductPage from './Pages/Pharmacy/ProductPage';
 import CartPage from './Pages/Pharmacy/CartPage';
 import { useAuth } from './Context/AuthContext';
 import HomePage from './Pages/FirstPage/HomePage';
+import ProductDetails from './Pages/Pharmacy/ProductDetails';
 import './Pages/styles/main.css'
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
       <Switch>
         <Route path="/first-page" component={HomePage} />
         <Route path="/login" component={FirstPage} />
+        <Route path="/home/product/details/:productId" component={ProductDetails} />
         <Route path="/home/cart-page" component={CartPage} />
         <Route path="/home/:category/:subcategory" component={ProductPage} />
         <Route path="/home/:category" component={ProductPage} />

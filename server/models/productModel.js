@@ -8,7 +8,10 @@ const productSchema = new mongoose.Schema({
   brand: String,
   price: Number,
   photo: String,
-  // ... other fields ...
+  subcategory1: String,
+  subcategory2: String,
+  availability: String,
+  description: String
 });
 
 module.exports = productsDB.model('Product', productSchema, 'products');

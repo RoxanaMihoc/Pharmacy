@@ -35,6 +35,7 @@ else
   }
 };
 
+// for product/productId
 router.getProductsById= async (req, res) =>{
   const {productId} = req.params;
 
@@ -42,6 +43,22 @@ router.getProductsById= async (req, res) =>{
 
   try {
     const product = await Product.find( query , 'category title brand price photo');
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+//for product/details/productId
+router.getProductById= async (req, res) =>{
+  const {productId} = req.params;
+
+  query ={ _id: productId};
+
+  try {
+    const product = await Product.find( query , 'category title brand price photo availability description subcategory1 subcategory2');
+    console.log("In controler " + product);
     res.json(product);
   } catch (error) {
     console.error(error);

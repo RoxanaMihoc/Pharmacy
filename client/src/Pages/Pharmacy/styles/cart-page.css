@@ -8,8 +8,11 @@
 .product-row {
   border-bottom: 1px solid #dee2e6;
   padding-top: 10px;
-  padding-bottom: 10px; 
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center; 
 }
+
 .product-list {
   margin-top: 20px;
 }

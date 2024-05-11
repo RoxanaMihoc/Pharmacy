@@ -8,6 +8,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [CNP, setCNP] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [role, setRole] = useState("");
 
   const handleRegister = async (e) => {
     try {
@@ -21,7 +22,7 @@ const SignUp = () => {
           "Access-Control-Allow-Origin": "*",
         },
         crossDomain: true,
-        body: JSON.stringify({ firstName, lastName, email, password, CNP}),
+        body: JSON.stringify({ firstName, lastName, email, password, CNP, role }),
       });
 
       if (!response.ok) {
@@ -38,6 +39,10 @@ const SignUp = () => {
         // Empty block to keep the console open
       }, 5000);
     }
+  };
+
+  const handleRoleChange = (event) => {
+    setRole(event.target.value);
   };
   return (
     <form>
@@ -94,6 +99,16 @@ const SignUp = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+        </div>
+      </label>
+      <br />
+      <label>
+        <div className="input-container">
+        <select value={role} onChange={handleRoleChange} required>
+        <option value="" disabled selected>Select your role</option>
+        <option value="doctor">Doctor</option>
+        <option value="patient">Patient</option>
+      </select>
         </div>
       </label>
       <div className="buttons-container">

@@ -103,6 +103,11 @@ p {
     color: #ff4500;
 }
 
+.navigation-buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }  
+
 .icon {
     font-size: 30px;
     margin-right: 5px;

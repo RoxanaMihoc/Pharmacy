@@ -35,12 +35,17 @@ const Login = () => {
 
       const data = await response.json();
       const token = data.token;
+      const role = data.role;
       console.log(data); // Assuming the API returns a message upon successful registration
       console.log('Login successful: ');
       login(token);
-      if(!isAuthenticated)
+      if(!isAuthenticated && role =='patient')
       {
         history.push('/home');
+      }
+      else
+      {
+        history.push('/home2');
       }
       
     } catch (error) {

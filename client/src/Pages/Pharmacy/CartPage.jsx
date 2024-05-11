@@ -15,7 +15,7 @@ const CartPage = () => {
   const [cart, setCart] = useState([]);
   const [activeStep, setActiveStep] = useState('Cos de cumparaturi');
   const { token } = useAuth();
-  const [header, payload, signature] = token.split(".");
+  const [header, payload, signature] = token.split("."); 
   const decodedPayload = JSON.parse(atob(payload));
   const currentUser = decodedPayload.userId;
   useEffect(() => {
@@ -29,6 +29,7 @@ const CartPage = () => {
           throw new Error("Failed to fetch cart data");
         }
         const data = await response.json();
+        console.log("data " + data.id);
         setCartItems(data);  
       } catch (error) {
         console.error("Error fetching cart data:", error);
@@ -163,11 +164,12 @@ const CartPage = () => {
                       <Col xs={3}>
                         <img src={product.photo} alt={product.title} className="cartImage" />
                       </Col>
-                      <Col xs={3}>{product.title}</Col>
+                      <Col xs={3} className="title">{product.title}</Col>
                       <Col xs={2}>
                         <FormControl
                           type="number"
                           defaultValue={1}
+                          min={1}
                           onChange={(e) =>
                             handleQuantityChange(
                               product._id,
