@@ -67,4 +67,20 @@ router.getProductById= async (req, res) =>{
 
 }
 
+// for product/productId
+router.getProductsByBrand= async (req, res) =>{
+  const brand = req.query.brand;
+
+  query ={ brand: brand};
+
+  try {
+    const product = await Product.find( query , 'category title brand price photo');
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+}
+
 module.exports = router;

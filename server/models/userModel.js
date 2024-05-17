@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
   CNP: { type: String, unique: true, required: true },
   role: { type: String, required: true },
   cart:{type: Array, required: true},
-  orders:{type: Array, required: true}
+  orders:{type: Array, required: true},
+  favorites:{type: Array, required: true}
 });
 
 userSchema.pre('save', async function (next) {

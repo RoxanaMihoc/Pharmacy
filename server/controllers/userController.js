@@ -105,3 +105,27 @@ exports.getCartbyId = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+exports.getFavoritesbyId = async (req, res) => {
+  try {
+    const { currentUser } = req.params;
+    await User.findById(currentUser)
+      .then((user) => {
+        if (!user) {
+          // User not found
+          console.log("User not found");
+          return;
+        }
+
+        // Access the cart field from the user document
+        const favorites = user.favorites;
+        res.json(favorites);
+      })
+      .catch((error) => {
+        console.error("Error retrieving user cart:", error);
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

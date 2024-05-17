@@ -15,11 +15,17 @@
   }
   
   .product-card {
+
     border: 1px solid #ddd;
     padding: 15px;
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border 0.2s ease;
+  }
+  
+  .product-card:hover {
+    border: 8px solid #ddd;
   }
   
   /* Add more styling as needed */

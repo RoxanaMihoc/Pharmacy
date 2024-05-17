@@ -1,7 +1,7 @@
 // src/components/menu.js
 import React, { useState } from "react";
 import CartPreview from "./CartPreview";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -14,6 +14,7 @@ import "./menu.css";
 
 const Menu = () => {
   const [showCartPreview, setShowCartPreview] = useState(false);
+  const history = useHistory();
 
   const location = useLocation();
 
@@ -23,6 +24,10 @@ const Menu = () => {
     }
   };
   const handleCloseCartPreview = () => setShowCartPreview(false);
+
+  const handleFavoritesButton = () =>{
+    history.push('/home/favorites-page');
+  }
 
 
   return (
@@ -57,6 +62,7 @@ const Menu = () => {
             <button>
               <FontAwesomeIcon
                 icon={faHeart}
+                onClick={handleFavoritesButton}
                 style={{ marginRight: "5px", fontSize: "30px" }}
               />
             </button>

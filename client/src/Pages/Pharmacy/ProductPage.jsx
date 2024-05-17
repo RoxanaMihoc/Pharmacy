@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Menu from "../../Components/Menu";
 import Footer from "../../Components/Footer";
+import SecondaryMenu from "../../Components/SecondMenu";
 import { useAuth } from '../../Context/AuthContext';
 import {addToCart, addToCartF} from '../../Components/CartButton';
+import addToFavorites  from "../../Components/FavoritesButton";
 import "./styles/product-page.css"; // Import your CSS file
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
@@ -92,9 +94,33 @@ const ProductPage = () => {
     }
   };
 
+  const handleAddToFavorites = async (productId) => {
+    try {
+    const [header, payload, signature] = token.split('.');
+    const decodedPayload = JSON.parse(atob(payload));
+
+    if (decodedPayload && decodedPayload.userId) {
+      const currentUser = decodedPayload.userId;
+    
+      const result = await addToFavorites(currentUser, productId, category, subcategory);
+      console.log('Product added to cart:', result);
+      if(result.success)
+      {
+        const result = addToCartF(productId);
+        console.log(result);
+      }
+      // Handle success, update UI or show a message
+    }
+    } catch (error) {
+      console.error('Failed to add product to cart:', error.message);
+      // Handle error, show an error message to the user
+    }
+  };
+
   return (
     <div>
       <Menu />
+      <SecondaryMenu />
       <Container>
         <Row>
           <Col md={3} className="filter-container">
@@ -169,7 +195,7 @@ const ProductPage = () => {
                       >
                         Add to Cart
                       </Button>
-                      <Button variant="secondary">Add to Wishlist</Button>
+                      <Button variant="secondary" className="mr-2" onClick={() => handleAddToFavorites(product._id)}>Add to Wishlist</Button>
                     </Card.Body>
                   </Card>
                 </Col>

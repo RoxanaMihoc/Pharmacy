@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Container,
   Row,
@@ -13,6 +13,7 @@ import Footer from "../../Components/Footer";
 import SecondaryMenu from "../../Components/SecondMenu";
 import { useAuth } from "../../Context/AuthContext";
 import { addToCart, addToCartF } from "../../Components/CartButton";
+import addToFavorites  from "../../Components/FavoritesButton";
 import "./styles/product-details.css"; // Import your CSS file
 
 const ProductDetails = () => {
@@ -22,6 +23,7 @@ const ProductDetails = () => {
   const [brand, setBrand] = useState("");
   const { token } = useAuth();
   const [activeTab, setActiveTab] = useState("description");
+  const productsGridRef = useRef(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -41,24 +43,22 @@ const ProductDetails = () => {
     fetchProduct();
   }, [productId]);
 
-  // useEffect(() => {
-  //   const fetchProductsByBrand = async () => {
-  //     console.log(brand);
-  //     try {
-  //       const response = await fetch(
-  //         `http://localhost:3000/home/product/brand/${brand}`
-  //       );
-  //       const data = await response.json();
-  //       console.log(data);
-  //       setRelatedProducts(data);
-  //       console.log("p" + relatedProducts);
-  //     } catch (error) {
-  //       console.error("Failed to fetch product details:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchProductsByBrand = async () => {
+      console.log(brand);
+      try {
+        const response = await fetch(`http://localhost:3000/home/products?brand=${encodeURIComponent(product.brand)}`);
+        const data = await response.json();
+        console.log(data);
+        setRelatedProducts(data);
+        console.log("p" + relatedProducts);
+      } catch (error) {
+        console.error("Failed to fetch product details:", error);
+      }
+    };
 
-  //   fetchProductsByBrand();
-  // }, [brand]);
+    fetchProductsByBrand();
+  }, [brand]);
 
   const handleAddToCart = async (productId) => {
     try {
@@ -81,6 +81,33 @@ const ProductDetails = () => {
       // Handle error, show an error message to the user
     }
   };
+
+  const scrollLeft = () => {
+    productsGridRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+  };
+
+  const scrollRight = () => {
+    productsGridRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+  };
+
+  const handleAddToFavorites = async (productId) => {
+    try {
+    const [header, payload, signature] = token.split('.');
+    const decodedPayload = JSON.parse(atob(payload));
+
+    if (decodedPayload && decodedPayload.userId) {
+      const currentUser = decodedPayload.userId;
+    
+      const result = await addToFavorites(currentUser, productId, category, subcategory);
+      console.log('Product added to favorites:', result);
+      // Handle success, update UI or show a message
+    }
+    } catch (error) {
+      console.error('Failed to add product to favorites:', error.message);
+      // Handle error, show an error message to the user
+    }
+  };
+
 
   return (
     <div>
@@ -121,7 +148,13 @@ const ProductDetails = () => {
                 >
                   Add to cart
                 </Button>
-                <button className="add-to-favorites">ADAGĂ LA FAVORITE</button>
+                <Button
+                  variant="primary"
+                  className="add-to-favorites"
+                  onClick={() => handleAddToFavorites(product._id)}
+                >
+                  Add to favorites
+                </Button>
               </div>
             </div>
           </div>
@@ -159,16 +192,27 @@ const ProductDetails = () => {
         </div>
         <div className="related-products">
           <h2>Alte produse ale producatorului {product.brand}</h2>
-          <div className="products-grid">
-            {relatedProducts.map((relatedProduct) => (
-              <div className="product-card" key={relatedProduct._id}>
-                <img src={relatedProduct.photo} alt={relatedProduct.title} />
-                <p className="product-title">{relatedProduct.title}</p>
-                <p className="product-brand">{relatedProduct.brand}</p>
-                <p className="product-price">{relatedProduct.price} LEI</p>
-                <button className="add-to-cart">ADAGĂ ÎN COȘ</button>
-              </div>
-            ))}
+          <div className="products-navigation">
+            <button className="card-nav-button" onClick={scrollLeft}>Prev</button>
+            <div className="products-grid" ref={productsGridRef}>
+
+              { relatedProducts.length > 0 ?(
+              relatedProducts.map((relatedProduct) => (
+                <div className="product-card" key={relatedProduct._id}>
+                  <Link to={`/home/product/details/${relatedProduct._id}`}>
+                  <img src={relatedProduct.photo} alt={relatedProduct.title} className="product-card-image" />
+                  <p className="product-title">{relatedProduct.title}</p>
+                  </Link>
+                  <p className="product-brand">{relatedProduct.brand}</p>
+                  <p className="product-price">{relatedProduct.price} LEI</p>
+                  <button className="card-add-to-cart">ADAGĂ ÎN COȘ</button>
+                </div>
+              ))
+            ) : 
+            (<div> No product</div>)
+          }
+            </div>
+            <button className="card-nav-button" onClick={scrollRight}>Next</button>
           </div>
         </div>
       </div>
