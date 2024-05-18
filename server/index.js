@@ -6,6 +6,7 @@ const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const favoritesRoutes = require('./routes/favoritesRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use('/home', userRoutes);
 app.use('/home', cartRoutes);
 app.use('/home', productRoutes);
 app.use('/home', favoritesRoutes);
+app.use('/home', orderRoutes);
 app.use('/users', userRoutes);
 
 const PORT = process.env.PORT || 3000;

@@ -1,54 +1,74 @@
-import React from 'react';
-import './summary.css';
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
+import "./summary.css";
 
-const Summary = () => {
+const Summary = ({ cartItems, cartId, addressDetails }) => {
+  console.log(cartItems);
+  console.log(addressDetails.fullName);
+  const submitOrder = async () => {
+    const response = await fetch("http://localhost:3000/home/orders", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({cartId, addressDetails}),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Order submitted:', data);
+    })
+    .catch((error) => {
+      console.error('Error submitting order:', error);
+    });
+  };
   return (
-    <div className="order-summary-container">
-      <h2>Sumar comanda</h2>
-      
-      <div className="summary-section">
-        <div className="summary-box">
-          <h3>Modalitate livrare</h3>
-          <p>Livrare prin Urgent Cargus</p>
-          <p>Roxana-Gabriela Mihoc, 0727476778</p>
-          <p>Radu Voda nr 18, Romania, Iasi, Rachiteni</p>
-          <button className="edit-button">Editeaza</button>
-        </div>
-        
-        <div className="summary-box">
-          <h3>Date facturare</h3>
-          <p>Persoana fizica</p>
-          <p>Roxana-Gabriela Mihoc, 0727476778</p>
-          <p>Radu Voda nr 18, Romania, Iasi, Rachiteni</p>
-          <button className="edit-button">Editeaza</button>
-        </div>
-        
-        <div className="summary-box">
-          <h3>Modalitate de plata</h3>
-          <p>Plata ramburs la primirea coletului</p>
-          <button className="edit-button">Editeaza</button>
-        </div>
-      </div>
-      
-      <div className="order-items">
-        <p>1 x Un om mai bun - Louise Penny</p>
-        <p>1 x Gazeta Libris</p>
-        <div className="cost-summary">
-          <p>Cost livrare <span>12.90 lei</span></p>
-          <p>Total: <span>27.60 lei</span></p>
-        </div>
-      </div>
-      
-      <div className="terms">
-        <label>
-          <input type="checkbox" required /> Am citit, am minimum 18 ani si sunt de acord cu Termenii de utilizare si Conditiile prezentate pe acest site.
-        </label>
-        <label>
-          <input type="checkbox" /> Doresc sa primesc prin e-mail noutatile si promotiile Libris cu privire la produsele si serviciile similare celor achizitionate.
-        </label>
-      </div>
-      
-      <button className="submit-button">Trimite comanda <span className="arrow">→</span></button>
+    <div>
+      <Container>
+      <h2>Summary of Your Order</h2>
+      <Row className="mt-3">
+        <Col md={6}>
+          <div className="mb-3">
+            <h3>Order Details</h3>
+            {cartItems.length > 0 ? (
+              cartItems.map((itemArray, index) => (
+                <Row className="product-row" key={index}>
+                  {itemArray.map((product, productIndex) => (
+                    <React.Fragment key={productIndex}>
+                      <Col xs={4}>
+                        <img src={product.photo} alt={product.title} className="cartImage" />
+                      </Col>
+                      <Col xs={8}>
+                        <div className="title">{product.title}</div>
+                        <div>Quantity: <FormControl type="number" defaultValue={1} min={1} readOnly /></div>
+                        <div>Price: ${product.price}</div>
+                      </Col>
+                    </React.Fragment>
+                  ))}
+                </Row>
+              ))
+            ) : (
+              <div>No products in cart.</div>
+            )}
+          </div>
+        </Col>
+        <Col md={6}>
+          <div className="mb-3">
+            <div className="address-details">
+            <h3>Address Details</h3>
+              <p><strong>First Name:</strong> {addressDetails.firstName}</p>
+              <p><strong>Last Name:</strong> {addressDetails.lastName}</p>
+              <p><strong>Phone:</strong> {addressDetails.phone}</p>
+              <p><strong>Email:</strong> {addressDetails.email}</p>
+              <p><strong>Address:</strong> {`${addressDetails.address}, ${addressDetails.city}, ${addressDetails.county}`}</p>
+              <p><strong>Additional Info:</strong> {addressDetails.additionalInfo || "N/A"}</p>
+            </div>
+          </div>
+          <button className="submit-order-button" onClick={submitOrder}>
+              Submit Order
+            </button>
+        </Col>
+      </Row>
+    </Container>
     </div>
   );
 };

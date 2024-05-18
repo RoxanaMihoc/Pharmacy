@@ -26,15 +26,18 @@ const Menu = () => {
   const handleCloseCartPreview = () => setShowCartPreview(false);
 
   const handleFavoritesButton = () =>{
-    history.push('/home/favorites-page');
+    history.push('/home/dashboard/favorites-page');
   }
 
+  const handleHomeButton = () =>{
+    history.push('/home');
+  }
 
   return (
     <>
       <div className="menu">
         <div className="menu-content">
-          <p>&copy; 2023 Your Website Name</p>
+          <p onClick={handleHomeButton}>&copy; 2023 Your Website Name</p>
 
           {/* Search bar */}
           <div className="search-bar">
@@ -53,13 +56,13 @@ const Menu = () => {
 
           {/* Navigation buttons */}
           <div className="navigation-buttons">
-            <button>
+          <button disabled={location.pathname === "/home/dashboard"}>
               <FontAwesomeIcon
                 icon={faUser}
                 style={{ marginRight: "5px", fontSize: "30px" }}
               />
             </button>
-            <button>
+            <button disabled={location.pathname === "/home/dashboard/favorites-page"}>
               <FontAwesomeIcon
                 icon={faHeart}
                 onClick={handleFavoritesButton}

@@ -6,6 +6,7 @@ import SecondaryMenu from "../../Components/SecondMenu";
 import addToFavorites from "../../Components/FavoritesButton";
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
+import "./styles/favorites-page.css";
 
 const FavoritesPage = () => {
   const [favoritesItems, setFavoritesItems] = useState([]);
@@ -46,7 +47,8 @@ const FavoritesPage = () => {
       });
 
       const resolvedData = await Promise.all(promises);
-      setFavorites(resolvedData.filter((item) => item !== null));
+      console.log(resolvedData);
+      setFavorites(resolvedData);
       console.log("favorites" + favorites);
     };
 
@@ -90,10 +92,6 @@ const FavoritesPage = () => {
       const updatedfavorites = favorites.map((itemArray) =>
         itemArray.filter((product) => {
           if (product._id === productId) {
-            // Save the price before filtering out the product
-            setTotalPrice(
-              (Number(totalPrice) - Number(product.price)).toFixed(20)
-            );
             return false; // Don't include the product in the updated favorites
           }
           return true; // Include other products in the updated favorites
@@ -107,7 +105,7 @@ const FavoritesPage = () => {
     }
   };
 
-  const handleAddToFavorites = async (productId) => {
+  const handleAddToCart = async (productId) => {
     try {
       const [header, payload, signature] = token.split(".");
       const decodedPayload = JSON.parse(atob(payload));
@@ -115,7 +113,7 @@ const FavoritesPage = () => {
       if (decodedPayload && decodedPayload.userId) {
         const currentUser = decodedPayload.userId;
 
-        const result = await addToFavorites(currentUser, productId);
+        const result = await addToCart(currentUser, productId);
         console.log("Product added to favorites:", result);
         if (result.success) {
           console.log(result);
@@ -130,51 +128,60 @@ const FavoritesPage = () => {
 
   return (
     <div>
-      <Menu />
-      <SecondaryMenu />
       <Container>
-        <Col md={9} className="product-list-container">
-          <Row>
-            {favorites.map((product) => (
-              <Col key={product._id} md={4} className="mb-4">
-                <Card>
-                  <Card.Img
-                    variant="top"
-                    src={product.photo}
-                    style={{ height: "200px", objectFit: "cover" }}
-                  />
-                  <Card.Body>
-                    <Link to={`/home/product/details/${product._id}`}>
-                      <Card.Title style={{ textAlign: "center" }}>
-                        {product.title}
-                      </Card.Title>
-                    </Link>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      {product.brand}
-                    </Card.Subtitle>
-                    <Card.Text>{`Price: $${product.price}`}</Card.Text>
-                    <Button
-                      variant="primary"
-                      className="mr-2"
-                      onClick={() => handleAddToFavorites(product._id)}
-                    >
-                      Add to favorites
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      className="mr-2"
-                      onClick={() => handleRemoveItem(product._id)}
-                    >
-                      Remove from favorites
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </Col>
+        <Row>
+          <Col md={9} className="product-list-container">
+          <h1>Favorites List</h1>
+            <Row>
+              {favorites.map((subArray, subArrayIndex) =>
+                subArray.map((product, index) => (
+                  <Col
+                    key={`${
+                      product._id || `product-${subArrayIndex}-${index}`
+                    }`}
+                    md={4}
+                    className="mb-4"
+                  >
+                    <Card className="favorites-card">
+                      <Card.Img
+                        className="favorite-photo"
+                        variant="top"
+                        src={product.photo}
+                        style={{ height: "200px", objectFit: "cover" }}
+                      />
+                      <Card.Body className="favorite-body">
+                        <Link to={`/home/product/details/${product._id}`}>
+                          <Card.Title style={{ textAlign: "center" }}>
+                            {product.title}
+                          </Card.Title>
+                        </Link>
+                        <Card.Subtitle className="mb-2 text-muted">
+                          {product.brand}
+                        </Card.Subtitle>
+                        <Card.Text>{`Price: $${product.price}`}</Card.Text>
+                        <Button
+                          variant="primary"
+                          className="mr-2"
+                          onClick={() => handleAddToFavorites(product._id)}
+                        >
+                          Add to favorites
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          className="mr-2"
+                          onClick={(e) => handleRemoveItem(e, product._id)}
+                        >
+                          Remove from favorites
+                        </Button>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))
+              )}
+            </Row>
+          </Col>
+        </Row>
       </Container>
-      <Footer />
     </div>
   );
 };

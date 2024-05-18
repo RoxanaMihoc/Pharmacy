@@ -1,90 +1,111 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./address.css";
 
-const AddressPage = () => {
+const AddressPage = ({ onSubmit }) => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    cnp: "",
+    phone: "",
+    email: "",
+    county: "",
+    city: "",
+    address: "",
+    additionalInfo: "",
+    paymentMethod: "Cash"  // Default payment method
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);  // Pass the address data back to the parent component
+  };
+
   return (
-    <div className="order-details">
+    <form className="order-details" onSubmit={handleSubmit}>
       <h2>Detalii comanda</h2>
       
       <div className="section">
-        <h3>1. Date livrare</h3>
+        <h3>1. Customer Info</h3>
         <div className="personal-info">
           <label>
-            Nume și Prenume*
-            <input type="text" placeholder="Nume și Prenume" required />
+            First Name*
+            <input type="text" name="firstName" placeholder="First Name" required onChange={handleInputChange} value={formData.firstName} />
           </label>
           <label>
-            Telefon*
-            <input type="tel" placeholder="Telefon" required />
+            Last Name*
+            <input type="text" name="lastName" placeholder="Last Name" required onChange={handleInputChange} value={formData.lastName} />
+          </label>
+          <label>
+            CNP*
+            <input type="text" name="cnp" placeholder="CNP" required onChange={handleInputChange} value={formData.cnp} />
+          </label>
+          <label>
+            Phone*
+            <input type="tel" name="phone" placeholder="Telefon" required onChange={handleInputChange} value={formData.phone} />
           </label>
           <label>
             E-mail*
-            <input type="email" placeholder="E-mail" required />
+            <input type="email" name="email" placeholder="E-mail" required onChange={handleInputChange} value={formData.email} />
           </label>
-        </div>
-        
-        <div className="delivery-method">
-          <h4>Modalitate livrare</h4>
-          <div className="delivery-options">
-            <label>
-              <input type="radio" name="delivery" />
-              Livrare prin curier
-            </label>
-            <label>
-              <input type="radio" name="delivery" />
-              Ridicare Personală
-            </label>
-          </div>
         </div>
         
         <div className="location-info">
           <label>
-            România
-            <select required>
-              <option value="">Selectați județul</option>
-              {/* Add your options here */}
+            County
+            <select name="county" required onChange={handleInputChange} value={formData.county}>
+              <option value="" disabled>Select the County</option>
+              <option value="Iasi">Iasi</option>
+              {/* Add more options here */}
             </select>
           </label>
           <label>
-            Selectați localitatea
-            <select required>
-              <option value="">Selectați localitatea</option>
-              {/* Add your options here */}
+            City
+            <select name="city" required onChange={handleInputChange} value={formData.city}>
+              <option value="" disabled>Select the City</option>
+              <option value="Iasi">Iasi</option>
+              {/* Add more options here */}
             </select>
+          </label>
+          <label>
+            Address
+            <input type="text" name="address" placeholder="Address" required onChange={handleInputChange} value={formData.address} />
           </label>
         </div>
         
         <label>
-          Lasa-ne aici detalii privind livrarea comenzii tale
-          <textarea placeholder="Lasa-ne aici detalii privind livrarea comenzii tale"></textarea>
+          Other details
+          <textarea name="additionalInfo" placeholder="Other details" onChange={handleInputChange} value={formData.additionalInfo}></textarea>
         </label>
       </div>
 
       <div className="section">
-        <h3>2. Modalitate de plata</h3>
+        <h3>2. Payment Method</h3>
         <div className="payment-methods">
           <label>
-            <input type="radio" name="payment"  />
-            Plata ramburs la primirea coletului
+            <input type="radio" name="paymentMethod" value="Cash" checked={formData.paymentMethod === "Cash"} onChange={handleInputChange} />
+            Cash
           </label>
           <label>
-            <input type="radio" name="payment" />
-            Plata online prin card PayU
-          </label>
-          <label>
-            <input type="radio" name="payment" />
-            Plata in avans prin op/depunere in cont
+            <input type="radio" name="paymentMethod" value="Card" checked={formData.paymentMethod === "Card"} onChange={handleInputChange} />
+            Card
           </label>
         </div>
       </div>
       <div className="section">
-      <button className="next-step">
-          Pasul urmator <span className="arrow">→</span>
+        <button type="submit" className="next-step">
+          Next step <span className="arrow">→</span>
         </button>
-        </div>
-    </div>
+      </div>
+    </form>
   );
-    
 };
 
 export default AddressPage;

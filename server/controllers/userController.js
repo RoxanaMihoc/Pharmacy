@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 exports.register = async (req, res) => {
   try {
     const { firstName, lastName, email, password, CNP, role } = req.body;
-console.log(role);
     if (role == "patient") {
       // Check if the email is already taken
       const existingUser = await User.findOne({ CNP });

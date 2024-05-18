@@ -15,7 +15,6 @@ const addToFavorites = async (req, res) => {
     );
 
     console.log(updatedUser);
-    
 
     res.status(200).json({ success: true, message: 'Product added to favorites successfully', productId });
   } catch (error) {
@@ -25,20 +24,19 @@ const addToFavorites = async (req, res) => {
 };
 
 const deleteProductFromFavorites = async (req, res) =>{
-  console.log("in addto cart backend");
   const { currentUser, productId } = req.params;
 
   try {
     // Update user's cart in the database
     await User.findByIdAndUpdate(
       currentUser,
-      { $pull: { cart: productId } },
+      { $pull: { favorites: productId } },
       { new: true }
     );
 
-    res.status(200).json({ success: true, message: 'Product removed from cart successfully', productId });
+    res.status(200).json({ success: true, message: 'Product removed from favorites successfully', productId });
   } catch (error) {
-    console.error('Error adding product to cart:', error);
+    console.error('Error removing product from favorites:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };

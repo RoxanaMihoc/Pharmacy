@@ -14,6 +14,7 @@ const CartPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState([]);
   const [activeStep, setActiveStep] = useState('Cos de cumparaturi');
+  const [addressDetails, setAddressDetails] = useState({});
   const { token } = useAuth();
   const [header, payload, signature] = token.split("."); 
   const decodedPayload = JSON.parse(atob(payload));
@@ -150,7 +151,12 @@ const CartPage = () => {
       setQuantity(newQuantity-1);
       await updateTotalPrice(productId); // Recalculate total price after quantity change
     }
-  };  
+  }; 
+  const handleAddressSubmit = (details) => {
+    setAddressDetails(details);
+    setActiveStep('Sumar comanda');
+  };
+
   const renderContent = () => {
     switch (activeStep) {
       case 'Cos de cumparaturi':
@@ -199,15 +205,11 @@ const CartPage = () => {
           </> 
         );
       case 'Contact si adresa':
-        return (
-          <div>
-            <AddressPage/>
-          </div>
-        );
+          return <AddressPage onSubmit={handleAddressSubmit} />;
       case 'Sumar comanda':
         return (
           <div>
-            <Summary/>
+            <Summary cartItems={cart} cartId={cartItems} addressDetails={addressDetails}/>
           </div>
         );
 

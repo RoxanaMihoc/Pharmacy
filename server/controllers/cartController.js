@@ -23,7 +23,6 @@ const addToCart = async (req, res) => {
 };
 
 const deleteProductFromCart = async (req, res) =>{
-  console.log("in addto cart backend");
   const { currentUser, productId } = req.params;
 
   try {
@@ -36,7 +35,7 @@ const deleteProductFromCart = async (req, res) =>{
 
     res.status(200).json({ success: true, message: 'Product removed from cart successfully', productId });
   } catch (error) {
-    console.error('Error adding product to cart:', error);
+    console.error('Error removing product from cart:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };

@@ -124,6 +124,7 @@ const ProductPage = () => {
       <Container>
         <Row>
           <Col md={3} className="filter-container">
+            <h1>{subcategory}</h1>
             <h3>Categories</h3>
             <Form.Group>
               {categories.map((category) => (
@@ -172,7 +173,7 @@ const ProductPage = () => {
             <Row>
               {filteredProducts.map((product) => (
                 <Col key={product._id} md={4} className="mb-4">
-                  <Card>
+                  <Card className="crad">
                     <Card.Img
                       variant="top"
                       src={product.photo}
