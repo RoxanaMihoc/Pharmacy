@@ -11,16 +11,11 @@ import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
 const ProductPage = () => {
-  const [categories, setCategories] = useState([
-    "Electronics",
-    "Clothing",
-    "Home & Kitchen",
-  ]);
   const [brands, setBrands] = useState(["BIOFARM", "Brand2", "Brand3"]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([10, 1000]);
   const [displayedPriceRange, setDisplayedPriceRange] = useState([10, 1000]);
-  const {token} = useAuth();
+  const { currentUser} = useAuth();
 
   const { category, subcategory } = useParams();
   const [products, setProducts] = useState([]);
@@ -73,12 +68,6 @@ const ProductPage = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-    const [header, payload, signature] = token.split('.');
-    const decodedPayload = JSON.parse(atob(payload));
-
-    if (decodedPayload && decodedPayload.userId) {
-      const currentUser = decodedPayload.userId;
-    
       const result = await addToCart(currentUser, productId, category, subcategory);
       console.log('Product added to cart:', result);
       if(result.success)
@@ -86,8 +75,6 @@ const ProductPage = () => {
         const result = addToCartF(productId);
         console.log(result);
       }
-      // Handle success, update UI or show a message
-    }
     } catch (error) {
       console.error('Failed to add product to cart:', error.message);
       // Handle error, show an error message to the user
@@ -96,12 +83,6 @@ const ProductPage = () => {
 
   const handleAddToFavorites = async (productId) => {
     try {
-    const [header, payload, signature] = token.split('.');
-    const decodedPayload = JSON.parse(atob(payload));
-
-    if (decodedPayload && decodedPayload.userId) {
-      const currentUser = decodedPayload.userId;
-    
       const result = await addToFavorites(currentUser, productId, category, subcategory);
       console.log('Product added to cart:', result);
       if(result.success)
@@ -110,7 +91,7 @@ const ProductPage = () => {
         console.log(result);
       }
       // Handle success, update UI or show a message
-    }
+    
     } catch (error) {
       console.error('Failed to add product to cart:', error.message);
       // Handle error, show an error message to the user
@@ -125,17 +106,6 @@ const ProductPage = () => {
         <Row>
           <Col md={3} className="filter-container">
             <h1>{subcategory}</h1>
-            <h3>Categories</h3>
-            <Form.Group>
-              {categories.map((category) => (
-                <Form.Check
-                  key={category}
-                  type="checkbox"
-                  label={category}
-                  onChange={() => {} /* Handle category change */}
-                />
-              ))}
-            </Form.Group>
             <h3>Brands</h3>
             <Form.Group>
               {brands.map((brand) => (

@@ -84,6 +84,8 @@ exports.login = async (req, res) => {
 exports.getCartbyId = async (req, res) => {
   try {
     const { currentUser } = req.params;
+    //currentUser null for some reason
+    console.log(currentUser);
     await User.findById(currentUser)
       .then((user) => {
         if (!user) {

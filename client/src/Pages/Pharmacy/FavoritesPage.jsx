@@ -3,7 +3,7 @@ import Menu from "../../Components/Menu";
 import Footer from "../../Components/Footer";
 import { useAuth } from "../../Context/AuthContext";
 import SecondaryMenu from "../../Components/SecondMenu";
-import addToFavorites from "../../Components/FavoritesButton";
+import {addToCart} from '../../Components/CartButton';
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import "./styles/favorites-page.css";
@@ -11,10 +11,7 @@ import "./styles/favorites-page.css";
 const FavoritesPage = () => {
   const [favoritesItems, setFavoritesItems] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const { token } = useAuth();
-  const [header, payload, signature] = token.split(".");
-  const decodedPayload = JSON.parse(atob(payload));
-  const currentUser = decodedPayload.userId;
+  const { currentUser} = useAuth();
   useEffect(() => {
     const fetchFavoritesData = async () => {
       try {
@@ -107,19 +104,13 @@ const FavoritesPage = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-      const [header, payload, signature] = token.split(".");
-      const decodedPayload = JSON.parse(atob(payload));
-
-      if (decodedPayload && decodedPayload.userId) {
-        const currentUser = decodedPayload.userId;
-
         const result = await addToCart(currentUser, productId);
         console.log("Product added to favorites:", result);
         if (result.success) {
           console.log(result);
         }
         // Handle success, update UI or show a message
-      }
+      
     } catch (error) {
       console.error("Failed to add product to favorites:", error.message);
       // Handle error, show an error message to the user
@@ -162,9 +153,9 @@ const FavoritesPage = () => {
                         <Button
                           variant="primary"
                           className="mr-2"
-                          onClick={() => handleAddToFavorites(product._id)}
+                          onClick={() => handleAddToCart(product._id)}
                         >
-                          Add to favorites
+                          Add to Cart
                         </Button>
                         <Button
                           variant="secondary"

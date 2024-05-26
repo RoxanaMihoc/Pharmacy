@@ -40,6 +40,25 @@ const deleteProductFromCart = async (req, res) =>{
   }
 };
 
-module.exports = { addToCart, deleteProductFromCart };
+const deleteCartFromUser = async(req, res) =>{
+  const { currentUser} = req.params;
+  console.log("in delete cart");
+
+  try {
+    // Update user's cart in the database
+    await User.findByIdAndUpdate(
+      currentUser,
+      { $set: { cart: [] } },
+      { new: true }
+    );
+
+    res.status(200).json({ success: true, message: 'Cart removed successfully when user placed an order'});
+  } catch (error) {
+    console.error('Error removing cart after the user placed an order:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+module.exports = { addToCart, deleteProductFromCart, deleteCartFromUser };
 
 

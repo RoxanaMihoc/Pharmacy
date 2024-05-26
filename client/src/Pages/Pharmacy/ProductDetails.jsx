@@ -21,7 +21,7 @@ const ProductDetails = () => {
   const [product, setProduct] = useState([{}]);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [brand, setBrand] = useState("");
-  const { token } = useAuth();
+  const { currentUser} = useAuth();
   const [activeTab, setActiveTab] = useState("description");
   const productsGridRef = useRef(null);
 
@@ -62,20 +62,13 @@ const ProductDetails = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-      const [header, payload, signature] = token.split(".");
-      const decodedPayload = JSON.parse(atob(payload));
-
-      if (decodedPayload && decodedPayload.userId) {
-        const currentUser = decodedPayload.userId;
-
         const result = await addToCart(currentUser, productId);
         console.log("Product added to cart:", result);
         if (result.success) {
           const result = addToCartF(productId);
           console.log(result);
         }
-        // Handle success, update UI or show a message
-      }
+
     } catch (error) {
       console.error("Failed to add product to cart:", error.message);
       // Handle error, show an error message to the user
@@ -92,16 +85,9 @@ const ProductDetails = () => {
 
   const handleAddToFavorites = async (productId) => {
     try {
-    const [header, payload, signature] = token.split('.');
-    const decodedPayload = JSON.parse(atob(payload));
-
-    if (decodedPayload && decodedPayload.userId) {
-      const currentUser = decodedPayload.userId;
-    
       const result = await addToFavorites(currentUser, productId, category, subcategory);
       console.log('Product added to favorites:', result);
       // Handle success, update UI or show a message
-    }
     } catch (error) {
       console.error('Failed to add product to favorites:', error.message);
       // Handle error, show an error message to the user

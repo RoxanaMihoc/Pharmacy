@@ -1,50 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
-import { useAuth } from "../Context/AuthContext";
 import "./summary.css";
 
-const Summary = ({ cartItems, cartId, addressDetails, totalPrice, onOrderSubmitted}) => {
-  console.log("Cart ", cartItems);
-  console.log("Cart ID ",cartId);
-  const { currentUser} = useAuth();
-  const submitOrder = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/home/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cartItems, addressDetails, currentUser, totalPrice }),
-      });
-      const data = await response.json();
-      console.log('Order submitted:', data);
-  
-      // Proceed to delete the cart if the order was successfully submitted
-      if (data.success) { // Assuming the API returns a 'success' attribute
-        const deleteResponse = await fetch(
-          `http://localhost:3000/home/cart/${currentUser}`,
-          {
-            method: "DELETE",
-          }
-        );
-
-        console.log("ceva2");
-  
-        if (!deleteResponse.ok) {
-          throw new Error('Failed to delete cart');
-        }
-  
-        console.log('Cart deleted successfully');
-        onOrderSubmitted(true);
-      } else {
-        onOrderSubmitted(false);
-      }
-    } catch (error) {
-      console.error('Error during the order process:', error);
-      onOrderSubmitted(false);
-    }
-  };
-  
+const PlacedOrder = () => {
   return (
     <div>
       <Container>
@@ -97,4 +55,4 @@ const Summary = ({ cartItems, cartId, addressDetails, totalPrice, onOrderSubmitt
   );
 };
 
-export default Summary;
+export default PlacedOrder;

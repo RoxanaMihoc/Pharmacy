@@ -5,11 +5,11 @@ import FirstPage from './Pages/Login/FirstPage';
 import Home from './Pages/Pharmacy/Home-Farmacy';
 import ProductPage from './Pages/Pharmacy/ProductPage';
 import CartPage from './Pages/Pharmacy/CartPage';
-import FavoritesPage from './Pages/Pharmacy/FavoritesPage';
 import { useAuth } from './Context/AuthContext';
 import HomePage from './Pages/FirstPage/HomePage';
 import ProductDetails from './Pages/Pharmacy/ProductDetails';
 import UserPage from './Pages/Pharmacy/UserPage';
+import AdminOrders from './Pages/Admin Interface/AdminOrders';
 import './Pages/styles/main.css'
 
 const App = () => {
@@ -18,6 +18,7 @@ const App = () => {
   return (
     <Router>
       <Switch>
+      <Route path="/admin" component={AdminOrders} />
         <Route path="/first-page" component={HomePage} />
         <Route path="/login" component={FirstPage} />
         <Route path="/home/product/details/:productId" component={ProductDetails} />

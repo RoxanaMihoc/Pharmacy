@@ -1,11 +1,21 @@
 // src/context/AuthContext.js
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
-  const [user, setUser] = useState(null); // State to store user information
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    if (token) {
+        const [header, payload, signature] = token.split('.');
+        const decodedPayload = JSON.parse(atob(payload));
+        setCurrentUser(decodedPayload.userId);
+    } else {
+        setCurrentUser(null);
+    }
+}, [token]);
 
   const login = (token) => {
     // Set the JWT token in both state and localStorage
@@ -21,7 +31,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout, currentUser }}>
       {children}
     </AuthContext.Provider>
   );

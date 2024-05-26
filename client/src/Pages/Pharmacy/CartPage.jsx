@@ -10,18 +10,18 @@ import "./styles/cart-page.css";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [isCartItems, setIsCartItems] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState([]);
-  const [activeStep, setActiveStep] = useState('Cos de cumparaturi');
+  const [activeStep, setActiveStep] = useState("Cos de cumparaturi");
   const [addressDetails, setAddressDetails] = useState({});
-  const { token } = useAuth();
-  const [header, payload, signature] = token.split("."); 
-  const decodedPayload = JSON.parse(atob(payload));
-  const currentUser = decodedPayload.userId;
+  const [orderSubmitted, setOrderSubmitted] = useState(false);
+  const { currentUser} = useAuth();
   useEffect(() => {
     const fetchCartData = async () => {
-      try {    
+      console.log("cart page", currentUser);
+      try {
         // Fetch cart data from backend API
         const response = await fetch(
           `http://localhost:3000/home/cart/${currentUser}`
@@ -31,7 +31,7 @@ const CartPage = () => {
         }
         const data = await response.json();
         console.log("data " + data.id);
-        setCartItems(data);  
+        setCartItems(data);
       } catch (error) {
         console.error("Error fetching cart data:", error);
       }
@@ -63,7 +63,7 @@ const CartPage = () => {
         // Iterate over each item in the array
         for (let j = 0; j < itemArray.length; j++) {
           const product = itemArray[j];
-          console.log("lala" + product.price); 
+          console.log("lala" + product.price);
           total += Number(product.price);
         }
       }
@@ -71,7 +71,7 @@ const CartPage = () => {
     };
 
     const fetchCartItems = async (productId) => {
-      console.log("Product Id " + productId); 
+      console.log("Product Id " + productId);
       try {
         const response = await fetch(
           `http://localhost:3000/home/product/${productId}`
@@ -90,12 +90,12 @@ const CartPage = () => {
       }
     };
 
-    populateCartItems(); 
-  
+    populateCartItems();
   }, [cartItems]);
 
   const handleRemoveItem = async (e, productId) => {
     e.preventDefault();
+
     try {
       // Send request to remove item from cart
       const response = await fetch(
@@ -103,8 +103,8 @@ const CartPage = () => {
         {
           method: "DELETE",
         }
-      );    
-      if (!response.ok) {  
+      );
+      if (!response.ok) {
         throw new Error("Failed to remove item from cart");
       }
 
@@ -112,17 +112,19 @@ const CartPage = () => {
         itemArray.filter((product) => {
           if (product._id === productId) {
             // Save the price before filtering out the product
-            setTotalPrice((Number(totalPrice) - Number(product.price)).toFixed(20));
+            setTotalPrice(
+              (Number(totalPrice) - Number(product.price)).toFixed(20)
+            );
             return false; // Don't include the product in the updated cart
           }
           return true; // Include other products in the updated cart
         })
-      );  
+      );
       setCartItems(cartItems.filter((item) => item.id !== productId));
       setCart(updatedCart);
       document.location.reload(); 
     } catch (error) {
-      console.error("Error removing item from cart:", error);  
+      console.error("Error removing item from cart:", error);
     }
   };
 
@@ -143,23 +145,67 @@ const CartPage = () => {
 
     setTotalPrice(total);
   };
-      
+
   const handleQuantityChange = async (productId, newQuantity) => {
     if (newQuantity > 0) {
       console.log(newQuantity);
       // Update quantity in local state
-      setQuantity(newQuantity-1);
+      setQuantity(newQuantity - 1);
       await updateTotalPrice(productId); // Recalculate total price after quantity change
     }
-  }; 
+  };
+
+  const canProceedToSummary = () => {
+    return (
+      addressDetails.firstName &&
+      addressDetails.phone &&
+      addressDetails.email &&
+      addressDetails.address
+    );
+  };
+
+  const setActiveStepState = (newStep) => {
+    // Ensure that the summary can only be accessed if address details are complete
+    if (newStep === "Sumar comanda" && !canProceedToSummary()) {
+      alert(
+        "Please complete all address details before proceeding to the summary."
+      );
+      return; // Prevent setting the active step to summary
+    } else if (newStep === "Comanda plasata" && !isOrderSubmitted) {
+      alert("Please submit the order before proceeding.");
+      return;
+    }
+
+    // Otherwise, proceed normally
+    setActiveStep(newStep);
+  };
+
   const handleAddressSubmit = (details) => {
+    console.log(details.firstName);
+    if (
+      !details.firstName ||
+      !details.phone ||
+      !details.email ||
+      !details.address
+    ) {
+      alert("All fields are required to proceed.");
+      return;
+    }
     setAddressDetails(details);
-    setActiveStep('Sumar comanda');
+    setActiveStep("Sumar comanda");
+  };
+
+  const handleOrderSubmission = (success) => {
+    if (success) {
+      setOrderSubmitted(true);
+      // document.location.reload();
+      setActiveStep('Comanda plasata'); // Move to the next step only if the order is successfully submitted
+    }
   };
 
   const renderContent = () => {
     switch (activeStep) {
-      case 'Cos de cumparaturi':
+      case "Cos de cumparaturi":
         return (
           <>
             {cart.length > 0 ? (
@@ -168,9 +214,15 @@ const CartPage = () => {
                   {itemArray.map((product, productIndex) => (
                     <React.Fragment key={productIndex}>
                       <Col xs={3}>
-                        <img src={product.photo} alt={product.title} className="cartImage" />
+                        <img
+                          src={product.photo}
+                          alt={product.title}
+                          className="cartImage"
+                        />
                       </Col>
-                      <Col xs={3} className="title">{product.title}</Col>
+                      <Col xs={3} className="title">
+                        {product.title}
+                      </Col>
                       <Col xs={2}>
                         <FormControl
                           type="number"
@@ -193,34 +245,39 @@ const CartPage = () => {
                           X
                         </Button>
                       </Col>
-                      
                     </React.Fragment>
                   ))}
                 </Row>
               ))
             ) : (
-              <div>Loading...</div>
+              <div>No products in the cart.</div>
             )}
             <h5>Total Price: ${totalPrice}</h5>
-          </> 
+          </>
         );
-      case 'Contact si adresa':
-          return <AddressPage onSubmit={handleAddressSubmit} />;
-      case 'Sumar comanda':
+      case "Contact si adresa":
+        return <AddressPage onSubmit={handleAddressSubmit} />;
+      case "Sumar comanda":
         return (
           <div>
-            <Summary cartItems={cart} cartId={cartItems} addressDetails={addressDetails}/>
+            <Summary 
+              cartItems={cart}
+              cartId={cartItems}
+              addressDetails={addressDetails}
+              totalPrice = {totalPrice}
+              onOrderSubmitted={handleOrderSubmission}
+            />
           </div>
         );
 
-        case 'Comanda plasata': 
-          return (
-            <div>
-              {/* Add your order submission content here */}
-              <h5>Submit Your Order</h5>
-              <p>Details about submitting the order...</p>
-            </div>
-          );
+      case "Comanda plasata":
+        return (
+          <div>
+            {/* Add your order submission content here */}
+            <h5>Submit Your Order</h5>
+            <p>Details about submitting the order...</p>
+          </div>
+        );
       default:
         return null;
     }
@@ -229,36 +286,46 @@ const CartPage = () => {
   return (
     <div>
       <Menu />
-      <SecondaryMenu/>
+      <SecondaryMenu />
       <Container>
         <Row className="mt-3 justify-content-center">
           <Col className="button-center">
             <div className="button-wrapper">
               <Button
                 variant="primary"
-                className={`step-button ${activeStep === 'Cos de cumparaturi' ? 'active' : ''}`}
-                onClick={() => setActiveStep('Cos de cumparaturi')}
+                className={`step-button ${
+                  activeStep === "Cos de cumparaturi" ? "active" : ""
+                }`}
+                onClick={() => setActiveStep("Cos de cumparaturi")}
               >
                 Cos de cumparaturi
               </Button>
               <Button
                 variant="primary"
-                className={`step-button ${activeStep === 'Contact si adresa' ? 'active' : ''}`}
-                onClick={() => setActiveStep('Contact si adresa')}
+                className={`step-button ${
+                  activeStep === "Contact si adresa" ? "active" : ""
+                }`}
+                onClick={() => setActiveStep("Contact si adresa")}
               >
                 Contact si adresa
               </Button>
               <Button
                 variant="primary"
-                className={`step-button ${activeStep === 'Sumar comanda' ? 'active' : ''}`}
-                onClick={() => setActiveStep('Sumar comanda')}
+                className={`step-button ${
+                  activeStep === "Sumar comanda" ? "active" : ""
+                }`}
+                onClick={() => setActiveStepState("Sumar comanda")}
+                disabled={!canProceedToSummary()}
               >
                 Sumar comanda
               </Button>
               <Button
                 variant="primary"
-                className={`step-button ${activeStep === 'Comanda plasata' ? 'active' : ''}`}
-                onClick={() => setActiveStep('Comanda plasata')}
+                className={`step-button ${
+                  activeStep === "Comanda plasata" ? "active" : ""
+                }`}
+                onClick={() => setActiveStep("Comanda plasata")}
+                disabled={!orderSubmitted}
               >
                 Comanda plasata
               </Button>
@@ -268,17 +335,13 @@ const CartPage = () => {
 
         <Row className="mt-3">
           <Col>
-            <div className="mb-3">
-              {renderContent()}
-            </div>
+            <div className="mb-3">{renderContent()}</div>
           </Col>
         </Row>
       </Container>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
 
 export default CartPage;
-
-

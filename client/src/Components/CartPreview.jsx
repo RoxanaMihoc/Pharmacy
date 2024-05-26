@@ -15,13 +15,11 @@ const CartPreview = ({ show, handleClose }) => {
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState([]);
   const [activeStep, setActiveStep] = useState('Cos de cumparaturi');
-  const { token } = useAuth();
+  const { currentUser} = useAuth();
   const history = useHistory();
-  const [header, payload, signature] = token.split(".");
-  const decodedPayload = JSON.parse(atob(payload));
-  const currentUser = decodedPayload.userId;
   useEffect(() => {
     const fetchCartData = async () => {
+      console.log("cart preview", currentUser);
       try {    
         // Fetch cart data from backend API
         const response = await fetch(
@@ -37,7 +35,7 @@ const CartPreview = ({ show, handleClose }) => {
       }
     };
 
-    fetchCartData();
+      fetchCartData();
   }, [currentUser]);
 
   useEffect(() => {
@@ -120,7 +118,6 @@ const CartPreview = ({ show, handleClose }) => {
       );  
       setCartItems(cartItems.filter((item) => item.id !== productId));
       setCart(updatedCart);
-      document.location.reload(); 
     } catch (error) {
       console.error("Error removing item from cart:", error);  
     }
