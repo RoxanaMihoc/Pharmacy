@@ -6,7 +6,7 @@ import "./second-menu.css";
 import "./hoover-button.css";
 import { faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 
-const SecondaryMenu = ({setCategory, setSubcategory}) => {
+const SecondaryMenu = () => {
   return (
     <div className="second-menu-content">
       {/* Add content for the secondary menu */}
@@ -17,15 +17,15 @@ const SecondaryMenu = ({setCategory, setSubcategory}) => {
         <button className="dropbtn">Categories</button>
         <div className="dropdown-content">
           <div className="button">
-            <HoverButton buttontext="Medicamente fara reteta" setCategory ={setCategory} setSubcategory={setSubcategory} />
+            <HoverButton buttontext="Medicamente fara reteta"  />
             <div className="additional-content-container">
               <div className="sub-additional-content-container1">
                 <div className="sub-div">
                 <h3> Afectiuni Digestive  </h3>
-                  <HoverButton buttontext="Afectiuni ale cavitatii bucale" setCategory ={setCategory} setSubcategory={setSubcategory}/> 
-                  <HoverButton buttontext="Antiacide, Antispastice, Balonare" setCategory ={setCategory} setSubcategory={setSubcategory}/>
-                  <HoverButton buttontext="Enzime Digestive"setCategory ={setCategory} setSubcategory={setSubcategory} />
-                  <HoverButton buttontext="Gastrita si ulcer, Greata si varsaturi"setCategory ={setCategory} setSubcategory={setSubcategory}/>
+                  <HoverButton buttontext="Afectiuni ale cavitatii bucale" /> 
+                  <HoverButton buttontext="Antiacide, Antispastice, Balonare" />
+                  <HoverButton buttontext="Enzime Digestive" />
+                  <HoverButton buttontext="Gastrita si ulcer, Greata si varsaturi"/>
                 </div>
                 <div className="sub-div">
                   <h2>Afectiuni dermatologice</h2>

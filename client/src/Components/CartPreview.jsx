@@ -1,9 +1,7 @@
 // src/components/CartPreviewModal.js
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, FormControl } from "react-bootstrap";
+import { Row, Col} from "react-bootstrap";
 import { Modal, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../Context/AuthContext";
 import { useHistory } from 'react-router-dom';
 import './cart-preview.css'; 
@@ -14,8 +12,8 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState([]);
-  const [activeStep, setActiveStep] = useState('Cos de cumparaturi');
   const { currentUser} = useAuth();
+  console.log(currentUser);
   const history = useHistory();
   useEffect(() => {
     const fetchCartData = async () => {
@@ -29,7 +27,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
           throw new Error("Failed to fetch cart data");
         }
         const data = await response.json();
-        setCartItems(data);  
+        setCartItems(data); 
       } catch (error) {
         console.error("Error fetching cart data:", error);
       }
@@ -149,12 +147,6 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
       await updateTotalPrice(productId); // Recalculate total price after quantity change
     }
   };  
-
-        
-  const moveToCartPage = async () => {
-
-     history.push('/user/cart-page');
-  }; 
 
   return (
     <Modal show={show} onHide={handleClose} centered>

@@ -13,7 +13,6 @@
 .product-container {
   display: flex;
   align-items: flex-start;
-  width: 2000px; /* Increased width for a larger page */
   padding: 20px;
   background-color: #fff;
 }
@@ -50,7 +49,7 @@
 
 .purchase-info {
   width: 400px; /* Increased width for a larger purchase info section */
-  margin-left: 30px; /* Increased margin for better spacing */
+  margin-left: 10px; /* Increased margin for better spacing */
   text-align: center;
   margin-top: 35px;
 }

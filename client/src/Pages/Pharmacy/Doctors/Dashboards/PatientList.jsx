@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../../../Context/AuthContext";
-import "./styles/patient-list.css";
+import { useLocation, useHistory } from "react-router-dom";
 
-const PatientList = ({ onPatientSelect }) => {
+const PatientList = () => {
   const [patients, setPatients] = useState([]);
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -30,13 +31,17 @@ const PatientList = ({ onPatientSelect }) => {
 
   if (loading) return <div>Loading...</div>;
 
+  const onPatientSelect = (patientId) => {
+    history.push(`/patients/profile/${patientId}`);
+  };
+
   return (
-    <div className="container">
-      <div className="filter-section">
+    <div className="container-section">
+      <div className="filter">
       <h1>Filter</h1>
         {/* Filters can be dynamically added here */}
       </div>
-      <div className="patient-section">
+      <div className="patient">
         <div className="search-bar">
           <input
             type="text"

@@ -3,7 +3,6 @@ import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import AddressPage from "../../../Components/AddressPage";
 import Summary from "../../../Components/Summary";
 import { useAuth } from "../../../Context/AuthContext";
-import SecondaryMenu from "../../../Components/SecondMenu";
 import "./styles/cart-page.css";
 
 const CartPage = () => {
@@ -37,7 +36,7 @@ const CartPage = () => {
     };
 
     fetchCartData();
-  }, []);
+  }, [currentUser]);
 
   useEffect(() => {
     const populateCartItems = async () => {

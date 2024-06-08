@@ -7,13 +7,16 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [role, setRole] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
     if (token) {
       const [header, payload, signature] = token.split(".");
       const decodedPayload = JSON.parse(atob(payload));
+      console.log( decodedPayload);
       setCurrentUser(decodedPayload.userId);
+      setRole(decodedPayload.role);
     } else {
       setCurrentUser(null);
     }
@@ -34,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, currentUser }}>
+    <AuthContext.Provider value={{ token, login, logout, currentUser, role }}>
       {children}
     </AuthContext.Provider>
   );

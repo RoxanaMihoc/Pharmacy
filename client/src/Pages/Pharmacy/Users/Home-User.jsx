@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import CartPreview from "../../../Components/CartPreview";
 import CartPage from "./CartPage";
 import ProductPage from "./ProductPage";
+import ProductDetails from "./ProductDetails";
 import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,6 +12,12 @@ import {
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/home.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 
 const HomeUser = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -18,11 +25,11 @@ const HomeUser = () => {
   const [showCartPreview, setShowCartPreview] = useState(false);
   const [category, setCategory] = useState('');
   const [subcategory, setSubcategory] = useState('');
-
   const location = useLocation();
+  const history = useHistory();
 
   const handleShowCartPreview = async () => {
-    if (location.pathname !== "/home/cart-page") {
+    if (location.pathname !== "/home/cart") {
       setShowCartPreview(true);
     }
   };
@@ -30,6 +37,7 @@ const HomeUser = () => {
   const handleCloseCartPreview = () => setShowCartPreview(false);
 
   const switchToCartPage = () => {
+    handleNavigate("/home/cart");
     setActiveTab("cart");
     setShowCartPreview(false); // Close the preview modal when moving to the cart page
   };
@@ -38,42 +46,22 @@ const HomeUser = () => {
     const tabNames = {
       dashboard: "Dashboard",
       appointments: "Appointments",
-      patients: "Patients",
+      profile: "My Profile",
       reports: "Reports",
       settings: "Settings",
-      cart: "Cart",
+      product: "Product List"
     };
     return tabNames[activeTab] || "Page Not Found";
   };
 
-  const renderContent = () => {
-    switch (activeTab) {
-      // case 'Profile':
-      //   return (
-      //     selectedPatientId
-      //       ? <PatientProfile patientId={selectedPatientId} onBack={() => setSelectedPatientId(null)} />
-      //       : <PatientList onPatientSelect={setSelectedPatientId} />
-      //   );
-      case "pharmacy":
-        return <ProductPage/>;
-      // case 'settings':
-      //     return <Settings />;
-      // case 'appointments':
-      //     return <Appointments />;
-      // case 'appointments':
-      //     return <Appointments />;
-      case "cart":
-        return <CartPage />;
-
-      default:
-        return <div>Page not found</div>;
-    }
+  const handleNavigate = (path) => {
+    history.push(path);
   };
 
   return (
     <div>
       <div className="home-doctor">
-        <Sidebar setActiveTab={setActiveTab} />
+      <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} />
         <div className="page-content">
           <div className="top-nav">
             {getTabName(activeTab)}
@@ -100,7 +88,14 @@ const HomeUser = () => {
               switchToCartPage={switchToCartPage}
             />
           </div>
-          {renderContent()}
+          <Switch>
+            <Route path="/home/dashboard" component={CartPage} />
+            <Route path="/home/cart" component={CartPage} />
+            <Route path="/home/product-page/:productId" component={ProductDetails} />
+            <Route path="/home/:category/:subcategory?" component={ProductPage} />
+            <Redirect from="/home" exact to="/home/dashboard" />
+            <Route component={() => <div>Page not found</div>} />
+          </Switch>
         </div>
       </div>
     </div>

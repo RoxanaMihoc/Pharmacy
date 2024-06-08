@@ -16,8 +16,10 @@ const ProductPage = () => {
   const [priceRange, setPriceRange] = useState([10, 1000]);
   const [displayedPriceRange, setDisplayedPriceRange] = useState([10, 1000]);
   const { currentUser} = useAuth();
-  const [category, setCategory] = useState('');
-  const [subcategory, setSubcategory] = useState('');
+  const {category, subcategory} = useParams();
+  console.log(category);
+  // const [category, setCategory] = useState('');
+  // const [subcategory, setSubcategory] = useState('');
   const [products, setProducts] = useState([]);
   console.log(category + " " + subcategory);
 
@@ -36,7 +38,7 @@ const ProductPage = () => {
     };
 
     fetchProducts();
-  }, [category]);
+  }, [category, subcategory]);
 
   const handleBrandChange = (brand) => {
     const updatedBrands = selectedBrands.includes(brand)
@@ -100,7 +102,7 @@ const ProductPage = () => {
 
   return (
     <div>
-      <SecondaryMenu setCategory={setCategory} setSubcategory={setSubcategory} />
+      <SecondaryMenu />
       <Container>
         <Row>
           <Col md={3} className="filter-container">
@@ -149,7 +151,7 @@ const ProductPage = () => {
                       style={{ height: "200px", objectFit: "cover" }}
                     />
                     <Card.Body>
-                    <Link to={`/home/product/details/${product._id}`}>
+                    <Link to={`/home/product-page/${product._id}`}>
                       <Card.Title style={{ textAlign: "center" }}>
                         {product.title}
                       </Card.Title>

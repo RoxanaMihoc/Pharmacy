@@ -13,7 +13,7 @@ const Dashboard = () => {
       <div className="welcome-banner">
         <div className="welcome-text">
           <h2>Welcome back,</h2>
-          <h1>{currentUser.firstName}</h1>
+          {/* <h1>{currentUser.firstName}</h1> */}
           <p>You have total {12} appointments today!</p>
         </div>
       </div>

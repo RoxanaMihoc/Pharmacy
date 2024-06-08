@@ -24,6 +24,7 @@ const ProductDetails = () => {
   const { currentUser} = useAuth();
   const [activeTab, setActiveTab] = useState("description");
   const productsGridRef = useRef(null);
+  console.log(productId);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -97,7 +98,6 @@ const ProductDetails = () => {
 
   return (
     <div>
-      <Menu />
       <SecondaryMenu />
       <div className="product-page1">
         <div className="product-page">
@@ -202,7 +202,6 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

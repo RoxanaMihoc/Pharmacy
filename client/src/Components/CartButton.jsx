@@ -53,45 +53,5 @@ const addToCartF = async (productId) => {
   }
 };
 
-
-function CartButton() {
-  const [isHovered, setIsHovered] = useState(false);
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Product 1', price: 10.00 },
-    { id: 2, name: 'Product 2', price: 15.00 },
-    { id: 3, name: 'Product 3', price: 20.00 }
-  ]);
-  const [total, setTotal] = useState(45.00); // Total price of the example products
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  return (
-    <div className="cart-button" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <FontAwesomeIcon
-        icon={faCartShopping}
-        style={{ marginRight: "5px", fontSize: "30px" }}
-      />
-      {isHovered && (
-        <div className="cart-preview">
-          <h3>Products in Cart</h3>
-          <ul>
-            {cartItems.map(item => (
-              <li key={item.id}>{item.name} - ${item.price.toFixed(2)}</li>
-            ))}
-          </ul>
-          <p>Total: ${total.toFixed(2)}</p>
-          <button>View Cart</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export {CartButton,addToCart, addToCartF};
+export {addToCart, addToCartF};
 

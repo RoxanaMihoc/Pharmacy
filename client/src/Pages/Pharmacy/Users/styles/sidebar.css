@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column; /* Stack vertically */
     padding: 20px;
-    height: 100vh; /* Full viewport height */
+    height: 200vh; /* Full viewport height */
     transition: transform 0.3s ease; /* Smooth transform transition */
 }
 

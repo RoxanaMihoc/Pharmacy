@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import "./styles/patient-profile.css";
+import { useParams } from "react-router-dom";
 
-const PatientProfile = ({ patientId, onBack }) => {
+
+const PatientProfile = ({ onBack }) => {
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const patientId = useParams();
 
   useEffect(() => {
     const fetchPatient = async () => {
         console.log(patientId);
       try {
         const response = await fetch(
-          `http://localhost:3000/doctors/patient/${patientId}`
+          `http://localhost:3000/doctors/patient/${patientId.patientId}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -34,6 +37,7 @@ const PatientProfile = ({ patientId, onBack }) => {
   if (!patient) return <div>No patient found</div>;
 
   return (
+    <div>
     <div className="user-profile">
         <button onClick={onBack}>Back to Patients List</button>
       <div className="user-info">
@@ -50,6 +54,9 @@ const PatientProfile = ({ patientId, onBack }) => {
         <p><strong>Address:</strong> {patient[0].address}</p>
       </div>
     </div>
+    <Medications/>
+    </div>
+
   );
 };
 

@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import Dashboard from "./Dashboards/DashBoard";
 import PatientList from './Dashboards/PatientList';
+import { useLocation, useHistory } from "react-router-dom";
 import PatientProfile from './Dashboards/PatientProfile';
+import Recommend from "./Dashboards/Prescription/Recommend";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 // import Appointments from './Appointments';
 // import Reports from './Reports';
 // import Settings from './Settings';
@@ -13,7 +21,7 @@ import "./styles/home.css";
 
 const HomeDoctor = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const history= useHistory();
 
   const getTabName = (activeTab) => {
     const tabNames = {
@@ -22,35 +30,19 @@ const HomeDoctor = () => {
       patients: "Patients",
       reports: "Reports",
       settings: "Settings",
+      prescription: "Prescription",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "dashboard":
-        return <Dashboard />;
-      // case 'appointments':
-      //     return <Appointments />;
-      case 'patients':
-        return (
-          selectedPatientId 
-            ? <PatientProfile patientId={selectedPatientId} onBack={() => setSelectedPatientId(null)} />
-            : <PatientList onPatientSelect={setSelectedPatientId} />
-        );
-      // case 'reports':
-      //     return <Reports />;
-      // case 'settings':
-      //     return <Settings />;
-      default:
-        return <div>Page not found</div>;
-    }
+  const handleNavigate = (path) => {
+    history.push(path);
   };
 
   return (
     <div>
       <div className="home-doctor">
-        <Sidebar setActiveTab={setActiveTab} />
+      <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} />
         <div className="page-content">
           <div className="top-nav">
             {getTabName(activeTab)}
@@ -63,7 +55,14 @@ const HomeDoctor = () => {
               </button>
             </div>
           </div>
-          {renderContent()}
+          <Switch>
+            {/* <Route path="/patients/dashboard" component={CartPage} /> */}
+            <Route path="/patients/profile/:patientId" component={PatientProfile} />
+            <Route path="/patients/profile" component={PatientList} />
+            <Route path="/patients/prescription" component={Recommend} />
+            <Redirect from="/home" exact to="/patients/dashboard" />
+            <Route component={() => <div>Page not found</div>} />
+          </Switch>
         </div>
       </div>
     </div>

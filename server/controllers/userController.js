@@ -36,11 +36,19 @@ exports.register = async (req, res) => {
         address,
         city,
         birth_date,
-        postal_code,
-        photo
+        postal_code
 
       });
       await newUser.save();
+      console.log("lala",newUser._id, selectedDoctor);
+      const patientId = newUser._id;
+      const doctorId = selectedDoctor;
+      const ret= await Doctor.findByIdAndUpdate(
+        doctorId,
+        { $addToSet: { patients: patientId } },  // Use $addToSet to avoid adding duplicates
+        { new: true, safe: true, upsert: false }  // Options for the update operation
+    );
+    console.log(ret);
       res.status(201).json({ message: "Patient registered successfully." });
     } else {
       // Check if the email is already taken
@@ -93,7 +101,7 @@ exports.login = async (req, res) => {
 
     // Create and send a JWT token
     const token = jwt.sign({ userId: user._id, role: role, firstName: user.firstName, lastName: user.lastName }, "your-secret-key");
-    res.json({ token, role, firstName, lastName });
+    res.json({ token, role});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -104,7 +112,7 @@ exports.getCartbyId = async (req, res) => {
   try {
     const { currentUser } = req.params;
     //currentUser null for some reason
-    console.log(currentUser + "ceva");
+    console.log(typeof(currentUser));
     let user = await User.findById(currentUser);
     if (!user) {
       // User not found

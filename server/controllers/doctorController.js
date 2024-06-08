@@ -30,7 +30,7 @@ const getAllPatientsByDoctorId= async (req, res) =>{
 // for product/productId
 const getPatientDetails = async (req, res) =>{
   const {patientId} = req.params;
-  console.log("id",patientId);
+  console.log("id",patientId.patient);
 
   query ={ _id: patientId};
 
