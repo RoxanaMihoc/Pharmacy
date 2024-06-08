@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
-import Menu from "../../Components/Menu";
-import Footer from "../../Components/Footer";
-import AddressPage from "../../Components/AddressPage";
-import Summary from "../../Components/Summary";
-import { useAuth } from "../../Context/AuthContext";
-import SecondaryMenu from "../../Components/SecondMenu";
+import AddressPage from "../../../Components/AddressPage";
+import Summary from "../../../Components/Summary";
+import { useAuth } from "../../../Context/AuthContext";
+import SecondaryMenu from "../../../Components/SecondMenu";
 import "./styles/cart-page.css";
 
 const CartPage = () => {
@@ -17,7 +15,8 @@ const CartPage = () => {
   const [activeStep, setActiveStep] = useState("Cos de cumparaturi");
   const [addressDetails, setAddressDetails] = useState({});
   const [orderSubmitted, setOrderSubmitted] = useState(false);
-  const { currentUser} = useAuth();
+  const { currentUser, token} = useAuth();
+  console.log(token, currentUser);
   useEffect(() => {
     const fetchCartData = async () => {
       console.log("cart page", currentUser);
@@ -38,7 +37,7 @@ const CartPage = () => {
     };
 
     fetchCartData();
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     const populateCartItems = async () => {
@@ -98,6 +97,7 @@ const CartPage = () => {
 
     try {
       // Send request to remove item from cart
+     // cand se da delete la un produs nu ai product id
       const response = await fetch(
         `http://localhost:3000/home/cart/${currentUser}/${productId}`,
         {
@@ -285,10 +285,8 @@ const CartPage = () => {
 
   return (
     <div>
-      <Menu />
-      <SecondaryMenu />
       <Container>
-        <Row className="mt-3 justify-content-center">
+        <Row className="mt-3">
           <Col className="button-center">
             <div className="button-wrapper">
               <Button
@@ -333,13 +331,12 @@ const CartPage = () => {
           </Col>
         </Row>
 
-        <Row className="mt-3">
+        <Row className="mt-2">
           <Col>
             <div className="mb-3">{renderContent()}</div>
           </Col>
         </Row>
       </Container>
-      <Footer />
     </div>
   );
 };

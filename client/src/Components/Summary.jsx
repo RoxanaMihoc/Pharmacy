@@ -7,6 +7,7 @@ const Summary = ({ cartItems, cartId, addressDetails, totalPrice, onOrderSubmitt
   console.log("Cart ", cartItems);
   console.log("Cart ID ",cartId);
   const { currentUser} = useAuth();
+  const user = currentUser;
   const submitOrder = async () => {
     try {
       const response = await fetch(`http://localhost:3000/home/orders`, {
@@ -14,7 +15,7 @@ const Summary = ({ cartItems, cartId, addressDetails, totalPrice, onOrderSubmitt
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cartItems, addressDetails, currentUser, totalPrice }),
+        body: JSON.stringify({ cartItems, addressDetails, user, totalPrice }),
       });
       const data = await response.json();
       console.log('Order submitted:', data);

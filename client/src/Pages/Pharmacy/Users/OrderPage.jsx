@@ -1,6 +1,6 @@
 // components/AdminOrders.js
 import React, { useEffect, useState } from 'react';
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../../Context/AuthContext";
 import { Container, Table, Button, Accordion, Card } from 'react-bootstrap';
 
 const OrderPage = () => {

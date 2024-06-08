@@ -12,7 +12,18 @@ const userSchema = new mongoose.Schema({
   role: { type: String, required: true },
   cart:{type: Array, required: true},
   orders:{type: Array, required: true},
-  favorites:{type: Array, required: true}
+  favorites:{type: Array, required: true},
+  doctor: { type: String, required: true },
+  gender: { type: String, required: true },
+  phone: { type: String, required: true },
+  address: { type: String, required: true },
+  city: { type: String, required: true },
+  birth_date: { type: String, required: true },
+  postal_code: { type: String, required: true },
+  appointments: {type: Array, required: true},
+  medical_history: {type: Array, required: true},
+  recomandations: {type: Array, required: true},
+  photo:{ type: String, required: true },
 });
 
 userSchema.pre('save', async function (next) {

@@ -1,9 +1,6 @@
-.mt-3 {
+.container{
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 1rem !important;
-  border-radius: 50%;
+  flex-direction: column;
 }
 .product-row {
   border-bottom: 1px solid #dee2e6;

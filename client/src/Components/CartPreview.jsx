@@ -8,7 +8,7 @@ import { useAuth } from "../Context/AuthContext";
 import { useHistory } from 'react-router-dom';
 import './cart-preview.css'; 
 
-const CartPreview = ({ show, handleClose }) => {
+const CartPreview = ({ show, handleClose, switchToCartPage }) => {
   
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -153,7 +153,7 @@ const CartPreview = ({ show, handleClose }) => {
         
   const moveToCartPage = async () => {
 
-     history.push('/home/cart-page');
+     history.push('/user/cart-page');
   }; 
 
   return (
@@ -209,7 +209,7 @@ const CartPreview = ({ show, handleClose }) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={moveToCartPage}>
+        <Button variant="primary" onClick={switchToCartPage}>
           Vezi detalii coș
         </Button>
       </Modal.Footer>

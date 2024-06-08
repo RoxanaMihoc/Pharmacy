@@ -41,11 +41,11 @@ const Login = () => {
       login(token);
       if(!isAuthenticated && role =='patient')
       {
-        history.push('/home');
+        history.push('/user');
       }
       else
       {
-        history.push('/home2');
+        history.push('/patients');
       }
       
     } catch (error) {

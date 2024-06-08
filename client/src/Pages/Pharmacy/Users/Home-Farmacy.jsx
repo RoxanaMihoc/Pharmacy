@@ -1,12 +1,10 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
-import { useAuth } from '../../Context/AuthContext';
-import Menu from '../../Components/Menu'
-import Gallery from '../../Components/Gallery';
-import ProductList from '../../Components/ProductList';
-import SecondaryMenu from "../../Components/SecondMenu";
-import Footer from "../../Components/Footer";
+import { useAuth } from '../../../Context/AuthContext';
+import Menu from '../../../Components/Menu'
+import Gallery from '../../../Components/Gallery';
+import ProductList from '../../../Components/ProductList';
+import SecondaryMenu from "../../../Components/SecondMenu";
+import Footer from "../../../Components/Footer";
 
 
 const Home = () => {

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Menu from "../../Components/Menu";
-import Footer from "../../Components/Footer";
-import { useAuth } from "../../Context/AuthContext";
-import SecondaryMenu from "../../Components/SecondMenu";
-import {addToCart} from '../../Components/CartButton';
+import Menu from "../../../Components/Menu";
+import Footer from "../../../Components/Footer";
+import { useAuth } from "../../../Context/AuthContext";
+import SecondaryMenu from "../../../Components/SecondMenu";
+import {addToCart} from '../../../Components/CartButton';
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import "./styles/favorites-page.css";

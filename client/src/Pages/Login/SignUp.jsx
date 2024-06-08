@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import "./styles/login.css";
 
 const SignUp = () => {
@@ -9,36 +10,12 @@ const SignUp = () => {
   const [CNP, setCNP] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [role, setRole] = useState("");
+  const history = useHistory();
 
   const handleRegister = async (e) => {
-    try {
-      e.preventDefault();
-      console.log(firstName + " " + lastName + " " + email + " " + password);
-      const response = await fetch("http://localhost:3000/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "applicatio/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        crossDomain: true,
-        body: JSON.stringify({ firstName, lastName, email, password, CNP, role }),
-      });
-
-      if (!response.ok) {
-        setErrorMessage("User already registered. Please use another email.");
-        throw new Error("Registration failed");
-      }
-
-      const data = await response.json();
-      console.log(data); // Assuming the API returns a message upon successful registration
-    } catch (error) {
-      console.error("Registration failed:", error.message);
-      debugger;
-      setTimeout(() => {
-        // Empty block to keep the console open
-      }, 5000);
-    }
+    e.preventDefault();
+    // Instead of making the POST request here, pass the data to the redirected page
+    history.push('/doctors', { firstName, lastName, email, password, CNP, role });
   };
 
   const handleRoleChange = (event) => {

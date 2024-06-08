@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import Menu from "../../Components/Menu";
-import Footer from "../../Components/Footer";
-import SecondaryMenu from "../../Components/SecondMenu";
-import { useAuth } from '../../Context/AuthContext';
-import {addToCart, addToCartF} from '../../Components/CartButton';
-import addToFavorites  from "../../Components/FavoritesButton";
+import Menu from "../../../Components/Menu";
+import Footer from "../../../Components/Footer";
+import SecondaryMenu from "../../../Components/SecondMenu";
+import { useAuth } from '../../../Context/AuthContext';
+import {addToCart, addToCartF} from '../../../Components/CartButton';
+import addToFavorites  from "../../../Components/FavoritesButton";
 import "./styles/product-page.css"; // Import your CSS file
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
@@ -16,8 +16,8 @@ const ProductPage = () => {
   const [priceRange, setPriceRange] = useState([10, 1000]);
   const [displayedPriceRange, setDisplayedPriceRange] = useState([10, 1000]);
   const { currentUser} = useAuth();
-
-  const { category, subcategory } = useParams();
+  const [category, setCategory] = useState('');
+  const [subcategory, setSubcategory] = useState('');
   const [products, setProducts] = useState([]);
   console.log(category + " " + subcategory);
 
@@ -100,8 +100,7 @@ const ProductPage = () => {
 
   return (
     <div>
-      <Menu />
-      <SecondaryMenu />
+      <SecondaryMenu setCategory={setCategory} setSubcategory={setSubcategory} />
       <Container>
         <Row>
           <Col md={3} className="filter-container">
@@ -175,7 +174,6 @@ const ProductPage = () => {
           </Col>
         </Row>
       </Container>
-      <Footer/>
     </div>
   );
 };

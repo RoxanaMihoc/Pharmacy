@@ -1,32 +1,35 @@
 // src/context/AuthContext.js
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from "react";
+import { useLocation, useHistory } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [currentUser, setCurrentUser] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     if (token) {
-        const [header, payload, signature] = token.split('.');
-        const decodedPayload = JSON.parse(atob(payload));
-        setCurrentUser(decodedPayload.userId);
+      const [header, payload, signature] = token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      setCurrentUser(decodedPayload.userId);
     } else {
-        setCurrentUser(null);
+      setCurrentUser(null);
     }
-}, [token]);
+  }, [token]);
 
   const login = (token) => {
     // Set the JWT token in both state and localStorage
     setToken(token);
-    localStorage.setItem('token', token);
+    localStorage.setItem("token", token);
   };
 
   const logout = () => {
     // Remove the JWT token from both state and localStorage
     setToken(null);
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
+    history.push("/login");
     setUser(null);
   };
 
