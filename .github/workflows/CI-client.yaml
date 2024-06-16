@@ -2,8 +2,8 @@ name: CI Pipeline - Client
 
 on:
   push:
-    branches-ignore:
-      - main
+    # branches-ignore:
+    #   - main
     paths:
       - 'client/**'
       - '.github/workflows/*client*.yaml'

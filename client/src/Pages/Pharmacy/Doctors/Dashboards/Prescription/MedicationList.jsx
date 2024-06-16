@@ -7,7 +7,7 @@ const MedicationList = () => {
     const [prescriptions, setPrescriptions] = useState([]);
     const history = useHistory();
     const location = useLocation();
-    const patient = location.state?.patient;
+    const patient = location.state?.patient; 
 
     useEffect(() => {
         const fetchPrescriptions = async () => {
