@@ -4,7 +4,6 @@ const User = require('../models/userModel');
 const addToCart = async (req, res) => {
   console.log("in addto cart backend");
   const { userId, productId } = req.body;
-  console.log('User:', User);
 
   try {
     // Update user's cart in the database
