@@ -23,7 +23,7 @@ env:
 
 jobs:
   build:
-    name: Build
+    name: Lint, Build and Upload
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +34,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '21'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
 
       - name: Run npm CI
         id: ci
@@ -58,3 +60,9 @@ jobs:
       - name: Build
         working-directory: client
         run: npm run build
+
+      - name: Upload Dist as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-dist
+          path: client/dist
