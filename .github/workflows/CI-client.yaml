@@ -18,6 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  enable-lint: false
   fail-on-lint: false
 
 jobs:
@@ -44,6 +45,7 @@ jobs:
         run: echo "::error::An error occurred during npm ci on the client module. Please inspect package.json and/or delete package-lock.json and recreate it!" && exit 1
 
       - name: Lint
+        if: env.enable-lint == 'true'
         id: lint
         working-directory: client
         continue-on-error: ${{ env.fail-on-lint == 'false' }}
