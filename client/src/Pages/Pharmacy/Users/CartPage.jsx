@@ -15,10 +15,8 @@ const CartPage = () => {
   const [addressDetails, setAddressDetails] = useState({});
   const [orderSubmitted, setOrderSubmitted] = useState(false);
   const { currentUser, token} = useAuth();
-  console.log(token, currentUser);
   useEffect(() => {
     const fetchCartData = async () => {
-      console.log("cart page", currentUser);
       try {
         // Fetch cart data from backend API
         const response = await fetch(

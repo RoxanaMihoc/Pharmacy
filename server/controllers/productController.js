@@ -11,9 +11,8 @@ function removeNonLetters(str) {
 }
 router.getAllProducts= async (req, res) =>{
   try {
-      console.log("in doctors");
-  const doctors = await Product.find({});
-  res.json(doctors);
+  const products = await Product.find({});
+  res.json(products);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

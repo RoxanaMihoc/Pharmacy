@@ -4,6 +4,8 @@ import CartPreview from "../../../Components/CartPreview";
 import CartPage from "./CartPage";
 import ProductPage from "./ProductPage";
 import ProductDetails from "./ProductDetails";
+import NotificationBell from "./NotificationBell";
+import PrescriptionDetails from "./PrescriptionDetails";
 import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -66,9 +68,7 @@ const HomeUser = () => {
           <div className="top-nav">
             {getTabName(activeTab)}
             <div className="nav-icons">
-              <button className="icon-button">
-                <FontAwesomeIcon icon={faBell} />
-              </button>
+              <NotificationBell/>
               <button className="icon-button">
                 <FontAwesomeIcon icon={faUserCircle} />
               </button>
@@ -91,6 +91,7 @@ const HomeUser = () => {
           <Switch>
             <Route path="/home/dashboard" component={CartPage} />
             <Route path="/home/cart" component={CartPage} />
+            <Route path="/home/prescription/:patientId" component={PrescriptionDetails} />
             <Route path="/home/product-page/:productId" component={ProductDetails} />
             <Route path="/home/:category/:subcategory?" component={ProductPage} />
             <Redirect from="/home" exact to="/home/dashboard" />

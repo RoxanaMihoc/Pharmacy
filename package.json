@@ -1,7 +1,15 @@
 {
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "install": "^0.13.0",
+    "npm": "^10.8.1",
     "react-bootstrap": "^2.10.2",
-    "react-toastify": "^10.0.5"
+    "react-toastify": "^10.0.5",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.8",
+    "utf-8-validate": "^5.0.10"
   }
 }
