@@ -11,7 +11,7 @@ const favoritesRoutes = require('./routes/favoritesRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
-const notificationRoutes = require('./routes/notificationRoutes');
+const notificationRoutes = require('./routes/notificationRoutes'); 
 
 const app = express();
 
