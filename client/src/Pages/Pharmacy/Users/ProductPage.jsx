@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import Menu from "../../../Components/Menu";
-import Footer from "../../../Components/Footer";
 import SecondaryMenu from "../../../Components/SecondMenu";
 import { useAuth } from '../../../Context/AuthContext';
 import {addToCart, addToCartF} from '../../../Components/CartButton';
@@ -24,6 +22,15 @@ const ProductPage = () => {
   console.log(category + " " + subcategory);
 
   useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/home/brands');
+        const data = await response.json();
+        setBrands(data);
+      } catch (error) {
+        console.error('Failed to fetch brands:', error);
+      }
+    };
     const fetchProducts = async () => {
       try {
         const response = await fetch(
@@ -38,6 +45,7 @@ const ProductPage = () => {
     };
 
     fetchProducts();
+    fetchBrands();
   }, [category, subcategory]);
 
   const handleBrandChange = (brand) => {

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Menu from "../../../Components/Menu";
-import Footer from "../../../Components/Footer";
 import { useAuth } from "../../../Context/AuthContext";
 import SecondaryMenu from "../../../Components/SecondMenu";
 import {addToCart} from '../../../Components/CartButton';

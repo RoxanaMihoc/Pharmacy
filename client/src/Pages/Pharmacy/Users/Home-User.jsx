@@ -6,6 +6,7 @@ import ProductPage from "./ProductPage";
 import ProductDetails from "./ProductDetails";
 import NotificationBell from "./NotificationBell";
 import PrescriptionDetails from "./PrescriptionDetails";
+import PaymentForm from "../../../Components/PaymentForm";
 import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,13 +21,17 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+// import { Elements } from "@stripe/react-stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
+
+// const stripePromise = loadStripe("your_public_key_here");
 
 const HomeUser = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [showCartPreview, setShowCartPreview] = useState(false);
-  const [category, setCategory] = useState('');
-  const [subcategory, setSubcategory] = useState('');
+  const [category, setCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
   const location = useLocation();
   const history = useHistory();
 
@@ -51,7 +56,7 @@ const HomeUser = () => {
       profile: "My Profile",
       reports: "Reports",
       settings: "Settings",
-      product: "Product List"
+      product: "Product List",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
@@ -63,23 +68,21 @@ const HomeUser = () => {
   return (
     <div>
       <div className="home-doctor">
-      <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} />
+        <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} />
         <div className="page-content">
           <div className="top-nav">
             {getTabName(activeTab)}
             <div className="nav-icons">
-              <NotificationBell/>
+              <NotificationBell />
               <button className="icon-button">
                 <FontAwesomeIcon icon={faUserCircle} />
               </button>
               <button
+                className="icon-button"
                 onClick={handleShowCartPreview}
                 disabled={location.pathname === "/user/cart-page"}
               >
-                <FontAwesomeIcon
-                  icon={faShoppingCart}
-                  style={{ marginRight: "5px", fontSize: "30px" }}
-                />
+                <FontAwesomeIcon icon={faShoppingCart} />
               </button>
             </div>
             <CartPreview
@@ -88,12 +91,24 @@ const HomeUser = () => {
               switchToCartPage={switchToCartPage}
             />
           </div>
-          <Switch>
+          <Switch className="page">
+          {/* <Elements stripe={stripePromise}>
+              <Route path="/home/payment" component={PaymentForm} />
+            </Elements> */}
             <Route path="/home/dashboard" component={CartPage} />
             <Route path="/home/cart" component={CartPage} />
-            <Route path="/home/prescription/:patientId" component={PrescriptionDetails} />
-            <Route path="/home/product-page/:productId" component={ProductDetails} />
-            <Route path="/home/:category/:subcategory?" component={ProductPage} />
+            <Route
+              path="/home/prescription/:patientId"
+              component={PrescriptionDetails}
+            />
+            <Route
+              path="/home/product-page/:productId"
+              component={ProductDetails}
+            />
+            <Route
+              path="/home/:category/:subcategory?"
+              component={ProductPage}
+            />
             <Redirect from="/home" exact to="/home/dashboard" />
             <Route component={() => <div>Page not found</div>} />
           </Switch>

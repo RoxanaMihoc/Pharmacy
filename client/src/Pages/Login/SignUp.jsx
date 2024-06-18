@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom';
-import "./styles/login.css";
+import { useHistory } from "react-router-dom";
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -15,7 +14,14 @@ const SignUp = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     // Instead of making the POST request here, pass the data to the redirected page
-    history.push('/doctors', { firstName, lastName, email, password, CNP, role });
+    history.push("/doctors", {
+      firstName,
+      lastName,
+      email,
+      password,
+      CNP,
+      role,
+    });
   };
 
   const handleRoleChange = (event) => {
@@ -68,10 +74,9 @@ const SignUp = () => {
       </label>
       <br />
       <label>
-        <div className="input-container">
+        <div className="input-container-password">
           <input
             type="password"
-            className="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -80,12 +85,14 @@ const SignUp = () => {
       </label>
       <br />
       <label>
-        <div className="input-container">
-        <select value={role} onChange={handleRoleChange} required>
-        <option value="" disabled selected>Select your role</option>
-        <option value="doctor">Doctor</option>
-        <option value="patient">Patient</option>
-      </select>
+        <div className="input-container-password">
+          <select value={role} onChange={handleRoleChange} required>
+            <option value="" disabled selected>
+              Select your role
+            </option>
+            <option value="doctor">Doctor</option>
+            <option value="patient">Patient</option>
+          </select>
         </div>
       </label>
       <div className="buttons-container">

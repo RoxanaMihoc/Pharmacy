@@ -36,7 +36,7 @@ router.getProductsByCategory = async (req, res) => {
   try {
     const products = await Product.find(
       query,
-      "category title brand price photo"
+      "category title brand price photo insurance"
     );
     res.json(products);
   } catch (error) {
@@ -54,7 +54,7 @@ router.getProductsById = async (req, res) => {
   try {
     const product = await Product.find(
       query,
-      "category title brand price photo"
+      "category title brand price photo insurance"
     );
     res.json(product);
   } catch (error) {
@@ -96,6 +96,15 @@ router.getProductsByBrand = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+router.getBrands = async (req, res) => {
+  try {
+    const brands = await Product.distinct('brand');
+    res.json(brands);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 

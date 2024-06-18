@@ -51,7 +51,7 @@ const UserForm = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container2">
       <h1>Other details</h1>
       <form onSubmit={handleRegister}>
         <label>

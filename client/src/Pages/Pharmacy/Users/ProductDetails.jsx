@@ -8,8 +8,6 @@ import {
   FormControl,
 } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
-import Menu from "../../../Components/Menu";
-import Footer from "../../../Components/Footer";
 import SecondaryMenu from "../../../Components/SecondMenu";
 import { useAuth } from "../../../Context/AuthContext";
 import { addToCart, addToCartF } from "../../../Components/CartButton";

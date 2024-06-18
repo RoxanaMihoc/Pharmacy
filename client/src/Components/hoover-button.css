@@ -10,7 +10,7 @@
 }
 
 
-.button .additional-content-container {
+.button-h .additional-content-container {
   display: none;
   position: absolute;
   top: 0;
@@ -24,7 +24,7 @@
 
 }
 
-.button:hover .additional-content-container {
+.button-h:hover .additional-content-container {
   display: grid;
   grid-template-columns: 60% 40%;
 }

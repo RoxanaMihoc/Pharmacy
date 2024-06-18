@@ -3,12 +3,12 @@ const Notification = require("../models/notificationModel");
 const addNotification = async (req, res) => {
   console.log("in notif");
   const { prescriptionId, details } = req.body;
-  const patientId = details.patientId;
+  const patientId = details.patient._id;
   console.log(patientId, details);
 
   try {
     const newNotification = new Notification({
-        prescriptionId,
+      prescriptionId,
       patientId,
       details,
     });

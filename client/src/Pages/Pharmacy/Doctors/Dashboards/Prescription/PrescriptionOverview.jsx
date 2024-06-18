@@ -3,21 +3,25 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useAuth } from "../../../../../Context/AuthContext";
 import "./styles/overview.css"; // Make sure to create and link this CSS for styling
 import io from "socket.io-client";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 const socket = io('http://localhost:3000');
 
 const PrescriptionOverview = () => {
   const location = useLocation();
   const patient = location.state?.patient;
+  const diagnosis = location.state?.diagnosis;
   const selectedItems = location.state?.selectedItems;
   const { currentUser } = useAuth();
-  console.log("In overview", patient._id, selectedItems);
+  console.log("In overview", patient, selectedItems);
 
   const sendPrescription = async () => {
     try {
       const prescriptionData  = {
         doctorId: currentUser, // Assuming currentUser contains the doctor's ID
-        patientId: patient._id, // Patient ID from the state
+        patient: patient, // Patient ID from the state
+        diagnosis: diagnosis,
         products: selectedItems.map((item) => ({
           medication: item, // ID of the medication
           dosage: item.dosage, // Dosage information
@@ -51,16 +55,53 @@ const PrescriptionOverview = () => {
     }
   };
 
+  const generatePDF = () => {
+    setTimeout(() => {
+      const input = document.getElementsByClassName('overview-container');
+      if (!input) {
+        console.error("Element to generate PDF from was not found!");
+        return;
+      }
+  
+      html2canvas(input, { scale: 1, useCORS: true }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+        });
+        const imgWidth = 210;  // A4 width in mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+  
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save('prescription-overview.pdf');
+      }).catch(err => {
+        console.error("Failed to generate PDF", err);
+      });
+    }, 500); // delay in milliseconds
+  };
+  
+
   return (
     <div className="overview-container">
       <h1>Prescription Overview</h1>
       <div className="patient-info">
         <h2>Patient Information</h2>
         <p>
-          Name: {patient.firstName} {patient.lastName}
+          Nume: {patient.lastName}
+        </p>
+        <p>
+          Prenume: {patient.firstName}
         </p>
         <p>Email: {patient.email}</p>
         <p>CNP: {patient.CNP}</p>
+        <p>Gen: {patient.gender}</p>
+        <p>Data nasterii: {patient.birth_date}</p>
+      </div>
+
+      <div className="diagnosis-info">
+        <h2>Diagnostic</h2>
+        <p>
+          {diagnosis}
+        </p>
       </div>
       <div className="prescription-details">
         <h2>Selected Medications</h2>
@@ -77,6 +118,10 @@ const PrescriptionOverview = () => {
       <button onClick={sendPrescription} className="send-button">
         Send Prescription
       </button>
+      <button onClick={generatePDF} className="generate-pdf-button">
+      Generate PDF
+    </button>
+
     </div>
   );
 };

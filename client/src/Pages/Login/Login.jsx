@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
-import "./styles/login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -41,7 +40,7 @@ const Login = () => {
       login(token);
       if(!isAuthenticated && role =='patient')
       {
-        history.push('/user');
+        history.push('/home');
       }
       else
       {
@@ -55,7 +54,6 @@ const Login = () => {
   };
 
   return (
-    <div>
       <form>
         <label>
           <div className="input-container">
@@ -80,10 +78,9 @@ const Login = () => {
       </label>
         <br />
         <label>
-          <div className="input-container">
+          <div className="input-container-password">
             <input
               type="password"
-              className="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -104,7 +101,6 @@ const Login = () => {
           </button>
         </div>
       </form>
-    </div>
   );
 };
 

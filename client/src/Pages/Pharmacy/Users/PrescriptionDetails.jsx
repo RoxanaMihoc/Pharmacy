@@ -34,7 +34,7 @@ const PrescriptionDetails = () => {
                     <p className="detailItem"><strong>Brand:</strong> {product.medication.brand}</p>
                     <p className="detailItem"><strong>Category:</strong> {product.medication.category}</p>
                     <p className="detailCheckbox"><strong>Availability:</strong> {product.medication.availability}</p>
-                    <p className="detailCheckbox"><strong>Price:</strong> ${product.medication.price.toFixed(2)}</p>
+                    <p className="detailCheckbox"><strong>Price:</strong> ${product.medication.price}</p>
                     <p className="detailCheckbox"><strong>Dosage:</strong> {product.dosage}</p>
                     <p className="detailCheckbox"><strong>Duration:</strong> {product.duration}</p>
                     <p className="detailCheckbox"><strong>Reason:</strong> {product.reason}</p>

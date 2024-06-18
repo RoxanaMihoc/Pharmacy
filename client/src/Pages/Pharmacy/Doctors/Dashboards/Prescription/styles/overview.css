@@ -7,7 +7,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.patient-info, .prescription-details {
+.patient-info, .prescription-details, .diagnosis-info {
     margin-bottom: 20px;
     padding: 10px;
     background-color: white;
@@ -48,3 +48,18 @@ li:last-child {
 .send-button:hover {
     background-color: #45a049;
 }
+
+.generate-pdf-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .generate-pdf-button:hover {
+    background-color: #45a049;
+  }
+  

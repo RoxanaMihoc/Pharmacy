@@ -1,7 +1,6 @@
 // src/components/CartPreviewModal.js
 import React, { useState, useEffect } from "react";
-import { Row, Col} from "react-bootstrap";
-import { Modal, Button } from 'react-bootstrap';
+import { Row, Col, Modal, Button} from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { useHistory } from 'react-router-dom';
 import './cart-preview.css'; 
@@ -198,11 +197,11 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
         <Button variant="primary" onClick={switchToCartPage}>
           Vezi detalii coș
+        </Button>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
         </Button>
       </Modal.Footer>
     </Modal>

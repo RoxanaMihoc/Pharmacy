@@ -14,7 +14,6 @@ import {
 // import Appointments from './Appointments';
 // import Reports from './Reports';
 // import Settings from './Settings';
-import Footer from "../../../Components/Footer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import "./styles/home.css";

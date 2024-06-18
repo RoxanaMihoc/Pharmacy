@@ -47,14 +47,13 @@
 
 /* Active button style */
 .step-button.active {
-  background-color: #007bff; /* Blue background for active button */
-  color: white; /* White text */
+  background-color: #007bff;
+  color: white; 
 }
 
-/* Hover effect for buttons */
 .step-button:hover {
-  background-color: #0056b3; /* Darker blue for hover effect */
-  color: white; /* White text */
+  background-color: #0056b3;
+  color: white; 
 }
 
 .cartImage{

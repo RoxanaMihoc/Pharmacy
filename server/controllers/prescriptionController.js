@@ -1,28 +1,37 @@
 const Prescription = require('../models/prescriptionModel');
 
 exports.addPrescription = async (req, res, io, userSockets) => {
-    const { doctorId, patientId, products, notes } = req.body;
-    console.log(patientId, products);
+    const { diagnosis, doctorId, patient, products, notes } = req.body;
+    console.log(patient, products);
+
+    const generateRandomNumber = () => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    };
+
+    const prescriptionNumber = generateRandomNumber();
 
     try {
         const newPrescription = new Prescription({
             doctorId,
-            patientId,
+            patient,
+            diagnosis,
             products,
-            notes
+            notes,
+            prescriptionNumber
         });
 
         await newPrescription.save();
 
-        console.log(userSockets[patientId]);
+        console.log(userSockets[patient._id]);
 
         // Emit an event to the specific patient's socket ID if they are connected
-        io.to(userSockets[patientId]).emit('new-prescription', {
+        io.to(userSockets[patient._id]).emit('new-prescription', {
             id: newPrescription._id,
             message: 'A new prescription has been issued to you.',
             prescriptionDetails: {
                 doctorId,
-                patientId,
+                patient,
+                diagnosis,
                 products,
                 notes
             }

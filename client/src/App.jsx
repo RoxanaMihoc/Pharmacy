@@ -6,12 +6,10 @@ import {
   Redirect,
 } from "react-router-dom";
 import FirstPage from "./Pages/Login/FirstPage";
-import Home from "./Pages/Pharmacy/Users/Home-Farmacy";
 import ProductPage from "./Pages/Pharmacy/Users/ProductPage";
 import HomeDoctor from "./Pages/Pharmacy/Doctors/HomeDoctor";
 import CartPage from "./Pages/Pharmacy/Users/CartPage";
 import { useAuth } from "./Context/AuthContext";
-import HomePage from "./Pages/FirstPage/HomePage";
 import ProductDetails from "./Pages/Pharmacy/Users/ProductDetails";
 import DoctorSelection from "./Pages/Login/DoctorSelection";
 import AdminOrders from "./Pages/Admin Interface/AdminOrders";
@@ -42,7 +40,6 @@ const App = () => {
         {role === "patient" && <Route path="/home" component={HomeUser} />}
         <Route path="/admin" component={AdminOrders} />
         <Route path="/others" component={UserForm} />
-        <Route path="/first-page" component={HomePage} />
         <Route path="/login" component={FirstPage} />
         <Route path="/doctors" component={DoctorSelection} />
         <Route path="/rem" component={Recommend} />

@@ -1,3 +1,4 @@
+/* General styling for the HomeUser layout */
 .page-content {
     display: flex;
     flex-direction: column; /* Stack children vertically */
@@ -6,23 +7,23 @@
 }
 
 .home-doctor {
-    display: flex; /* Enable flexbox */
-    height: 100vh; /* Full viewport height */
+    display: flex;
+    min-height: 100vh; /* Full viewport height */
 }
 
 .sidebar {
-    min-width: 200px; /* Minimum width for the sidebar */
-    background-color: #343a40; /* Dark background for the sidebar */
+    flex: 0 0 200px; /* Sidebar fixed width */
+    background-color: #343a40; /* Dark background */
     color: #ffffff; /* White text color */
+    height: 100vh; /* Full height */
+    overflow-y: auto; /* Scrollable if content overflows */
 }
-
-/* You might need additional adjustments to align with your design */
 
 .top-nav {
     background-color: #f8f9fa;
     padding: 10px 20px;
-    font-size: 20px;
     border-bottom: 1px solid #dee2e6;
+    font-size: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,17 +31,17 @@
 
 .nav-icons {
     display: flex;
-    gap: 20px; /* Space between icons */
+    gap: 20px;
 }
 
 .icon-button {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 24px; /* Larger icons */
-    color: #343a40; /* Icon color */
+    font-size: 24px;
+    color: #343a40;
 }
 
 .icon-button:hover {
-    color: #007bff; /* Change color on hover */
+    color: #d83434;
 }

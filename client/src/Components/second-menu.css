@@ -1,6 +1,6 @@
 .second-menu-content {
     text-align: "center";
-    background-color: rgb(255, 0, 0);
+    background-color: #2C3E50;
     
 }
 
@@ -13,7 +13,7 @@
 }
 
 .dropbtn {
-    background-color: green;
+    background-color: rgb(140, 150, 240);
     color: white;
     padding: 25px;
     border: none;

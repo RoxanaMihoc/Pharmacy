@@ -11,6 +11,7 @@ const socket = io("http://localhost:3000");
 const NotificationBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [allNotifications, setAllNotifications] = useState([]);
   const { currentUser } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();
@@ -29,6 +30,7 @@ const NotificationBell = () => {
 
 //         const notifications = await response.json();
 //         console.log(notifications);
+//         setAllNotifications(notifications);
 //     } catch (error) {
 //         console.error("Error fetching notifications:", error);
 //         alert("Failed to fetch notifications");
