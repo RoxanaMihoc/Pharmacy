@@ -42,6 +42,8 @@ const notificationSchema = new mongoose.Schema({
               subcategory1: String,
               subcategory2: String,
               title: String,
+              productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+
           },
           dosage: String,
           duration: String,

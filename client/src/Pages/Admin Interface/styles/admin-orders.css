@@ -38,7 +38,7 @@ h2 {
     background-color: rgba(0, 123, 255, 0.1);
 }
 
-.button {
+/* .button {
     color: #007bff;
     background: none;
     border: none;
@@ -51,7 +51,7 @@ h2 {
 .button:hover {
     background-color: #0056b3;
     color: white;
-}
+} */
 
 
 /* Responsive design adjustments */

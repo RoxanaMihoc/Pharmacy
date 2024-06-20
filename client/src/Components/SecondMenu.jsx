@@ -14,7 +14,7 @@ const SecondaryMenu = () => {
       {/* Secondary menu items */}
 
       <div className="dropdown">
-        <button className="dropbtn">Categories</button>
+        <button className="dropbtn"><h2>Categories</h2></button>
         <div className="dropdown-content">
           <div className="button-h">
             <HoverButton buttontext="Medicamente fara reteta"  />
@@ -44,13 +44,11 @@ const SecondaryMenu = () => {
                   minerale Afectiuni ale ficatului si ale bilei
                 </div>
               </div>
-              
             </div>
           </div>
 
           <div className="button">
             <HoverButton buttontext="Button 1" />
-            <div className="additional-content-container">LALALA</div>
           </div>
         </div>
       </div>

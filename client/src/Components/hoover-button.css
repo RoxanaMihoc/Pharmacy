@@ -35,10 +35,6 @@
   gap: 20px;
 }
 
-.additional-content-container .sub-additional-content-container2{
-  background-color: rgb(255, 140, 0);
-  }
-
 .hover-button:hover {
   transform: translateX(5%);
   transition: background-color 0.5s ease;

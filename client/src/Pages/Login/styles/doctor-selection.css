@@ -6,7 +6,7 @@
   height: 100vh; /* Full viewport height */
   padding: 20px;
   background-color: #f4f4f4; /* Light grey background */
-  background: linear-gradient(to top left, #2b2d57, #8f94fb);
+  background: linear-gradient(to top left,  #2C3E50, #acb4d1);
 }
 
 .doctor-group {
@@ -18,7 +18,6 @@
   width: 60%; /* Reduced width to make the div smaller */
   max-width: 600px; /* Maximum width to ensure it doesn't get too wide on larger screens */
 }
-
 
 .doctor-item {
   padding: 10px;
@@ -35,17 +34,12 @@ input[type="radio"] {
   margin-right: 10px; /* Space out the radio button from the text */
 }
 
-.submit-button {
-  padding: 10px 20px;
+.submit-button button {
+  padding: 10px 15px;
+  width:auto;
   font-size: 16px;
-  color: white;
-  background-color: #007bff; /* Bootstrap primary color */
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 20px; /* Space from the last group */
-}
-
-.submit-button:hover {
-  background-color: #0056b3; /* Darker on hover */
+  transition: background-color 0.3s;
 }

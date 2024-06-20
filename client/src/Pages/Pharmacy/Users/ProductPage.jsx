@@ -111,7 +111,7 @@ const ProductPage = () => {
   return (
     <div>
       <SecondaryMenu />
-      <Container>
+      <Container className="container">
         <Row>
           <Col md={3} className="filter-container">
             <h1>{subcategory}</h1>

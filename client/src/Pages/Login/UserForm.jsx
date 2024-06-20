@@ -52,63 +52,67 @@ const UserForm = () => {
 
   return (
     <div className="form-container2">
-      <h1>Other details</h1>
-      <form onSubmit={handleRegister}>
+      <h1>Alte detalii</h1>
+      <form onSubmit={handleRegister} className="form-c">
         <label>
-          Gender:
+          Gen:
           <select
             name="gender"
             value={formData.gender}
             onChange={handleChange}
             required
           >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="">Selectează gen</option>
+            <option value="Bărbat">Bărbat</option>
+            <option value="Femeie">Femeie</option>
           </select>
         </label>
         <label>
-          Phone Number:
+         Număr de telefon:
           <input
             type="tel"
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
+            placeholder="Număr de telefon"
             required
           />
         </label>
         <label>
-          Address:
+          Adresă:
           <input
             type="text"
             name="address"
             value={formData.address}
             onChange={handleChange}
+            placeholder="Adresă"
             required
           />
         </label>
         <label>
-          City:
+          Oraș:
           <input
             type="text"
             name="city"
             value={formData.city}
             onChange={handleChange}
+            placeholder="Oraș"
             required
           />
         </label>
         <label>
-          Postal Code:
+          Cod poștal:
           <input
             type="text"
             name="postalCode"
             value={formData.postalCode}
             onChange={handleChange}
+            placeholder="Cod poștal"
             required
           />
         </label>
         <label>
-          Birth Date:
+          Zi de naștere:
           <input
             type="date"
             name="birthDate"
@@ -117,7 +121,7 @@ const UserForm = () => {
             required
           />
         </label>
-        <button type="submit">Submit</button>
+        <button className="button-form" type="submit">Submit</button>
       </form>
     </div>
   );

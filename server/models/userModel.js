@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
   appointments: {type: Array, required: true},
   medical_history: {type: Array, required: true},
   recomandations: {type: Array, required: true},
+  photo:{type: String},
 });
 
 userSchema.pre('save', async function (next) {

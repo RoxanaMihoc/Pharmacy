@@ -27,7 +27,6 @@ const getAllPatientsByDoctorId= async (req, res) =>{
   }
 }
 
-// for product/productId
 const getPatientDetails = async (req, res) =>{
   const {patientId} = req.params;
   console.log("id",patientId.patient);
@@ -36,6 +35,7 @@ const getPatientDetails = async (req, res) =>{
 
   try {
     const user = await User.find( query);
+    console.log(user);
     res.json(user);
   } catch (error) {
     console.error(error);

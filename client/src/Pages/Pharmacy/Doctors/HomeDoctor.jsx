@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import Dashboard from "./Dashboards/DashBoard";
-import PatientList from './Dashboards/PatientList';
+import PatientList from './PatientList';
 import { useLocation, useHistory } from "react-router-dom";
-import PatientProfile from './Dashboards/PatientProfile';
-import Recommend from "./Dashboards/Prescription/Recommend";
+import PatientProfile from './PatientProfile';
+import Recommend from "./Prescription/Recommend";
 import {
   BrowserRouter as Router,
   Route,

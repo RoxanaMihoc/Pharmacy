@@ -1,4 +1,17 @@
 body {
     margin: 0;
     padding: 0;
-  }
+}
+
+button {
+  background-color: #828e99; /* Primary blue */
+  color: black;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #b5b7c4; /* Darker blue on hover */
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { useAuth } from "../../../../../Context/AuthContext";
+import { useAuth } from "../../../../Context/AuthContext";
 import "./styles/overview.css"; // Make sure to create and link this CSS for styling
 import io from "socket.io-client";
 import { jsPDF } from "jspdf";
@@ -82,9 +82,9 @@ const PrescriptionOverview = () => {
 
   return (
     <div className="overview-container">
-      <h1>Prescription Overview</h1>
+      <h1>Sumar Prescripție</h1>
       <div className="patient-info">
-        <h2>Patient Information</h2>
+        <h2>Informații Pacient</h2>
         <p>
           Nume: {patient.lastName}
         </p>
@@ -104,7 +104,7 @@ const PrescriptionOverview = () => {
         </p>
       </div>
       <div className="prescription-details">
-        <h2>Selected Medications</h2>
+        <h2>Medicamente selectate</h2>
         <ul>
           {selectedItems.map((item, index) => (
             <li key={index}>
@@ -116,10 +116,10 @@ const PrescriptionOverview = () => {
         </ul>
       </div>
       <button onClick={sendPrescription} className="send-button">
-        Send Prescription
+        Trimite Prescripție
       </button>
       <button onClick={generatePDF} className="generate-pdf-button">
-      Generate PDF
+      Generează PDF
     </button>
 
     </div>

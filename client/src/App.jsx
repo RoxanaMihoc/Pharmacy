@@ -16,7 +16,7 @@ import AdminOrders from "./Pages/Admin Interface/AdminOrders";
 import "./Pages/styles/main.css";
 import UserForm from "./Pages/Login/UserForm";
 import HomeUser from "./Pages/Pharmacy/Users/Home-User";
-import Recommend from "./Pages/Pharmacy/Doctors/Dashboards/Prescription/Recommend";
+import Recommend from "./Pages/Pharmacy/Doctors/Prescription/Recommend";
 
 const App = () => {
   const { token, role } = useAuth();

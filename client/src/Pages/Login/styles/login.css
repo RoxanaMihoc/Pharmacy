@@ -1,9 +1,9 @@
 
 .first-page {
   display: flex;
-  justify-content:end;
+  justify-content:center;
   align-items: center;
-  background: linear-gradient(to top left, #2b2d57, #8f94fb);
+  background: linear-gradient(to top left,  #2C3E50, #acb4d1);
   height: 100vh;
 }
 
@@ -16,13 +16,10 @@
 } 
 
 .login-container {
-  background-color: #fefefe;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
   padding: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   width: 60vh;
   margin-right: 0;
 }
@@ -71,11 +68,11 @@
 .buttons-container button{
   width:60%;
   height:45px;
-  background: rgb(255, 255, 255);
   outline:none;
   border-radius: 40px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top:10%;
+  color: black;
 }
 
 .button-container {
@@ -97,20 +94,25 @@
 
 .button-container button:hover {
   border-bottom: 2px solid ; /* Change color as needed */
+  background-color: #ffffff;
 }
 
-/* Add styles for selected and unselected states */
 .button-container .login-selected {
-  color: rgb(151, 151, 202); /* Change color for selected state */
-  border-bottom: 2px solid rgb(151, 151, 202);
+  color: #748394; /* Change color for selected state */
+  border-bottom: 2px solid #748394;
 }
 
 .button-container .signup-unselected {
-  color: gray; /* Change color for unselected state */
-  border-bottom: 2px gray;
+  color: rgb(165, 168, 172); /* Change color for unselected state */
+  border-bottom: 2px rgb(165, 168, 172)
 }
 
-/* .text-error{
-  padding: 0;
-  font-size: 10px;
-} */
+/* Targeting all select elements */
+select {
+  color: grey; /* Darker text for better contrast */
+  border: 1px solid #aaa; /* Subtle border */
+  padding: 8px; /* Padding for better touch interaction */
+  border-radius: 4px; /* Rounded corners for aesthetics */
+  outline: none; /* Removes the default focus outline */
+}
+

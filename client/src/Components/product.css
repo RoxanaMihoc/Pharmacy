@@ -19,20 +19,15 @@
   height: auto;
 }
 
-.product button {
+/* .product button {
   background-color: #333;
   color: white;
   padding: 8px;
   border: none;
   cursor: pointer;
   margin-top: 8px;
-}
-
-.product button:hover {
-  background-color: #555;
-}
-
-
+} */
+ 
 .buttons{
   display: flex;
   flex-direction: column;

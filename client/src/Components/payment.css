@@ -57,7 +57,7 @@
     text-align: center;
 }
 
-button {
+/* button {
     width: 100%;
     padding: 12px;
     background-color: #ff6f61;
@@ -66,11 +66,11 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-}
+} */
 
-button:hover {
+/* button:hover {
     background-color: #ff5a42;
-}
+} */
 
 button:disabled {
     opacity: 0.5;

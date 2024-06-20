@@ -55,3 +55,17 @@ exports.getAllPrescriptions= async (req, res) =>{
     }
 }
 
+exports.getPrescriptionsByPatientId = async (req, res) => {
+    try {
+      const { user} = req.params;
+      console.log(user);
+      query = { patientId: user };
+      const prescription = await Prescription.find(query);
+      console.log("skdcn",prescription);
+      res.json(prescription);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+

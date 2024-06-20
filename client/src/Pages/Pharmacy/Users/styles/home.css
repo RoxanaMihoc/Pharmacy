@@ -43,5 +43,6 @@
 }
 
 .icon-button:hover {
-    color: #d83434;
+    color: #343a40;
+    background-color: #aacdf5; ;
 }

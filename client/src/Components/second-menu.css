@@ -1,7 +1,6 @@
 .second-menu-content {
     text-align: "center";
     background-color: #2C3E50;
-    
 }
 
 /* Dropdown.css */
@@ -12,16 +11,26 @@
     margin-left: 360px;
 }
 
+.dropbtn h2{
+    color: #f9f9f9;
+}
+
 .dropbtn {
-    background-color: rgb(140, 150, 240);
+    background-color: #2C3E50;
     color: white;
     padding: 25px;
     border: none;
     cursor: pointer;
-    width:300px;
-    border-left: #333;
+    width: 300px;
+    border-left: #333;  /* Note: 'border-left' and 'border-right' need valid properties */
     border-right: #333;
+    height: auto;
 }
+
+.dropbtn:hover {
+    box-shadow: 0 8px 10px  rgba(0, 0, 0, 0.3); /* Shadow effect */
+}
+
 
 .dropdown-content {
     display: none;

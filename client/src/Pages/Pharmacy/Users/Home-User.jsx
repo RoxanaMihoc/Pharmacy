@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import CartPreview from "../../../Components/CartPreview";
 import CartPage from "./CartPage";
+import FavoritesPage from "./FavoritesPage";
 import ProductPage from "./ProductPage";
 import ProductDetails from "./ProductDetails";
+import UserProfile from "./UserProfile";
 import NotificationBell from "./NotificationBell";
 import PrescriptionDetails from "./PrescriptionDetails";
 import PaymentForm from "../../../Components/PaymentForm";
+import Prescriptions from "./Prescriptions";
 import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
-  faUserCircle,
+  faHeart,
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/home.css";
@@ -49,6 +52,11 @@ const HomeUser = () => {
     setShowCartPreview(false); // Close the preview modal when moving to the cart page
   };
 
+  const handleFavoritesButton = () => {
+    handleNavigate("/home/favorites");
+    setActiveTab("favorites");
+  };
+
   const getTabName = (activeTab) => {
     const tabNames = {
       dashboard: "Dashboard",
@@ -57,6 +65,9 @@ const HomeUser = () => {
       reports: "Reports",
       settings: "Settings",
       product: "Product List",
+      favorites:"Favorites",
+      prescriptions:"Prescriptions",
+      orders:"Orders",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
@@ -74,8 +85,8 @@ const HomeUser = () => {
             {getTabName(activeTab)}
             <div className="nav-icons">
               <NotificationBell />
-              <button className="icon-button">
-                <FontAwesomeIcon icon={faUserCircle} />
+              <button className="icon-button" onClick={handleFavoritesButton}>
+                <FontAwesomeIcon icon={faHeart} />
               </button>
               <button
                 className="icon-button"
@@ -95,8 +106,11 @@ const HomeUser = () => {
           {/* <Elements stripe={stripePromise}>
               <Route path="/home/payment" component={PaymentForm} />
             </Elements> */}
+            <Route path="/home/prescriptions" component={Prescriptions} />
             <Route path="/home/dashboard" component={CartPage} />
             <Route path="/home/cart" component={CartPage} />
+            <Route path="/home/favorites" component={FavoritesPage} />
+            <Route path="/home/profile/:currentUser" component={UserProfile} />
             <Route
               path="/home/prescription/:patientId"
               component={PrescriptionDetails}

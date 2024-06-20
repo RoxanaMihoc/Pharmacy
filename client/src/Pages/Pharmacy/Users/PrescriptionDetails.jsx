@@ -46,7 +46,7 @@ const PrescriptionDetails = () => {
     };
 
     return (
-        <div className="container">
+        <div className="pres-container">
             <h1 className="header">Prescription Details</h1>
             <div>
                 {renderProducts(notification.prescriptionDetails.products)}
