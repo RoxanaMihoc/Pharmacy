@@ -1,9 +1,12 @@
 const express = require('express');
-const router = express.Router();
 const ordersController  = require('../controllers/ordersController');
+const router = express.Router();
 // Route to add a product to the cart
 router.get('/orders', ordersController.getAllOrders);
 router.get('/orders/:currentUser', ordersController.getOrdersForUser);
-router.post('/orders', ordersController.addToOrders);
 
-module.exports = router;
+module.exports = (io, userSockets) => {
+    console.log("in rout o",userSockets);
+    router.post('/orders', (req, res) => ordersController.addToOrders(req, res, io, userSockets));
+    return router;
+  };

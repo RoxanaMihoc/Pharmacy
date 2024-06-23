@@ -2,16 +2,22 @@ const Order = require("../models/orderModel");
 const express = require("express");
 const router = express.Router();
 
-const addToOrders = async (req, res) => {
-  const { cartItems, addressDetails, totalPrice, currentUser } = req.body;
+exports.addToOrders = async (req, res, io, userSockets) => {
+  const { cartItems, addressDetails, totalPrice, currentUser, pharmacist } = req.body;
+  console.log("In add to orders:",pharmacist);
   console.log("In add to orders:", cartItems);
 
+  const generateRandomNumber = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+  const orderNumber = generateRandomNumber();
   const {
     firstName,
     lastName,
     phone,
     email,
-    CNP,
+    identifier,
     address,
     county,
     city,
@@ -25,7 +31,7 @@ const addToOrders = async (req, res) => {
       lastName,
       phone,
       email,
-      CNP,
+      identifier,
       address,
       county,
       city,
@@ -35,9 +41,38 @@ const addToOrders = async (req, res) => {
       totalPrice: totalPrice,
       user: currentUser,
       status: "Pending",
+      pharmacist: pharmacist,
+      orderNumber: orderNumber,
     });
     console.log("Attempting to save:", newOrder);
     await newOrder.save();
+    console.log("Sockets: ",userSockets,userSockets[pharmacist] );
+
+    if (userSockets[pharmacist] && userSockets[pharmacist].socketId) {
+    io.to(userSockets[pharmacist].socketId).emit('new-order', {
+      id: newOrder._id,
+      message: 'A new order has been placed.',
+      orderDetails: {
+        firstName,
+        lastName,
+        phone,
+        email,
+        identifier,
+        address,
+        county,
+        city,
+        paymentMethod,
+        additionalInfo,
+        cart: cartItems,
+        totalPrice: totalPrice,
+        user: currentUser,
+        status: "Comandă trimisă",
+        pharmacist: pharmacist,
+        orderNumber, orderNumber
+      }
+  });
+}
+
     res.status(200).json({
       success: true,
       message: "Order saved successfully",
@@ -47,7 +82,7 @@ const addToOrders = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-const getAllOrders = async (req, res) => {
+exports.getAllOrders = async (req, res) => {
   try {
     console.log("In orders admin");
     const orders = await Order.find();
@@ -57,7 +92,7 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-const getOrdersForUser = async (req, res) => {
+exports.getOrdersForUser = async (req, res) => {
   const {currentUser} = req.params;
   try {
     const orders = await Order.find({ user: currentUser });
@@ -68,5 +103,5 @@ const getOrdersForUser = async (req, res) => {
   }
   
 };
-module.exports = { addToOrders, getAllOrders, getOrdersForUser };
+
 

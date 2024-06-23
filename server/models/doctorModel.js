@@ -7,7 +7,7 @@ const doctorSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  CNP: { type: String, required: true },
+  identifier: { type: String, required: true },
   role: { type: String, required: true },
   patients: { type: Array, required: true },
 });
@@ -26,6 +26,6 @@ doctorSchema.pre("save", async function (next) {
   next();
 });
 
-const Doctor = doctorsDB.model("Doctor", doctorSchema);
+const Doctor = doctorsDB.model("Doctor", doctorSchema, 'doctors');
 
 module.exports = Doctor;

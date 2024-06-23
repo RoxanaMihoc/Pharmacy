@@ -7,7 +7,7 @@ const DoctorSelection = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const location = useLocation();
   const history = useHistory();
-  const { firstName, lastName, email, password, CNP, role} = location.state || {};
+  const { firstName, lastName, email, password, identifier, role} = location.state || {};
 
   useEffect(() => {
     const getAllDoctors = async () => {
@@ -33,7 +33,7 @@ const DoctorSelection = () => {
 
   const handleRegister = async (e) => {
       e.preventDefault();
-      history.push('/others', { firstName, lastName, email, password, CNP, role, selectedDoctor });
+      history.push('/others', { firstName, lastName, email, password, identifier, role, selectedDoctor });
   };
 
   return (

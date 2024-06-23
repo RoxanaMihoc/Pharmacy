@@ -8,11 +8,10 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  CNP: { type: String, unique: true, required: true },
+  identifier: { type: String, unique: true, required: true },
   role: { type: String, required: true },
   cart:{type: Array, required: true},
   orders:{type: Array, required: true},
-  favorites:{type: Array, required: true},
   doctor: { type: String, required: true },
   gender: { type: String, required: true },
   phone: { type: String, required: true },
@@ -20,9 +19,6 @@ const userSchema = new mongoose.Schema({
   city: { type: String, required: true },
   birth_date: { type: String, required: true },
   postal_code: { type: String, required: true },
-  appointments: {type: Array, required: true},
-  medical_history: {type: Array, required: true},
-  recomandations: {type: Array, required: true},
   photo:{type: String},
 });
 

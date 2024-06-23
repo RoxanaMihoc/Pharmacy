@@ -6,17 +6,16 @@ import {
   Redirect,
 } from "react-router-dom";
 import FirstPage from "./Pages/Login/FirstPage";
-import ProductPage from "./Pages/Pharmacy/Users/ProductPage";
-import HomeDoctor from "./Pages/Pharmacy/Doctors/HomeDoctor";
-import CartPage from "./Pages/Pharmacy/Users/CartPage";
+import HomeDoctor from "./Pages/Doctors/HomeDoctor";
 import { useAuth } from "./Context/AuthContext";
-import ProductDetails from "./Pages/Pharmacy/Users/ProductDetails";
 import DoctorSelection from "./Pages/Login/DoctorSelection";
 import AdminOrders from "./Pages/Admin Interface/AdminOrders";
 import "./Pages/styles/main.css";
 import UserForm from "./Pages/Login/UserForm";
-import HomeUser from "./Pages/Pharmacy/Users/Home-User";
-import Recommend from "./Pages/Pharmacy/Doctors/Prescription/Recommend";
+import RoleSelection from "./Pages/Login/RoleSelection";
+import HomeUser from "./Pages/Users/Home-User";
+import Recommend from "./Pages/Doctors/Prescription/Recommend";
+import Pharmacy from "./Pages/Pharmacy/HomePharmacy";
 
 const App = () => {
   const { token, role } = useAuth();
@@ -24,9 +23,9 @@ const App = () => {
 
   const getInitialRoute = () => {
     switch (role) {
-      case "patient":
+      case "Patient":
         return "/home";
-      case "doctor":
+      case "Doctor":
         return "/patients";
       default:
         return "/login"; // assuming there's a login or another default page
@@ -38,19 +37,24 @@ const App = () => {
       <Switch>
         {role === "doctor" && <Route path="/patients" component={HomeDoctor} />}
         {role === "patient" && <Route path="/home" component={HomeUser} />}
-        <Route path="/admin" component={AdminOrders} />
         <Route path="/others" component={UserForm} />
         <Route path="/login" component={FirstPage} />
+        <Route path="/role" component={RoleSelection} />
         <Route path="/doctors" component={DoctorSelection} />
         <Route path="/rem" component={Recommend} />
         <Route
           path="/home"
-          render={() => (token ? <Home-User /> : <Redirect to="/login" />)}
+          render={() => (token ? <HomeUser /> : <Redirect to="/role" />)}
         />
 
         <Route
           path="/patients"
-          render={() => (token ? <Home-Doctor /> : <Redirect to="/login" />)}
+          render={() => (token ? <HomeDoctor /> : <Redirect to="/role" />)}
+        />
+
+      <Route
+          path="/pharmacy"
+          render={() => (token ? <Pharmacy /> : <Redirect to="/role" />)}
         />
       </Switch>
     </Router>

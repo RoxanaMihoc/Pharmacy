@@ -1,39 +1,75 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [CNP, setCNP] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [role, setRole] = useState("");
   const history = useHistory();
+  const location = useLocation();
+  const [identifier, setIdentifier] = useState("");
+  const role = location.state?.role;
+  console.log(role);
+  const placeholderText = role === "Doctor" ? "CND" : role === "Pharmacist" ? "CNF" : "CNP";
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    // Instead of making the POST request here, pass the data to the redirected page
-    history.push("/doctors", {
-      firstName,
-      lastName,
-      email,
-      password,
-      CNP,
-      role,
-    });
+    if (role == "Patient") {
+      history.push("/doctors", {
+        firstName,
+        lastName,
+        email,
+        password,
+        identifier,
+        role,
+      });
+    }
+    else
+    {
+      register();
+    }
   };
 
-  const handleRoleChange = (event) => {
-    setRole(event.target.value);
+  const register = async (e) => {
+    try {
+      console.log(identifier, role);
+      const response = await fetch("http://localhost:3000/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "applicatio/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        crossDomain: true,
+        body: JSON.stringify({ firstName, lastName, email, password, identifier, role}),
+      });
+
+      if (!response.ok) {
+        setErrorMessage("User already registered. Please use another email.");
+        throw new Error("Registration failed");
+      }
+
+      const data = await response.json();
+      console.log(data); // Assuming the API returns a message upon successful registration
+      history.push("/login");
+    } catch (error) {
+      console.error("Registration failed:", error.message);
+      debugger;
+      setTimeout(() => {
+        // Empty block to keep the console open
+      }, 5000);
+    }
   };
+
   return (
     <form>
       <label>
         <div className="input-container">
           <input
             type="text"
-            placeholder="First Name"
+            placeholder="Nume"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
@@ -44,7 +80,7 @@ const SignUp = () => {
         <div className="input-container">
           <input
             type="text"
-            placeholder="Last Name"
+            placeholder="Prenume"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
@@ -63,38 +99,29 @@ const SignUp = () => {
       </label>
       <br />
       <label>
-        <div className="input-container">
-          <input
-            type="text"
-            placeholder="CNP"
-            value={CNP}
-            onChange={(e) => setCNP(e.target.value)}
-          />
-        </div>
+      <div className="input-container">
+        <input
+          type="text"
+          placeholder={placeholderText}
+          value={identifier}
+          onChange={(e) => setIdentifier(e.target.value)}
+        />
+      </div>
       </label>
       <br />
       <label>
         <div className="input-container-password">
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Parola"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
       </label>
       <br />
-      <label>
-        <div className="input-container-password">
-          <select value={role} onChange={handleRoleChange} required>
-            <option value="" disabled selected>
-              Select your role
-            </option>
-            <option value="doctor">Doctor</option>
-            <option value="patient">Patient</option>
-          </select>
-        </div>
-      </label>
+      <br></br>
+
       <div className="buttons-container">
         {errorMessage && (
           <p className="text-error" style={{ color: "red" }}>

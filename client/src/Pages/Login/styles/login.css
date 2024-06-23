@@ -34,13 +34,16 @@
   padding-right:20px;
 }
 
-.input-container-password {
-  width: 48vh;
-  height: 20px;
-}
 .input-container {
   width: 50vh;
   height: 40px;
+  margin-bottom: 20px;
+}
+
+.input-container-password {
+  width: 48vh;
+  height: 18px;
+  margin-bottom: 25px;
 }
 
 .input-container input {
@@ -53,6 +56,7 @@
   border-radius: 10px;
   font-size: 16px;
   padding: 0 2px 5px 5px;
+
 }
 
 .input-container input::placeholder {

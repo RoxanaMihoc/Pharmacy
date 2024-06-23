@@ -16,6 +16,8 @@ const doctorsDB = mongoose.createConnection('mongodb+srv://roxanamihoc67:Roxana1
 const ordersDB = mongoose.createConnection('mongodb+srv://roxanamihoc67:Roxana123@cluster0.85fbtf2.mongodb.net/Orders?retryWrites=true&w=majority');
 const notifDB = mongoose.createConnection('mongodb+srv://roxanamihoc67:Roxana123@cluster0.85fbtf2.mongodb.net/Notifications?retryWrites=true&w=majority');
 const prescriptionDB = mongoose.createConnection('mongodb+srv://roxanamihoc67:Roxana123@cluster0.85fbtf2.mongodb.net/Prescriptions?retryWrites=true&w=majority');
+const pharmacyDB = mongoose.createConnection('mongodb+srv://roxanamihoc67:Roxana123@cluster0.85fbtf2.mongodb.net/Pharmacy?retryWrites=true&w=majority');
+const pharmacistDB = mongoose.createConnection('mongodb+srv://roxanamihoc67:Roxana123@cluster0.85fbtf2.mongodb.net/Pharmacist?retryWrites=true&w=majority');
 
 module.exports = {
   productsDB,
@@ -23,5 +25,7 @@ module.exports = {
   doctorsDB,
   ordersDB,
   notifDB,
-  prescriptionDB
+  prescriptionDB,
+  pharmacyDB,
+  pharmacistDB
 };

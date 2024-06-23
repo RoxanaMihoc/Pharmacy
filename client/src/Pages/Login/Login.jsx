@@ -1,94 +1,81 @@
-// Login.js
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom';
-import { useAuth } from '../../Context/AuthContext';
+import { useHistory, useLocation } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [CNP, setCNP] = useState("");
   const { login, isAuthenticated } = useAuth();
   const history = useHistory();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
+  const location = useLocation();
+  const [identifier, setIdentifier] = useState("");
+  const role = location.state?.role;
+  const placeholderText = role === "Doctor" ? "CND" : role === "Pharmacist" ? "CNF" : "CNP";
 
   const handleLogin = async (e) => {
-    // Placeholder logic for demonstration purposes
-    console.log(`Login with username: ${email} and password: ${password} and CNP:${CNP}` );
+    e.preventDefault();
+    console.log(
+      `Login with email: ${email}, password: ${password}, ${role} ID: ${identifier}`
+    );
     try {
-      e.preventDefault();
       const response = await fetch("http://localhost:3000/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "applicatio/json",
-          "Access-Control-Allow-Origin": "*",
         },
-        crossDomain: true,
-        body: JSON.stringify({email, password, CNP }),
-      }); 
+        body: JSON.stringify({ email, password, identifier, role }),
+      });
 
       if (!response.ok) {
-        setErrorMessage('Invalid email or password. Please try again.');
+        setErrorMessage("Invalid email or password. Please try again.");
         throw new Error("Login failed");
       }
 
       const data = await response.json();
-      const token = data.token;
-      const role = data.role;
-      console.log(data); // Assuming the API returns a message upon successful registration
-      console.log('Login successful: ');
-      login(token);
-      if(!isAuthenticated && role =='patient')
-      {
-        history.push('/home');
+      login(data.token); // Assuming login function handles setting auth state
+      console.log("Login successful:", data);
+
+      if (!isAuthenticated && role == "Patient") {
+        history.push("/home");
+      } else if (role == "Doctor") {
+        history.push("/patients");
+      } else {
+        history.push("/pharmacy");
       }
-      else
-      {
-        history.push('/patients');
-      }
-      
     } catch (error) {
       console.error("Login failed:", error.message);
-      debugger;
+      setErrorMessage(error.message);
     }
   };
 
   return (
-      <form>
-        <label>
-          <div className="input-container">
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        </label>
-        <br />
-      <label>
-        <div className="input-container">
-          <input
-            type="text"
-            placeholder="CNP"
-            value={CNP}
-            onChange={(e) => setCNP(e.target.value)}
-          />
-        </div>
-      </label>
-        <br />
-        <label>
-          <div className="input-container-password">
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </label>
-        <br />
-        <div className="buttons-container">
+    <form onSubmit={handleLogin}>
+      <div className="input-container">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div className="input-container">
+        <input
+          type="text"
+          placeholder={placeholderText}
+          value={identifier}
+          onChange={(e) => setIdentifier(e.target.value)}
+        />
+      </div>
+      <div className="input-container-password">
+        <input
+          type="password"
+          placeholder="Parola"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+      <div className="buttons-container">
         {errorMessage && <p className="text-error" style={{ color: 'red'}}>{errorMessage}</p>}
           <button type="button" onClick={handleLogin}>
             Login
@@ -100,7 +87,7 @@ const Login = () => {
             Forgot Password
           </button>
         </div>
-      </form>
+    </form>
   );
 };
 

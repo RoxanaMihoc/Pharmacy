@@ -9,12 +9,15 @@ const Summary = ({
   addressDetails,
   totalPrice,
   onOrderSubmitted,
+  pharmacy,
 }) => {
   console.log("Cart ", cartItems);
   console.log("Cart ID ", cartId);
+  console.log(pharmacy);
   const { currentUser } = useAuth();
   const user = currentUser;
   const [price, setTotalPrice] = useState(0);
+  const pharmacist = "66760074556be02d8a3594e6";
 
   useEffect(() => {
     const priceAfterInsurance = calculateTotalPrice(cartItems);
@@ -37,16 +40,32 @@ const Summary = ({
     return Number(total.toFixed(2));
   }
 
-  const sendToPayment = () => {
-    console.log("Redirecting to payment");
-    // Additional logic for handling payment when price is not 0
-  };
-
   const handleOrderClick = () => {
     if (price === 0) {
       submitOrder();
     } else {
       submitOrder();
+    }
+  };
+
+  const getPharmacist = async (pharmacy) => {
+    try {
+      // Replace '/api/pharmacy' with your actual endpoint that handles the request
+      const response = await fetch(
+        `http://localhost:3000/home/pharmacists/${pharmacy}`
+      );
+
+      if (!response.ok) {
+        // If the server response is not ok, throw an error with the status
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json(); // Assuming the response is JSON formatted
+      console.log("Pharmacist details:", data);
+      setPharmacist(data); // Returning the fetched pharmacist details
+    } catch (error) {
+      console.error("Failed to fetch pharmacist:", error.message);
+      // Handle errors, such as showing an error message to the user
     }
   };
 
@@ -57,7 +76,13 @@ const Summary = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cartItems, addressDetails, user, totalPrice }),
+        body: JSON.stringify({
+          cartItems,
+          addressDetails,
+          user,
+          totalPrice,
+          pharmacist,
+        }),
       });
       const data = await response.json();
       console.log("Order submitted:", data);
@@ -165,7 +190,7 @@ const Summary = ({
               </div>
             </div>
             <button className="submit-order-button" onClick={handleOrderClick}>
-              {price === 0 ? "Submit Order" : "Proceed to Payment"}
+              Submit Order
             </button>
           </Col>
         </Row>

@@ -21,11 +21,11 @@ exports.addPrescription = async (req, res, io, userSockets) => {
         });
 
         await newPrescription.save();
-
+        console.log(typeof(patient._id));
         console.log(userSockets[patient._id]);
 
         // Emit an event to the specific patient's socket ID if they are connected
-        io.to(userSockets[patient._id]).emit('new-prescription', {
+        io.to(userSockets[patient._id].socketId).emit('new-prescription', {
             id: newPrescription._id,
             message: 'A new prescription has been issued to you.',
             prescriptionDetails: {

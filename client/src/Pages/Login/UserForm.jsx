@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import "./styles/user-form.css"; // Import the stylesheet
 
 const UserForm = () => {
   const location = useLocation();
-  const { firstName, lastName, email, password, CNP, role, selectedDoctor } = location.state || {};
+  const history =useHistory();
+  const { firstName, lastName, email, password, identifier, role, selectedDoctor } = location.state || {};
   const [formData, setFormData] = useState({
     gender: "",
     phoneNumber: "",
@@ -26,7 +27,7 @@ const UserForm = () => {
           "Access-Control-Allow-Origin": "*",
         },
         crossDomain: true,
-        body: JSON.stringify({ firstName, lastName, email, password, CNP, role, selectedDoctor, formData }),
+        body: JSON.stringify({ firstName, lastName, email, password, identifier, role, selectedDoctor, formData }),
       });
 
       if (!response.ok) {
@@ -36,6 +37,7 @@ const UserForm = () => {
 
       const data = await response.json();
       console.log(data); // Assuming the API returns a message upon successful registration
+      history.push("/login", {role});
     } catch (error) {
       console.error("Registration failed:", error.message);
       debugger;

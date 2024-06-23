@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
   lastName: String,
   phone: String,
   email: String,
-  CNP: String,
+  identifier: String,
   address: String,
   county: String,
   city: String,
@@ -16,6 +16,8 @@ const orderSchema = new mongoose.Schema({
   totalPrice: Number,
   user: String,
   status: String,
+  pharmacist: String,
+  orderNumber: String,
   cart: {
     type: [[{
       _id: mongoose.Schema.Types.ObjectId,

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { prescriptionDB } = require("../config/database");
 
 const patientSchema = new mongoose.Schema({
-  CNP: { type: String, required: true },
+  identifier: { type: String, required: true },
   address: { type: String, required: true },
   appointments: { type: Array, required: true },
   birth_date: { type: Date, required: true },

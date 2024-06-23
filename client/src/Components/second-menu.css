@@ -28,7 +28,8 @@
 }
 
 .dropbtn:hover {
-    box-shadow: 0 8px 10px  rgba(0, 0, 0, 0.3); /* Shadow effect */
+     background-color: #2C3E50;
+    box-shadow: 0 10px 10px  rgba(0, 0, 0, 0.8); /* Shadow effect */
 }
 
 

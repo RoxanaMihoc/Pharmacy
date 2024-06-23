@@ -1,0 +1,100 @@
+.stock-list-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+th, td {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+th:first-child, td:first-child {
+    border-left: none;
+}
+
+th:last-child, td:last-child {
+    border-right: none;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.pages-content{
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Aligns the pagination controls to the right */
+    padding: 20px;
+    width: 300px; /* Ensures the container takes the full width of its parent */
+}
+
+.page-button {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.page-button:hover {
+    background-color: #e0e0e0;
+}
+
+.page-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.page-select {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0 10px;
+}
+
+.page-select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+
+
+/* .page-link:hover {
+    background-color: #0056b3;
+}
+
+.active .page-link {
+    background-color: #0056b3;
+} */
+
+button {
+    cursor: pointer;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-right: 5px;
+    border-radius: 5px;
+    text-align: center;
+}

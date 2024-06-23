@@ -1,0 +1,65 @@
+/* General styling for the HomeUser layout */
+.page-content {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: stretch; /* Stretch children to fill the width */
+    flex: 1; /* Take up all available space */
+}
+
+.home-doctor {
+    display: flex;
+    min-height: 100vh; /* Full viewport height */
+}
+
+.sidebar {
+    flex: 0 0 200px; /* Sidebar fixed width */
+    background-color: #343a40; /* Dark background */
+    color: #ffffff; /* White text color */
+    height: 100vh; /* Full height */
+    overflow-y: auto; /* Scrollable if content overflows */
+}
+
+.top-nav {
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #343a40;
+}
+
+.icon-button:hover {
+    color: #343a40;
+    background-color: #aacdf5; ;
+}
+
+.page-content {
+    flex-grow: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Allows scrolling within the content area */
+  }
+  
+  /* Adjusted sidebar CSS */
+  .sidebar {
+    flex: 0 0 250px; /* Fixed width */
+    background-color: #2C3E50; /* Background color */
+    color: #fff; /* Text color */
+    padding: 20px;
+    transition: transform 0.3s ease;
+    overflow-y: auto; /* Allows internal scrolling */
+    min-height: 100%; /* Ensures at least 100% height */
+    width:500px;
+  }

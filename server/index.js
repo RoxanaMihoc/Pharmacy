@@ -8,10 +8,10 @@ const socketIo = require ('socket.io');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const favoritesRoutes = require('./routes/favoritesRoutes');
-const orderRoutes = require('./routes/orderRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
 const notificationRoutes = require('./routes/notificationRoutes'); 
+const pharmacyRoutes = require('./routes/pharmacyRoutes'); 
 
 const app = express();
 
@@ -31,8 +31,9 @@ app.use('/home', userRoutes);
 app.use('/home', cartRoutes);
 app.use('/home', productRoutes);
 app.use('/home', favoritesRoutes);
-app.use('/home', orderRoutes);
+// app.use('/home', orderRoutes);
 app.use('/home', notificationRoutes);
+app.use('/home', pharmacyRoutes);
 app.use('/users', userRoutes);
 app.use('/doctors', doctorRoutes);
 
@@ -41,11 +42,12 @@ const userSockets = {};
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
-  socket.on('register', userId => {
-    userSockets[userId] = socket.id;
-    console.log("in index", userId, socket.id);
+  socket.on('register', (userId, userType) => {
+    userSockets[userId] = { socketId: socket.id, type: userType };
+    console.log("Registered:", userId, userType, socket.id);
+
     socket.on('disconnect', () => {
-      delete userSockets[userId]; // Cleanup on disconnect
+      delete userSockets[userId];
       console.log('Client disconnected', socket.id);
     });
   });
@@ -54,7 +56,8 @@ io.on('connection', (socket) => {
     console.log('Client disconnected:', socket.id);
   });
 });
-
+const orderRoutes = require('./routes/orderRoutes')(io, userSockets);
+app.use('/home', orderRoutes);
 app.use('/home', prescriptionRoutes(io, userSockets));
 
 const PORT = process.env.PORT || 3000;
