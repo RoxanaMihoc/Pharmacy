@@ -82,7 +82,6 @@ exports.register = async (req, res) => {
           identifier,
           role,
           cart: [],
-          orders: [],
           favorites: [],
           doctor,
           gender,
@@ -168,7 +167,7 @@ exports.login = async (req, res) => {
     }
 
     if (!user) {
-      console.log("Look for a doctor");
+      console.log("Look for a pharmacist");
       user = await Pharmacist.findOne({ identifier });
     }
 

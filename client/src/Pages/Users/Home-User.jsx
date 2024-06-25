@@ -5,12 +5,12 @@ import FavPage from "./FavPage";
 import FavoritesPage from "./FavoritesPage";
 import ProductPage from "./ProductPage";
 import ProductDetails from "./ProductDetails";
-import UserProfile from "./UserProfile";
 import NotificationBell from "./NotificationBell";
 import PrescriptionDetails from "./PrescriptionDetails";
 import Prescriptions from "./Prescriptions";
 import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import OrderPage from "./OrdersPage";
 import {
   faBell,
   faHeart,
@@ -54,15 +54,11 @@ const HomeUser = () => {
 
   const getTabName = (activeTab) => {
     const tabNames = {
-      appointments: "Appointments",
-      profile: "My Profile",
-      reports: "Reports",
-      settings: "Settings",
-      product: "Product List",
-      favorites:"Favorites",
-      prescriptions:"Prescriptions",
-      orders:"Orders",
-      cart:"Cart",
+      product: "Farmacie",
+      favorites:"Favorite",
+      prescriptions:"Rețete",
+      orders:"Comenzi",
+      cart:"Coș",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
@@ -101,7 +97,7 @@ const HomeUser = () => {
             <Route path="/home/prescriptions" component={Prescriptions} />
             <Route path="/home/cart" component={FavPage} />
             <Route path="/home/favorites" component={FavoritesPage} />
-            <Route path="/home/profile/:currentUser" component={UserProfile} />
+            <Route path="/home/orders" component={OrderPage} />
             <Route
               path="/home/prescription/:patientId"
               component={PrescriptionDetails}
@@ -114,7 +110,7 @@ const HomeUser = () => {
               path="/home/:category/:subcategory?"
               component={ProductPage}
             />
-            <Redirect from="/home" exact to="/home/dashboard" />
+            <Redirect from="/home" exact to="/home/product-page" />
             <Route component={() => <div>Page not found</div>} />
           </Switch>
         </div>

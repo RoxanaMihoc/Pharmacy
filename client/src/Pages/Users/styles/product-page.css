@@ -1,13 +1,15 @@
 /* Container for the entire page */
 .container {
+    font-family: "Poppins", sans-serif;
     padding-top: 20px;
     max-width: 1400px;
+    
 }
 
 /* Filter section styles */
 .filter-container {
     background-color: #f8f9fa;
-    border-right: 1px solid #dee2e6;
+    border-right: 2px solid #777575;
     padding: 20px;
     position: sticky;
     top: 0;
@@ -17,7 +19,10 @@
 
 /* Makes only the brands list scrollable within the filter container */
 .brands-scrollable {
-    max-height: 150px;
+    border-top:solid #dee2e6;
+    border-left:solid #dee2e6;
+    border-top-left-radius: 10px;
+    max-height: 350px;
     overflow-y: auto;
     margin-bottom: 20px;
 }
@@ -25,12 +30,14 @@
 /* Styling for range inputs (sliders) */
 input[type="range"] {
     width: 100%;
+    border: solid 1px;
     margin: 20px 0;
 }
 
 /* Styling for checkboxes in the filter container */
 .form-check {
     margin: 10px 0;
+    margin-left: 10px;
 }
 
 /* Product list and card styles */
@@ -40,27 +47,98 @@ input[type="range"] {
 
 .mb-4
 {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
     height: 500px;
+    width: 200px;
+    
 }
 
 .card {
+    margin-top: 20px;
     margin-bottom: 20px; /* Adds space between cards */
+    
+    
+}
+
+.mb-4 .card-porduct-page {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0.3, 0.3);
+    display: flex;
+    height: 496px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.5s ease;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    width: 500px;
+}
+
+.mb-4 .card-porduct-page:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0.6, 0.5);
+    background-color: #ffffff; /* Culoarea pe care vrei să o aibă la hover */
 }
 
 .card-img {
+    margin-top: 20px;
+    margin-left: 20px;
     height: 200px; /* Set a fixed height for images */
     object-fit: cover; /* Ensures images cover the area well without distortion */
 }
 
+.card-img-1 {
+    display: block;
+    width: 200px;  /* Ensures the image covers the full width of the container */
+    height: 200px; /* Ensures the image covers the full height of the container */
+    object-fit: cover; /* Covers the area, may clip the image */
+    margin-top: 10px;
+    margin-right: 10px;
+    background-color: #ffffff;
+}
+
+
 .card-body {
     text-align: center; /* Centers text in the card body */
+    background-color: #ffffff;
+    margin-bottom: 5px;
 }
 
 /* Buttons styling */
-.btn-primary, .btn-secondary {
-    width: 100%; /* Makes buttons full width */
-    margin-top: 5px; /* Adds a small top margin for button spacing */
-}
+
+
+
+.add-fav-card {
+    font-family: "Poppins", sans-serif;
+    background-color: #ddd8d8;
+    border: 2px solid #b4b1b1;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: 90%; /* Ajustează lățimea pentru a fi mai subțire */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto; /* Ajustează înălțimea pentru a fi mai subțire */
+    color: #000000;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Tranziție lină pentru culoare și fundal */
+    margin-top: 10px; /* Adaugă un spațiu deasupra butonului */
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    font-weight: bold;
+    
+  }
+
+  .add-fav-card:hover {
+    background-color: #776e6e;
+    border: 2px solid #776e6e;
+    box-shadow: 0 4px 4px rgba(0, 0, 0.5, 0.5);
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+
 
 /* Styling links to make them more appealing */
 a {
@@ -82,4 +160,18 @@ a:hover {
     cursor:pointer;
     background-color: red;
 
+}
+
+.card-title{
+    height: 75px;
+}
+
+.brands-filter{
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.brands-filter-price{
+    font-weight: bold;
+    margin-top: 100px;
 }

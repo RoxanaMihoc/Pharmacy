@@ -91,7 +91,7 @@ const FavoritesPage = () => {
           return true; // Include other products in the updated favorites
         })
       );
-      setFavoritesItems(favoritesItems.filter((item) => item.id !== productId));
+      setFavoritesItems(favoritesItems.filter((item) => item !== productId));
       setFavorites(updatedfavorites);
       document.location.reload();
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../Context/AuthContext";
@@ -11,78 +11,76 @@ const socket = io("http://localhost:3000");
 const NotificationBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [allNotifications, setAllNotifications] = useState([]);
   const { currentUser, role } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();
+  const notificationRef = useRef(null);
 
-//   const fetchNotifications = async () => {
-//     try {
-//         const response = await fetch(`http://localhost:3000/home/notification/${currentUser}`, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         });
+   //   const fetchNotifications = async () => {
+  //     try {
+  //         const response = await fetch(`http://localhost:3000/home/notification/${currentUser}`, {
+  //             headers: {
+  //                 'Content-Type': 'application/json',
+  //             },
+  //         });
 
-//         if (!response.ok) {
-//             throw new Error("Failed to fetch notifications");
-//         }
+  //         if (!response.ok) {
+  //             throw new Error("Failed to fetch notifications");
+  //         }
 
-//         const notifications = await response.json();
-//         console.log(notifications);
-//         setAllNotifications(notifications);
-//     } catch (error) {
-//         console.error("Error fetching notifications:", error);
-//         alert("Failed to fetch notifications");
-//     }
-// };
+  //         const notifications = await response.json();
+  //         console.log(notifications);
+  //         setAllNotifications(notifications);
+  //     } catch (error) {
+  //         console.error("Error fetching notifications:", error);
+  //         alert("Failed to fetch notifications");
+  //     }
+  // };
 
-// useEffect(() => {
-//     fetchNotifications();
-// }, []); 
-
-
-  // // Example of fetching notifications (Replace with WebSocket or other methods)
-  const fetchNotification = async (notification) => {
-    console.log("in fetch");
-    try {
-      const prescriptionData = {
-        userId: notification.prescriptionDetails.patientId,
-        prescriptionId: notification.id,
-        details: notification.prescriptionDetails,
-      };
-      const response = await fetch(
-        "http://localhost:3000/home/add-notification",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(prescriptionData),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to send notification");
-      }
-      const result = await response.json();
-
-      console.log(result);
-    } catch (error) {
-      console.error("Error sending notification:", error);
-      alert("Failed to send prescription");
-    }
-  };
+  // useEffect(() => {
+  //     fetchNotifications();
+  // }, []);
 
   useEffect(() => {
-    console.log("Setting up socket listeners",currentUser, role);
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("order-update", (message) => {
+      // Assuming the message contains the notification message and additional details
+      console.log("Order update received:", message);
+      const newNotification = {
+        id: message.orderId, // Assuming each message contains a unique order ID
+        message: message.message,
+        date: new Date().toISOString(), // Capture the date when the message is received
+      };
+
+      // Update notifications to include the new pharmacy notification
+      setNotifications(prev => [newNotification, ...prev]);
+      setUnreadCount(prev => prev + 1);
+    });
+
+    return () => {
+      socket.off("order-update");
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("Setting up socket listeners", currentUser, role);
     socket.emit("register", currentUser, role);
 
     const handleNewNotification = (notification) => {
       console.log("Notification received:", notification);
-      // Check if notification already exists to prevent duplicates
       if (!notifications.some(notif => notif.id === notification.id)) {
-        fetchNotification(notification);
         setNotifications(prev => [notification, ...prev]);
         setUnreadCount(prev => prev + 1);
       } else {
@@ -96,45 +94,48 @@ const NotificationBell = () => {
       console.log("Cleaning up socket listeners");
       socket.off("new-prescription", handleNewNotification);
     };
-  }, [notifications, currentUser]); // Adding notifications as a dependency may cause unnecessary re-renders, be cautious.
-
+  }, [notifications, currentUser]);
 
   const handleNotificationClick = (notification) => {
-    // Push to the route where you want to show the notification details
-    // Assuming you have a route like '/prescription/:id' and each notification
-    // includes a 'prescriptionId' you can navigate to:
-    console.log("lala", notifications);
     history.push({
       pathname: `/home/prescription/${notification.id}`,
-      state: { notification }, // Pass the entire notification object via route state
+      state: { notification },
     });
   };
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
     if (showNotifications) {
-      setUnreadCount(0); // Reset unread count when closing the notification panel
+      setUnreadCount(0);
     }
   };
+
+  function formatHour(dateString) {
+    const date = new Date(dateString);
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+  }
 
   return (
     <div>
       <button className="icon-button" onClick={toggleNotifications}>
         <FontAwesomeIcon icon={faBell} />
-        {notifications.length > 0 && (
-          <span className="notification-badge">{notifications.length}</span>
+        {unreadCount > 0 && (
+          <span className="notification-badge">{unreadCount}</span>
         )}
       </button>
       {showNotifications && (
-        <div className="notification-panel">
+        <div className="notification-panel" ref={notificationRef}>
           <h4>Notifications</h4>
           <ul>
             {notifications.map((notification, index) => (
-              <li
-                key={notification.id}
-                onClick={() => handleNotificationClick(notification)}
-              >
+              <li key={index} onClick={() => handleNotificationClick(notification)}>
                 {notification.message}
+                <span className="notification-date">{formatHour(notification.date)}</span>
               </li>
             ))}
           </ul>

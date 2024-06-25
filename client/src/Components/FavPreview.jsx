@@ -113,7 +113,7 @@ const FavPreview = ({ show, handleClose, switchToFavPage }) => {
           return true; // Include other products in the updated cart
         })
       );  
-      setCartItems(cartItems.filter((item) => item.id !== productId));
+      setCartItems(cartItems.filter((item) => item !== productId));
       setCart(updatedCart);
     } catch (error) {
       console.error("Error removing item from cart:", error);  

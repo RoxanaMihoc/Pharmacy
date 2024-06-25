@@ -9,16 +9,39 @@ import {
   faCashRegister,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/order-overview.css";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3000");
 
 const OrderOverview = () => {
   const location = useLocation();
   const { notification } = location.state;
   console.log(notification);
+  const orderNumber = notification.orderDetails.orderNumber;
+  const patientId = notification.orderDetails.user;
 
   const handleOrderAcceptance = async () => {
-    // This function would ideally check stock availability and update order status
-    console.log("Processing Order:", notification.orderId);
-    // Placeholder for order processing simulation
+    //fa put request si dupa ce ai pus in orders, pune si io.on(update-order)....
+    try {
+      const response = await fetch(`http://localhost:3000/home/update-order`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "Gata de ridicare", orderNumber, patientId
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update order status');
+      }
+
+      alert("Status updated and user notified!");
+    } catch (error) {
+      console.error("Error updating order:", error);
+      alert("Failed to update order status and notify user");
+    }
   };
 
   if (!notification) return <p>No order details available.</p>;
@@ -35,7 +58,9 @@ const OrderOverview = () => {
           </div>
         </div>
         <div className="order-actions">
-          <button className="button-order">Confirmă ridicare comandă</button>
+        <button className="button-order" onClick={handleOrderAcceptance}>
+        Confirmă ridicare comandă
+      </button>
         </div>
       </div>
 

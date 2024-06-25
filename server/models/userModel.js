@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   identifier: { type: String, unique: true, required: true },
   role: { type: String, required: true },
   cart:{type: Array, required: true},
-  orders:{type: Array, required: true},
+  favorites:{type: Array, required: true},
   doctor: { type: String, required: true },
   gender: { type: String, required: true },
   phone: { type: String, required: true },

@@ -23,12 +23,8 @@ const HomeDoctor = () => {
 
   const getTabName = (activeTab) => {
     const tabNames = {
-      dashboard: "Dashboard",
-      appointments: "Appointments",
-      patients: "Patients",
-      reports: "Reports",
-      settings: "Settings",
-      prescription: "Prescription",
+      patients: "Pacienți",
+      prescription: "Rețete",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
@@ -54,10 +50,10 @@ const HomeDoctor = () => {
             </div>
           </div>
           <Switch>
-            <Route path="/patients/profile/:patientId" component={PatientProfile} />
-            <Route path="/patients/profile" component={PatientList} />
-            <Route path="/patients/prescription" component={Recommend} />
-            <Redirect from="/home" exact to="/patients/dashboard" />
+            <Route path="/doctor/profile/:patientId" component={PatientProfile} />
+            <Route path="/doctor/profile" component={PatientList} />
+            <Route path="/doctor/prescription" component={Recommend} />
+            <Redirect from="/home" exact to="/doctor/dashboard" />
             <Route component={() => <div>Page not found</div>} />
           </Switch>
         </div>

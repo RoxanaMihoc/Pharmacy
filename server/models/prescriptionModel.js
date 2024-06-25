@@ -49,7 +49,7 @@ const prescriptionSchema = new mongoose.Schema({
   ],
     notes: String,
     date: { type: Date, default: Date.now },
-    status: { type: String, default: 'Pending' },
+    status: { type: String, default: 'în așteptare' },
   });
 
   module.exports = prescriptionDB.model('Prescriptions', prescriptionSchema, 'prescriptions');

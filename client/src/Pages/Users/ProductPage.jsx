@@ -112,7 +112,8 @@ const ProductPage = () => {
         <Row>
           <Col md={3} className="filter-container">
             <h1>{subcategory}</h1>
-            <h3>Brands</h3>
+            <h3 className="brands-filter">Branduri</h3>
+            <div className="brands-scrollable"> {/* Scrollable container for brands */}
             <Form.Group>
               {brands.map((brand) => (
                 <Form.Check
@@ -124,7 +125,8 @@ const ProductPage = () => {
                 />
               ))}
             </Form.Group>
-            <h3>Price Range</h3>
+            </div>
+            <h3 className="brands-filter-price">Preț</h3>
             <Form.Control
               type="range"
               min={10}
@@ -136,43 +138,41 @@ const ProductPage = () => {
             />
 
             <p>
-              Displayed Price Range: ${displayedPriceRange[0]} - $
+              Preț: ${displayedPriceRange[0]} - Lei
               {displayedPriceRange[1]}
             </p>
-            <Button variant="primary" onClick={handleFilter}>
+            {/* <Button variant="primary" onClick={handleFilter}>
               Filter
-            </Button>
+            </Button> */}
           </Col>
           <Col md={9} className="product-list-container">
             {/* Display products based on selected filters */}
-            <h1>Product List</h1>
+            <h1>Listă produse</h1>
             <Row>
               {filteredProducts.map((product) => (
                 <Col key={product._id} md={4} className="mb-4">
-                  <Card className="crad">
-                    <Card.Img
+                  <Card className="card-porduct-page">
+                    <Card.Img className="card-img-1"
                       variant="top"
                       src={product.photo}
-                      style={{ height: "200px", objectFit: "cover" }}
+                    
                     />
                     <Card.Body>
                     <Link to={`/home/product-page/${product._id}`}>
-                      <Card.Title style={{ textAlign: "center" }}>
+                      <Card.Title className="card-title" style={{ textAlign: "center" }}>
                         {product.title}
                       </Card.Title>
                       </Link>
                       <Card.Subtitle className="mb-2 text-muted">
                         {product.brand}
-                      </Card.Subtitle>
-                      <Card.Text>{`Price: $${product.price}`}</Card.Text>
-                      <Button
+                      </Card.Subtitle> 
+                      <Card.Text>{`Preț: ${product.price} Lei`}</Card.Text>
+                      <button className="add-fav-card"
                         variant="primary"
-                        className="add-fav"
-                        onClick={() => handleAddToFav(product._id)}
-                      >
+                        onClick={() => handleAddToFav(product._id)}>
                         Adaugă produs
-                      </Button>
-                      <Button variant="secondary" className="add-fav" onClick={() => handleAddToFavorites(product._id)}>Adaugă la favorite</Button>
+                      </button>
+                      <button variant="secondary" className="add-fav-card" onClick={() => handleAddToFavorites(product._id)}>Adaugă la favorite</button>
                     </Card.Body>
                   </Card>
                 </Col>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../Context/AuthContext";
@@ -16,6 +16,29 @@ const NotificationBell = () => {
   console.log(role);
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();
+  const notificationRef = useRef(null);
+
+  function formatHour(dateString) {
+    const date = new Date(dateString);
+    let hours = date.getHours();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    return hours + ' ' + ampm;
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [notificationRef]);
 
 //   const fetchNotification = async (notification) => {
 //     console.log("in fetch");
@@ -100,7 +123,7 @@ useEffect(() => {
         )}
       </button>
       {showNotifications && (
-        <div className="notification-panel">
+        <div className="notification-panel" ref={notificationRef}>
           <h4>Notifications</h4>
           <ul>
             {notifications.map((notification, index) => (
@@ -109,6 +132,9 @@ useEffect(() => {
                 onClick={() => handleNotificationClick(notification)}
               >
                 {notification.message}
+                <span className="notification-date">
+                  {formatHour(notification.orderDetails.date)}
+                </span>
               </li>
             ))}
           </ul>

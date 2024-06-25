@@ -1,5 +1,7 @@
 import React from 'react';
 import { useAuth } from "../../Context/AuthContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCubesStacked, faArrowLeftLong, faStore, faCommentMedical } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = ({ onNavigate, setActiveTab }) => {
     const { logout } = useAuth();
@@ -10,11 +12,12 @@ const Sidebar = ({ onNavigate, setActiveTab }) => {
     return (
         <div className="sidebar">
             <div className="sidebar-header">
-                MedMonitor
+            <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
             </div>
             <ul>
-            <li onClick={() => handleNavigate('/pharmacy', 'stoc')}>Stoc</li>
-            <li onClick={logout} >Logout</li>
+            <li onClick={() => handleNavigate('/pharmacy', 'stoc')}><FontAwesomeIcon icon={faStore} /> Stoc</li>
+            <li onClick={() => handleNavigate('/pharmacy/orders', 'comenzi')}><FontAwesomeIcon icon={faCubesStacked} /> Comenzi</li>
+            <li onClick={logout} ><FontAwesomeIcon icon={faArrowLeftLong} /> Logout</li>
             </ul>
         </div>
     );

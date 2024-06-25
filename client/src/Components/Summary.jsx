@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
+import { useHistory } from 'react-router-dom';
 import "./summary.css";
 
 const Summary = ({
@@ -11,13 +12,16 @@ const Summary = ({
   onOrderSubmitted,
   pharmacy,
 }) => {
-  console.log("Cart ", cartItems);
-  console.log("Cart ID ", cartId);
-  console.log(pharmacy);
   const { currentUser } = useAuth();
   const user = currentUser;
   const [price, setTotalPrice] = useState(0);
   const pharmacist = "66760074556be02d8a3594e6";
+  const history = useHistory();
+
+  const handlePharmacy = () => {
+    history.push("/home/medicamente-otc");
+  };
+  
 
   useEffect(() => {
     const priceAfterInsurance = calculateTotalPrice(cartItems);
@@ -97,8 +101,6 @@ const Summary = ({
           }
         );
 
-        console.log("ceva2");
-
         if (!deleteResponse.ok) {
           throw new Error("Failed to delete cart");
         }
@@ -114,14 +116,16 @@ const Summary = ({
     }
   };
 
+
+
   return (
     <div>
       <Container>
-        <h2>Summary of Your Order</h2>
+        <h2>Sumar Comandă</h2>
         <Row className="mt-3">
           <Col md={6}>
-            <div className="mb-3">
-              <h3>Order Details</h3>
+            <div className="details-order">
+              <h3> Produse:</h3>
               {cartItems.length > 0 ? (
                 cartItems.map((itemArray, index) => (
                   <Row className="product-row" key={index}>
@@ -137,7 +141,7 @@ const Summary = ({
                         <Col xs={8}>
                           <div className="title">{product.title}</div>
                           <div>
-                            Quantity:{" "}
+                            Cantitate:{" "}
                             <FormControl
                               type="number"
                               defaultValue={1}
@@ -147,9 +151,9 @@ const Summary = ({
                           </div>
                           <div className="price-detail">
                             {product.insurance === "no" ? (
-                              <div>Price: ${product.price}</div>
+                              <div>Preț: {product.price} Lei</div>
                             ) : (
-                              <div>Covered by Insurance</div>
+                              <div>Acoperit de asigurare</div>
                             )}
                           </div>
                         </Col>
@@ -158,40 +162,54 @@ const Summary = ({
                   </Row>
                 ))
               ) : (
-                <div>No products in cart.</div>
+                <div>
+                  Niciun produs in coș.
+                  <button
+                    className="go-to-button"
+                    onClick={handlePharmacy}
+                  >
+                    Caută produse în farmacie.
+                  </button>
+                </div>
               )}
-              <p> Total Price: ${price} </p>
             </div>
           </Col>
           <Col md={6}>
             <div className="mb-3">
               <div className="address-details">
-                <h3>Address Details</h3>
+                <h3>Detalii client</h3>
                 <p>
-                  <strong>First Name:</strong> {addressDetails.firstName}
+                  <strong>Nume:</strong> {addressDetails.lastName}
                 </p>
                 <p>
-                  <strong>Last Name:</strong> {addressDetails.lastName}
+                  <strong>Prenume:</strong> {addressDetails.firstName}
                 </p>
                 <p>
-                  <strong>Phone:</strong> {addressDetails.phone}
+                  <strong>Telefon:</strong> {addressDetails.phone}
                 </p>
                 <p>
                   <strong>Email:</strong> {addressDetails.email}
                 </p>
                 <p>
-                  <strong>Address:</strong>{" "}
+                  <strong>Adresă:</strong>{" "}
                   {`${addressDetails.address}, ${addressDetails.city}, ${addressDetails.county}`}
                 </p>
                 <p>
-                  <strong>Additional Info:</strong>{" "}
+                  <strong>Informații adiționale:</strong>{" "}
                   {addressDetails.additionalInfo || "N/A"}
                 </p>
               </div>
             </div>
-            <button className="submit-order-button" onClick={handleOrderClick}>
-              Submit Order
-            </button>
+            <div className="price-submit">
+              <h3> Preț total: {price} Lei </h3>
+              <button
+                className="submit-order-button"
+                onClick={handleOrderClick}
+                disabled={totalPrice === 0}
+              >
+                Trimite Comanda
+              </button>
+            </div>
           </Col>
         </Row>
       </Container>

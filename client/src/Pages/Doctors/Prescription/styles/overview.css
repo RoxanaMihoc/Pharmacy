@@ -10,10 +10,10 @@
     align-items: center;
 }
 
-.patient-info, .prescription-details, .diagnosis-info {
+.patient-info, .prescription-details-2, .diagnosis-info {
     margin-bottom: 20px;
     padding: 10px;
-    background-color: white;
+    background-color: #f4f4f9;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     width: 100%;
@@ -61,5 +61,6 @@ li:last-child {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    color:black;
     font-size: 16px;
   }

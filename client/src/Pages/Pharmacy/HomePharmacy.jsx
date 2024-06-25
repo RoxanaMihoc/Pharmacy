@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import StockList from "./StockList"
 import OrderOverview from "./OrderOverview";
+import OrdersPage from "./OrdersPage";
 import { useLocation, useHistory } from "react-router-dom";
 import {
   BrowserRouter as Router,
@@ -20,6 +21,7 @@ const Pharmacy = () => {
   const getTabName = (activeTab) => {
     const tabNames = {
       stoc: "Stoc",
+      comenzi: "Comenzi",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
@@ -47,6 +49,7 @@ const Pharmacy = () => {
               path="/pharmacy/orders/:notificationId"
               component={OrderOverview}
               />
+              <Route path="/pharmacy/orders" component={OrdersPage} />
             <Route path="/pharmacy" component={StockList} />
             <Route component={() => <div>Page not found</div>} />
           </Switch>

@@ -33,7 +33,7 @@ const PatientList = () => {
   if (loading) return <div>Loading...</div>;
 
   const onPatientSelect = (patientId) => {
-    history.push(`/patients/profile/${patientId}`);
+    history.push(`/doctor/profile/${patientId}`);
   };
 
   const filteredPatients = patients.filter(patient =>
@@ -44,16 +44,16 @@ const PatientList = () => {
   return (
     <div className="container-section">
       <div className="filter">
-        <h1>Filter</h1>
+        <h1>Filtru</h1>
         <select
           value={genderFilter}
           onChange={(e) => setGenderFilter(e.target.value)}
           className="gender-filter"
         >
-          <option value="">All Genders</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="Other">Other</option>
+          <option value="">Gen</option>
+          <option value="Bărbat">Masculin</option>
+          <option value="Femeie">Feminin</option>
+          <option value="Other">Altul</option>
         </select>
       </div>
       <div className="patient">
@@ -65,7 +65,7 @@ const PatientList = () => {
             onChange={(e) => setFilter(e.target.value)}
           />
           <button className="button-add-patient" onClick={() => console.log("Add New Patient")}>
-            Add New Patient
+            Adaugă un nou pacient
           </button>
         </div>
         <div className="patient-grid">

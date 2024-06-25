@@ -52,14 +52,11 @@ const SignUp = () => {
       }
 
       const data = await response.json();
-      console.log(data); // Assuming the API returns a message upon successful registration
-      history.push("/login");
+      console.log(data);
+      history.push("/role");
     } catch (error) {
       console.error("Registration failed:", error.message);
       debugger;
-      setTimeout(() => {
-        // Empty block to keep the console open
-      }, 5000);
     }
   };
 
@@ -129,7 +126,7 @@ const SignUp = () => {
           </p>
         )}
         <button type="submit" onClick={handleRegister}>
-          Sign Up
+         Înregistrare
         </button>
       </div>
     </form>

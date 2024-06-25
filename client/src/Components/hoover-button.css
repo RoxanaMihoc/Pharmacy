@@ -15,7 +15,7 @@
   position: absolute;
   top: 0;
   left: 100%; /* Position to the right of the button */
-  width: 1000px; /* Set the width of the additional content */
+  width: 900px; /* Set the width of the additional content */
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 10px;
@@ -26,13 +26,13 @@
 
 .button-h:hover .additional-content-container {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 50% 50%;
 }
 
 .additional-content-container .sub-additional-content-container1{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
 }
 
 .hover-button:hover {

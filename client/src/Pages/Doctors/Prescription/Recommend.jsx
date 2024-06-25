@@ -15,16 +15,16 @@ function Recommend() {
     <div className="prescription-app">
       <Switch>
         <Route
-          path="/patients/prescription/path-to-overview"
+          path="/doctor/prescription/path-to-overview"
           component={PrescriptionsOverview}
         />
         <Route
-          path="/patients/prescription/medicine"
+          path="/doctor/prescription/medicine"
           component={MedicationList}
         />
-        <Route path="/patients/prescription/users" component={PatientsList} />
-        <Route path="/patients/prescription" component={PrescriptionsList} />
-        <Redirect from="/home" exact to="/patients/dashboard" />
+        <Route path="/doctor/prescription/users" component={PatientsList} />
+        <Route path="/doctor/prescription" component={PrescriptionsList} />
+        <Redirect from="/home" exact to="/doctor/dashboard" />
         <Route component={() => <div>Page not found</div>} />
       </Switch>
     </div>

@@ -52,7 +52,7 @@ const FavPage = () => {
 
       const resolvedData = await Promise.all(promises);
       setCart(resolvedData.filter((item) => item !== null));
-      console.log(cart); 
+      console.log(cart);
     };
 
     const fetchCartItems = async (productId) => {
@@ -82,11 +82,10 @@ const FavPage = () => {
   useEffect(() => {
     let total = 0;
 
-    cart.forEach(product => {
-      console.log(typeof(product[0].price), "test");
+    cart.forEach((product) => {
       total += Number(product[0].price);
     });
-    console.log(typeof(total));
+    console.log(typeof total);
     setTotalPrice(Number(total));
   }, [cart]);
 
@@ -118,7 +117,7 @@ const FavPage = () => {
           return true; // Include other products in the updated cart
         })
       );
-      setCartItems(cartItems.filter((item) => item.id !== productId));
+      setCartItems(cartItems.filter((item) => item !== productId));
       setCart(updatedCart);
       document.location.reload();
     } catch (error) {
@@ -234,6 +233,10 @@ const FavPage = () => {
     console.log(selectedPharmacy);
   };
 
+  const handlePharmacy = () => {
+    history.push("/home/medicamente-otc");
+  };
+
   const renderContent = () => {
     switch (activeStep) {
       case "Cos de cumparaturi":
@@ -281,32 +284,49 @@ const FavPage = () => {
                 </Row>
               ))
             ) : (
-              <div>No products in the cart.</div>
-            )}
-            <h5>Total Price: ${totalPrice}</h5>
-            <div>
-              <h2>Selectează o farmacie</h2>
-              <div className="pharmacy-list">
-                {pharmacies.map((pharmacy) => (
-                  <div
-                    key={pharmacy._id}
-                    className={`pharmacy-item ${
-                      selectedPharmacy === pharmacy._id ? "selected" : ""
-                    }`}
-                    onClick={() => handleSelectPharmacy(pharmacy._id)}
+              <div className="empty-cart">
+                  <h2>Niciun produs in coș.</h2>
+                  <h3>Continuă cumpăraturile si adauga produse in coș.</h3>
+                  <button
+                    className="go-to-button"
+                    onClick={handlePharmacy}
                   >
-                    <img
-                      src={pharmacy.photo}
-                      alt={pharmacy.name}
-                      className="pharmacy-photo"
-                    />
-                    <div className="pharmacy-info">
-                      <strong>{pharmacy.name}</strong>
-                      <p>{pharmacy.location}</p>
-                    </div>
+                    Caută produse în farmacie.
+                  </button>
+                </div>
+            )}
+            <div>
+              {cart.length > 0 && (
+                <div>
+                  <h5>Total Price: {totalPrice} Lei</h5>
+                  <h2>Selectează o farmacie</h2>
+                  <div className="pharmacy-list">
+                    {pharmacies.length > 0 ? (
+                      pharmacies.map((pharmacy) => (
+                        <div
+                          key={pharmacy._id}
+                          className={`pharmacy-item ${
+                            selectedPharmacy === pharmacy._id ? "selected" : ""
+                          }`}
+                          onClick={() => handleSelectPharmacy(pharmacy._id)}
+                        >
+                          <img
+                            src={pharmacy.photo}
+                            alt={pharmacy.name}
+                            className="pharmacy-photo"
+                          />
+                          <div className="pharmacy-info">
+                            <strong>{pharmacy.name}</strong>
+                            <p>{pharmacy.location}</p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No pharmacies available.</p> // Message displayed when there are no pharmacies
+                    )}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </div>
           </>
         );

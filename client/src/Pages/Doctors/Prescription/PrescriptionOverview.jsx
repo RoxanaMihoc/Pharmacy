@@ -104,7 +104,7 @@ const PrescriptionOverview = () => {
           {diagnosis}
         </p>
       </div>
-      <div className="prescription-details">
+      <div className="prescription-details-2">
         <h2>Medicamente selectate</h2>
         <ul>
           {selectedItems.map((item, index) => (

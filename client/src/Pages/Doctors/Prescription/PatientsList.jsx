@@ -1,5 +1,3 @@
-// src/PatientsList.js
-
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
@@ -41,7 +39,7 @@ const PatientsList = () => {
   const handleSendClick = () => {
     if (selectedPatient) {
       // Navigate to the medicine page with the selected patient's data
-      history.push(`/patients/prescription/medicine`, {
+      history.push(`/doctor/prescription/medicine`, {
         patient: selectedPatient,
       });
     } else {
@@ -60,10 +58,10 @@ const PatientsList = () => {
 
   return (
     <div className="patients-container">
-      <h1>Patients List</h1>
+      <h1>Listă pacienți</h1>
       <input
         type="text"
-        placeholder="Search by name..."
+        placeholder="Caută după nume..."
         value={searchTerm}
         onChange={handleSearchChange}
         className="search-bar"
@@ -75,6 +73,11 @@ const PatientsList = () => {
             onClick={() => handlePatientSelect(patient)}
             className="patient-item"
           >
+            <img
+              src={patient.photo || "default_profile.png"}
+              alt={`${patient.firstName} ${patient.lastName}`}
+              className="header-photo"
+            ></img>
             <div className="patient-details">
               <h4>
                 {patient.firstName} {patient.lastName}
@@ -82,25 +85,25 @@ const PatientsList = () => {
               <p></p>
               {patient.email}
             </div>
-            <div> 
-            <input
-              type="checkbox"
-              checked={selectedPatient === patient}
-              onChange={() => handlePatientSelect(patient)}
-              className="select-checkbox"
-            />
+            <div>
+              <input
+                type="checkbox"
+                checked={selectedPatient === patient}
+                onChange={() => handlePatientSelect(patient)}
+                className="select-checkbox"
+              />
             </div>
           </div>
         ))}
       </div>
       <div>
-      <button
-        onClick={handleSendClick}
-        disabled={!selectedPatient}
-        className="send-button"
-      >
-        Send to Medicine
-      </button>
+        <button
+          onClick={handleSendClick}
+          disabled={!selectedPatient}
+          className="send-button"
+        >
+          Mai departe
+        </button>
       </div>
     </div>
   );

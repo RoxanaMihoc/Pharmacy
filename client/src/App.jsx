@@ -9,7 +9,6 @@ import FirstPage from "./Pages/Login/FirstPage";
 import HomeDoctor from "./Pages/Doctors/HomeDoctor";
 import { useAuth } from "./Context/AuthContext";
 import DoctorSelection from "./Pages/Login/DoctorSelection";
-import AdminOrders from "./Pages/Admin Interface/AdminOrders";
 import "./Pages/styles/main.css";
 import UserForm from "./Pages/Login/UserForm";
 import RoleSelection from "./Pages/Login/RoleSelection";
@@ -26,7 +25,7 @@ const App = () => {
       case "Patient":
         return "/home";
       case "Doctor":
-        return "/patients";
+        return "/doctor";
       default:
         return "/login"; // assuming there's a login or another default page
     }
@@ -35,8 +34,9 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        {role === "doctor" && <Route path="/patients" component={HomeDoctor} />}
-        {role === "patient" && <Route path="/home" component={HomeUser} />}
+        {role === "Doctor" && <Route path="/doctor" component={HomeDoctor} />}
+        {role === "Patient" && <Route path="/home/medicamente-otc" component={HomeUser} />}
+        {role === "Pharmacist" && <Route path="/pharmacy" component={Pharmacy} />}
         <Route path="/others" component={UserForm} />
         <Route path="/login" component={FirstPage} />
         <Route path="/role" component={RoleSelection} />
@@ -48,7 +48,7 @@ const App = () => {
         />
 
         <Route
-          path="/patients"
+          path="/doctor"
           render={() => (token ? <HomeDoctor /> : <Redirect to="/role" />)}
         />
 

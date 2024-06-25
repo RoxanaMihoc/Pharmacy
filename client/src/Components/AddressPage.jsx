@@ -35,7 +35,7 @@ const AddressPage = ({ onSubmit }) => {
       <div className="section">
         <h3>1. Customer Info</h3>
         <div className="personal-info">
-          <label>
+          <label> 
             First Name*
             <input type="text" name="firstName" placeholder="First Name" required onChange={handleInputChange} value={formData.firstName} />
           </label>
@@ -74,28 +74,33 @@ const AddressPage = ({ onSubmit }) => {
               {/* Add more options here */}
             </select>
           </label>
+          <div className="street-info">
           <label>
             Address
             <input type="text" name="address" placeholder="Address" required onChange={handleInputChange} value={formData.address} />
           </label>
         </div>
-        
+        <div className="street-info">
         <label>
           Other details
           <textarea name="additionalInfo" placeholder="Other details" onChange={handleInputChange} value={formData.additionalInfo}></textarea>
         </label>
+        </div>
+        </div>
       </div>
 
       <div className="section">
         <h3>2. Payment Method</h3>
         <div className="payment-methods">
           <label>
+          Cash
             <input type="radio" name="paymentMethod" value="Cash" checked={formData.paymentMethod === "Cash"} onChange={handleInputChange} />
-            Cash
           </label>
           <label>
+
+          Card
             <input type="radio" name="paymentMethod" value="Card" checked={formData.paymentMethod === "Card"} onChange={handleInputChange} />
-            Card
+
           </label>
         </div>
       </div>

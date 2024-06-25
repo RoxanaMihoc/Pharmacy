@@ -1,10 +1,16 @@
 // components/AdminOrders.js
-import React, { useEffect, useState } from "react";
-import { Container, Table, Button, Accordion, Card } from "react-bootstrap";
-import "./styles/admin-orders.css";
 
-const AdminOrders = () => {
+import { useAuth } from "../../Context/AuthContext";
+import React, { useState, useEffect } from "react";
+import "./styles/orders.css"; // Ensure to create this CSS file
+import { useLocation } from "react-router-dom";
+import { Container, Table, Button, Accordion, Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+
+const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
+  const { currentUser } = useAuth();
   const [visibleOrderId, setVisibleOrderId] = useState(null);
 
   useEffect(() => {
@@ -13,7 +19,9 @@ const AdminOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/home/orders`);
+      const response = await fetch(
+        `http://localhost:3000/home/orders/${currentUser}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch orders");
       }
@@ -25,40 +33,38 @@ const AdminOrders = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate().toString().padStart(2, "0")}-${(
+      date.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${date.getFullYear()}`;
+  };
+
   const toggleDetails = (orderId) => {
     setVisibleOrderId(visibleOrderId === orderId ? null : orderId);
   };
 
-  // const updateOrderStatus = async (id, status) => {
-  //     await axios.patch(`/api/orders/${id}`, { status });
-  //     fetchOrders();
-  // };
-
-  // const cancelOrder = async (id) => {
-  //     await axios.delete(`/api/orders/${id}`);
-  //     fetchOrders();
-  // };
-
   return (
     <Container className="mt-3">
-      <h2>Order Management</h2>
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>Order ID</th>
-            <th>Customer Name</th>
+            <th>Numărul comenzii</th>
+            <th>Nume Pacient</th>
             <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
+            <th>Telefon</th>
+            <th>Adresă</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th>Acțiuni</th>
           </tr>
         </thead>
         <tbody>
           {orders.map((order) => (
             <React.Fragment key={order._id}>
               <tr>
-                <td>{order._id}</td>
+                <td>#{order.orderNumber}</td>
                 <td>
                   {order.firstName} {order.lastName}
                 </td>
@@ -72,8 +78,8 @@ const AdminOrders = () => {
                     onClick={() => toggleDetails(order._id)}
                   >
                     {visibleOrderId === order._id
-                      ? "Hide Products"
-                      : "View Products"}
+                      ? "Ascunde produse"
+                      : "Vezi produse"}
                   </Button>
                 </td>
               </tr>
@@ -83,9 +89,9 @@ const AdminOrders = () => {
                     <Table size="sm">
                       <thead>
                         <tr>
-                          <th>Product</th>
-                          <th>Quantity</th>
-                          <th>Price</th>
+                          <th>Produs</th>
+                          <th>Cantitate</th>
+                          <th>Preț</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -101,9 +107,9 @@ const AdminOrders = () => {
                             </tr>
                           ))}
                         <tr className="total-price">
-                        <th>Total Price</th>
-                        <th></th>
-                        <th>{order.totalPrice}</th>
+                          <th>Total Price</th>
+                          <th></th>
+                          <th>{order.totalPrice}</th>
                         </tr>
                       </tbody>
                     </Table>
@@ -118,4 +124,4 @@ const AdminOrders = () => {
   );
 };
 
-export default AdminOrders;
+export default OrdersPage;

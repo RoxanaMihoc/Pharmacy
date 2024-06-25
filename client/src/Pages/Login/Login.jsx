@@ -39,7 +39,7 @@ const Login = () => {
       if (!isAuthenticated && role == "Patient") {
         history.push("/home");
       } else if (role == "Doctor") {
-        history.push("/patients");
+        history.push("/doctor");
       } else {
         history.push("/pharmacy");
       }

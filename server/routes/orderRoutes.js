@@ -4,9 +4,11 @@ const router = express.Router();
 // Route to add a product to the cart
 router.get('/orders', ordersController.getAllOrders);
 router.get('/orders/:currentUser', ordersController.getOrdersForUser);
+router.put('/orders/:currentUser', ordersController.getOrdersForUser);
 
 module.exports = (io, userSockets) => {
     console.log("in rout o",userSockets);
     router.post('/orders', (req, res) => ordersController.addToOrders(req, res, io, userSockets));
+    router.put('/update-order',(req, res) => ordersController.changeStatusOrder(req, res, io, userSockets));
     return router;
   };
