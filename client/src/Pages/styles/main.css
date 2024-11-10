@@ -7,7 +7,6 @@ body {
 button {
   background-color: #828e99; /* Primary blue */
   color: black;
-  padding: 10px 20px;
   border-radius: 10px;
   border: none;
   cursor: pointer;

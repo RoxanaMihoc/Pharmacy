@@ -13,7 +13,9 @@ const PatientList = () => {
 
   useEffect(() => {
     const fetchPatients = async () => {
-      const response = await fetch(`http://localhost:3000/doctors/patients-list/${currentUser}`);
+      const response = await fetch(
+        `http://localhost:3000/doctors/patients-list/${currentUser}`
+      );
       if (response.ok) {
         const data = await response.json();
         setPatients(data);
@@ -24,7 +26,7 @@ const PatientList = () => {
       }
     };
 
-    fetchPatients().catch(err => {
+    fetchPatients().catch((err) => {
       console.error("Error fetching patients:", err);
       setLoading(false);
     });
@@ -36,9 +38,12 @@ const PatientList = () => {
     history.push(`/doctor/profile/${patientId}`);
   };
 
-  const filteredPatients = patients.filter(patient =>
-    `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(filter.toLowerCase()) &&
-    (genderFilter ? patient.gender === genderFilter : true)
+  const filteredPatients = patients.filter(
+    (patient) =>
+      `${patient.firstName} ${patient.lastName}`
+        .toLowerCase()
+        .includes(filter.toLowerCase()) &&
+      (genderFilter ? patient.gender === genderFilter : true)
   );
 
   return (
@@ -60,28 +65,39 @@ const PatientList = () => {
         <div className="search-bar2">
           <input
             type="text"
-            placeholder="Search patients"
+            placeholder="Caută pacienți.."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
+            className="search-input-bar2"
           />
-          <button className="button-add-patient" onClick={() => console.log("Add New Patient")}>
+          <button
+            className="button-add-patient"
+            onClick={() => console.log("Add New Patient")}
+          >
             Adaugă un nou pacient
           </button>
         </div>
+
         <div className="patient-grid">
           {filteredPatients.map((patient) => (
-             <div key={patient._id} className="patient-item2" onClick={() => onPatientSelect(patient._id)}>
+            <div
+              key={patient._id}
+              className="patient-item2"
+              onClick={() => onPatientSelect(patient._id)}
+            >
               <img
-            src={patient.photo || "default_profile.png"}
-            alt={`${patient.firstName} ${patient.lastName}`}
-            className="header-photo"
-          />
-               <div className="patient-details">
-
-                 <h3>{patient.firstName} {patient.lastName}</h3>
-                 <p>{patient.email}</p> {/* Assuming email is a detail you want to show */}
-               </div>
-             </div>
+                src={patient.photo || "default_profile.png"}
+                alt={`${patient.firstName} ${patient.lastName}`}
+                className="header-photo-list"
+              />
+              <div className="patient-details">
+                <h4>
+                  {patient.firstName} {patient.lastName}
+                </h4>
+                <p>{patient.email}</p>{" "}
+                {/* Assuming email is a detail you want to show */}
+              </div>
+            </div>
           ))}
         </div>
       </div>

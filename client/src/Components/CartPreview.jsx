@@ -5,7 +5,7 @@ import { useAuth } from "../Context/AuthContext";
 import { useHistory } from 'react-router-dom';
 import './cart-preview.css'; 
 
-const FavPreview = ({ show, handleClose, switchToFavPage }) => {
+const CartPreview = ({ show, handleClose, switchToCartPage }) => {
   
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -33,7 +33,7 @@ const FavPreview = ({ show, handleClose, switchToFavPage }) => {
     };
 
       fetchCartData();
-  }, [currentUser]);
+  }, [currentUser, cartItems]);
 
   useEffect(() => {
     const populateCartItems = async () => {
@@ -192,15 +192,15 @@ const FavPreview = ({ show, handleClose, switchToFavPage }) => {
               <div className="cart-message">No product in the cart.</div>
             )}
       <div className="cart-summary">
-          <p>Total {cart.length} produse</p>
+          <p>Total {cart.length} produse:</p>
           <p>{totalPrice} Lei</p>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={switchToFavPage}>
+        <Button className="button-fav-preview" onClick={switchToCartPage}>
           Vezi detalii comandă
         </Button>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button className="button-fav-preview"  onClick={handleClose}>
          Închide
         </Button>
       </Modal.Footer>
@@ -208,4 +208,4 @@ const FavPreview = ({ show, handleClose, switchToFavPage }) => {
   );
 };
 
-export default FavPreview;
+export default CartPreview;

@@ -4,13 +4,13 @@
     margin: auto;
 }
 
-.search-bar {
+/* .search-bar {
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     width:auto;
-}
+} */
 
 .patient-items-container {
     display: flex;

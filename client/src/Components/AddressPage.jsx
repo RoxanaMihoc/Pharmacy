@@ -33,14 +33,14 @@ const AddressPage = ({ onSubmit }) => {
       <h2>Detalii comanda</h2>
       
       <div className="section">
-        <h3>1. Customer Info</h3>
+        <h3>1. Informații client</h3>
         <div className="personal-info">
           <label> 
-            First Name*
+            Nume*
             <input type="text" name="firstName" placeholder="First Name" required onChange={handleInputChange} value={formData.firstName} />
           </label>
           <label>
-            Last Name*
+            Prenume*
             <input type="text" name="lastName" placeholder="Last Name" required onChange={handleInputChange} value={formData.lastName} />
           </label>
           <label>
@@ -48,7 +48,7 @@ const AddressPage = ({ onSubmit }) => {
             <input type="text" name="cnp" placeholder="CNP" required onChange={handleInputChange} value={formData.cnp} />
           </label>
           <label>
-            Phone*
+            Telefon*
             <input type="tel" name="phone" placeholder="Telefon" required onChange={handleInputChange} value={formData.phone} />
           </label>
           <label>
@@ -59,7 +59,7 @@ const AddressPage = ({ onSubmit }) => {
         
         <div className="location-info">
           <label>
-            County
+            Județ
             <select name="county" required onChange={handleInputChange} value={formData.county}>
               <option value="" disabled>Select the County</option>
               <option value="Iasi">Iasi</option>
@@ -67,7 +67,7 @@ const AddressPage = ({ onSubmit }) => {
             </select>
           </label>
           <label>
-            City
+            Oraș
             <select name="city" required onChange={handleInputChange} value={formData.city}>
               <option value="" disabled>Select the City</option>
               <option value="Iasi">Iasi</option>
@@ -76,13 +76,13 @@ const AddressPage = ({ onSubmit }) => {
           </label>
           <div className="street-info">
           <label>
-            Address
+            Adresă
             <input type="text" name="address" placeholder="Address" required onChange={handleInputChange} value={formData.address} />
           </label>
         </div>
         <div className="street-info">
         <label>
-          Other details
+          Informații adiționale
           <textarea name="additionalInfo" placeholder="Other details" onChange={handleInputChange} value={formData.additionalInfo}></textarea>
         </label>
         </div>
@@ -90,7 +90,7 @@ const AddressPage = ({ onSubmit }) => {
       </div>
 
       <div className="section">
-        <h3>2. Payment Method</h3>
+        <h3>2. Metoda de plată</h3>
         <div className="payment-methods">
           <label>
           Cash
@@ -106,7 +106,7 @@ const AddressPage = ({ onSubmit }) => {
       </div>
       <div className="section">
         <button type="submit" className="next-step">
-          Next step <span className="arrow">→</span>
+          Urmatoarea pagina <span className="arrow">→</span>
         </button>
       </div>
     </form>

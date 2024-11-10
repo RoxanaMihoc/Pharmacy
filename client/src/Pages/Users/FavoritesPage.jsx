@@ -119,7 +119,7 @@ const FavoritesPage = () => {
       <Container>
         <Row>
           <Col md={9} className="product-list-container">
-          <h1>Favorites List</h1>
+          <h1>Listă de favorite</h1>
             <Row>
               {favorites.map((subArray, subArrayIndex) =>
                 subArray.map((product, index) => (
@@ -146,20 +146,20 @@ const FavoritesPage = () => {
                         <Card.Subtitle className="mb-2 text-muted">
                           {product.brand}
                         </Card.Subtitle>
-                        <Card.Text>{`Price: $${product.price}`}</Card.Text>
+                        <Card.Text>{`Pret: ${product.price} Lei`}</Card.Text>
                         <Button
-                          variant="primary"
-                          className="mr-2"
+                          
+                          className="add-fav-card"
                           onClick={() => handleAddToCart(product._id)}
                         >
-                          Add to Cart
+                          Adauga Produs
                         </Button>
                         <Button
-                          variant="secondary"
-                          className="mr-2"
+                          
+                          className="add-fav-card"
                           onClick={(e) => handleRemoveItem(e, product._id)}
                         >
-                          Remove from favorites
+                          Șterge de la favorite
                         </Button>
                       </Card.Body>
                     </Card>

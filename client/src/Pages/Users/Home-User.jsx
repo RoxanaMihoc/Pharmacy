@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import FavPreview from "../../Components/FavPreview";
-import FavPage from "./FavPage";
+import CartPreview from "../../Components/CartPreview";
+import CartPage from "./CartPage";
 import FavoritesPage from "./FavoritesPage";
 import ProductPage from "./ProductPage";
 import ProductDetails from "./ProductDetails";
@@ -27,24 +27,24 @@ import {
 const HomeUser = () => {
   const [activeTab, setActiveTab] = useState("product");
   const [selectedPatientId, setSelectedPatientId] = useState(null);
-  const [showFavPreview, setShowFavPreview] = useState(false);
+  const [showCartPreview, setShowCartPreview] = useState(false);
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const location = useLocation();
   const history = useHistory();
 
-  const handleShowFavPreview = async () => {
+  const handleShowCartPreview = async () => {
     if (location.pathname !== "/home/cart") {
-      setShowFavPreview(true);
+      setShowCartPreview(true);
     }
   };
 
-  const handleCloseFavPreview = () => setShowFavPreview(false);
+  const handleCloseCartPreview = () => setShowCartPreview(false);
 
-  const switchToFavPage = () => {
+  const switchToCartPage = () => {
     handleNavigate("/home/cart");
     setActiveTab("cart");
-    setShowFavPreview(false); // Close the preview modal when moving to the cart page
+    setShowCartPreview(false); // Close the preview modal when moving to the cart page
   };
 
   const handleFavoritesButton = () => {
@@ -81,21 +81,21 @@ const HomeUser = () => {
               </button>
               <button
                 className="icon-button"
-                onClick={handleShowFavPreview}
+                onClick={handleShowCartPreview}
                 disabled={location.pathname === "/user/cart-page"}
               >
                 <FontAwesomeIcon icon={faBagShopping} />
               </button>
             </div>
-            <FavPreview
-              show={showFavPreview}
-              handleClose={handleCloseFavPreview}
-              switchToFavPage={switchToFavPage}
+            <CartPreview
+              show={showCartPreview}
+              handleClose={handleCloseCartPreview}
+              switchToCartPage={switchToCartPage}
             />
           </div>
           <Switch className="page">
             <Route path="/home/prescriptions" component={Prescriptions} />
-            <Route path="/home/cart" component={FavPage} />
+            <Route path="/home/cart" component={CartPage} />
             <Route path="/home/favorites" component={FavoritesPage} />
             <Route path="/home/orders" component={OrderPage} />
             <Route

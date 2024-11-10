@@ -126,14 +126,14 @@ const ProductDetails = () => {
                   <FormControl type="number" defaultValue={1} min={1} />
                 </div>
                 <Button
-                  variant="primary"
+                  
                   className="add-to-cart"
                   onClick={() => handleAddToCart(product._id)}
                 >
                   Adaugă produs
                 </Button>
                 <Button
-                  variant="primary"
+                  
                   className="add-to-favorites"
                   onClick={() => handleAddToFavorites(product._id)}
                 >

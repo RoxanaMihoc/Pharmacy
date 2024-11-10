@@ -5,7 +5,7 @@ import Summary from "../../Components/Summary";
 import { useAuth } from "../../Context/AuthContext";
 import "./styles/fav-page.css";
 
-const FavPage = () => {
+const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartItems, setIsCartItems] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -90,7 +90,7 @@ const FavPage = () => {
   }, [cart]);
 
   const handleRemoveItem = async (e, productId) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     try {
       // Send request to remove item from cart
@@ -270,7 +270,7 @@ const FavPage = () => {
                           }
                         />
                       </Col>
-                      <Col xs={2}>${product.price}</Col>
+                      <Col xs={2}>{product.price} Lei</Col>
                       <Col xs={2} className="delete-col">
                         <Button
                           variant="danger"
@@ -297,9 +297,9 @@ const FavPage = () => {
             )}
             <div>
               {cart.length > 0 && (
-                <div>
-                  <h5>Total Price: {totalPrice} Lei</h5>
-                  <h2>Selectează o farmacie</h2>
+                <div className="ppppp">
+                  <h5>Total: {totalPrice} Lei</h5>
+                  <h2>Selectează o farmacie:</h2>
                   <div className="pharmacy-list">
                     {pharmacies.length > 0 ? (
                       pharmacies.map((pharmacy) => (
@@ -322,7 +322,7 @@ const FavPage = () => {
                         </div>
                       ))
                     ) : (
-                      <p>No pharmacies available.</p> // Message displayed when there are no pharmacies
+                      <p>Nicio farmacie disponibila.</p> // Message displayed when there are no pharmacies
                     )}
                   </div>
                 </div>
@@ -330,7 +330,7 @@ const FavPage = () => {
             </div>
           </>
         );
-      case "Contact si adresa":
+      case "Adresa si contact":
         return <AddressPage onSubmit={handleAddressSubmit} />;
       case "Sumar comanda":
         return (
@@ -366,7 +366,7 @@ const FavPage = () => {
           <Col className="button-center">
             <div className="button-wrapper">
               <Button
-                variant="primary"
+                
                 className={`step-button ${
                   activeStep === "Cos de cumparaturi" ? "active" : ""
                 }`}
@@ -375,16 +375,16 @@ const FavPage = () => {
                 Cos de cumparaturi
               </Button>
               <Button
-                variant="primary"
+                
                 className={`step-button ${
-                  activeStep === "Contact si adresa" ? "active" : ""
+                  activeStep === "Adresa si contact" ? "active" : ""
                 }`}
-                onClick={() => setActiveStep("Contact si adresa")}
+                onClick={() => setActiveStep("Adresa si contact")}
               >
-                Contact si adresa
+                Adresa si contact
               </Button>
               <Button
-                variant="primary"
+                
                 className={`step-button ${
                   activeStep === "Sumar comanda" ? "active" : ""
                 }`}
@@ -394,7 +394,7 @@ const FavPage = () => {
                 Sumar comanda
               </Button>
               <Button
-                variant="primary"
+                
                 className={`step-button ${
                   activeStep === "Comanda plasata" ? "active" : ""
                 }`}
@@ -417,4 +417,4 @@ const FavPage = () => {
   );
 };
 
-export default FavPage;
+export default CartPage;

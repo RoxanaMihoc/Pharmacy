@@ -5,7 +5,7 @@ const patientSchema = new mongoose.Schema({
   identifier: { type: String, required: true },
   address: { type: String, required: true },
   appointments: { type: Array, required: true },
-  birth_date: { type: Date, required: true },
+  birth_date: { type: String, required: true },
   cart: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
   city: { type: String, required: true },
   doctor: { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor' },

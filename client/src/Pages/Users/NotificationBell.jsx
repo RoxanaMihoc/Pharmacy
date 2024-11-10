@@ -130,7 +130,7 @@ const NotificationBell = () => {
       </button>
       {showNotifications && (
         <div className="notification-panel" ref={notificationRef}>
-          <h4>Notifications</h4>
+          <h4>Notificări</h4>
           <ul>
             {notifications.map((notification, index) => (
               <li key={index} onClick={() => handleNotificationClick(notification)}>

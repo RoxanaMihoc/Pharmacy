@@ -1,4 +1,3 @@
-
 /* .cart-items {
   list-style: none;
   margin: 0;
@@ -43,8 +42,34 @@
   margin-top: 10px;
 }
 
-.cart-message
-{ display: flex;
+.cart-message {
+  display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Center the modal title */
+.modal-title {
+  text-align: center;
+  width: 100%;
+  font-size: 1.5rem; /* Adjust font size as needed */
+  font-weight: bold; /* Optional: Make the title bold */
+}
+
+/* Center the footer buttons */
+.modal-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px; /* Optional: Add some space between buttons */
+}
+.modal-footer .button-fav-preview {
+  background-color: #ddd8d8;
+  color: #000000;
+}
+
+.modal-footer .button-fav-preview:hover {
+  background-color: #776e6e;
+  box-shadow: 0 4px 4px rgba(0, 0, 0.5, 0.5);
+  color: #ffffff;
+  font-weight: 500;
 }

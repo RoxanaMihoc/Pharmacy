@@ -16,3 +16,33 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border 0.2s ease;
 }
+
+.favorite-body .add-fav-card {
+    font-family: "Poppins", sans-serif;
+    background-color: #ddd8d8;
+    border: 2px solid #b4b1b1;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: 90%; /* Ajustează lățimea pentru a fi mai subțire */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto; /* Ajustează înălțimea pentru a fi mai subțire */
+    color: #000000;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Tranziție lină pentru culoare și fundal */
+    margin-top: 10px; /* Adaugă un spațiu deasupra butonului */
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    font-weight: bold;
+    
+  }
+
+  .favorite-body .add-fav-card:hover {
+    background-color: #776e6e;
+    border: 2px solid #776e6e;
+    box-shadow: 0 4px 4px rgba(0, 0, 0.5, 0.5);
+    color: #ffffff;
+    font-weight: 500;
+  }

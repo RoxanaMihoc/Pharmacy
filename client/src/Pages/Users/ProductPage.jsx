@@ -9,7 +9,7 @@ import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
 const ProductPage = () => {
-  const [brands, setBrands] = useState(["BIOFARM", "Brand2", "Brand3"]);
+  const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([10, 1000]);
   const [displayedPriceRange, setDisplayedPriceRange] = useState([10, 1000]);
@@ -104,6 +104,18 @@ const ProductPage = () => {
       // Handle error, show an error message to the user
     }
   };
+  const linkMap = {
+    "medicamente-otc" : "Medicamente fara reteta" ,
+    "afectiuni-ale-cavitatii-bucale":"Afectiuni ale cavitatii bucale",
+    "antispastice-balonare-constipatie":"Antiacide, Antispastice, Balonare",
+    "enzime-digestive": "Enzime Digestive",
+      "greata-gastrita":"Gastrita si ulcer, Greata si varsaturi",
+    // Add more mappings as needed
+  };
+
+  function getMappedText(subdirectory) {
+    return linkMap[subdirectory] || subdirectory; // Default to subdirectory if no match is found
+}
 
   return (
     <div>
@@ -111,7 +123,7 @@ const ProductPage = () => {
       <Container className="container">
         <Row>
           <Col md={3} className="filter-container">
-            <h1>{subcategory}</h1>
+            <h1>{getMappedText(subcategory)}</h1>
             <h3 className="brands-filter">Branduri</h3>
             <div className="brands-scrollable"> {/* Scrollable container for brands */}
             <Form.Group>
@@ -141,7 +153,7 @@ const ProductPage = () => {
               Preț: ${displayedPriceRange[0]} - Lei
               {displayedPriceRange[1]}
             </p>
-            {/* <Button variant="primary" onClick={handleFilter}>
+            {/* <Button  onClick={handleFilter}>
               Filter
             </Button> */}
           </Col>
@@ -168,11 +180,11 @@ const ProductPage = () => {
                       </Card.Subtitle> 
                       <Card.Text>{`Preț: ${product.price} Lei`}</Card.Text>
                       <button className="add-fav-card"
-                        variant="primary"
+                        
                         onClick={() => handleAddToFav(product._id)}>
                         Adaugă produs
                       </button>
-                      <button variant="secondary" className="add-fav-card" onClick={() => handleAddToFavorites(product._id)}>Adaugă la favorite</button>
+                      <button  className="add-fav-card" onClick={() => handleAddToFavorites(product._id)}>Adaugă la favorite</button>
                     </Card.Body>
                   </Card>
                 </Col>
