@@ -47,8 +47,8 @@ const OrdersPage = () => {
   };
 
   return (
-    <Container className="mt-3">
-      <Table striped bordered hover responsive>
+    <Container className="orders-container">
+      <Table striped bordered hover responsive className="table-orders">
         <thead>
           <tr>
             <th>Numărul comenzii</th>
@@ -102,14 +102,14 @@ const OrdersPage = () => {
                               <td>{item.title || "No title"}</td>
                               <td>{item.quantity || 1}</td>
                               <td>
-                                ${item.price ? item.price.toFixed(2) : "0.00"}
+                                {item.price ? item.price.toFixed(2) : "0.00"} Lei
                               </td>
                             </tr>
                           ))}
                         <tr className="total-price">
                           <th>Total Price</th>
                           <th></th>
-                          <th>{order.totalPrice}</th>
+                          <th>{order.totalPrice} Lei</th>
                         </tr>
                       </tbody>
                     </Table>

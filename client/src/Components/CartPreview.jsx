@@ -33,7 +33,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
     };
 
       fetchCartData();
-  }, [currentUser, cartItems]);
+  }, [currentUser]);
 
   useEffect(() => {
     const populateCartItems = async () => {

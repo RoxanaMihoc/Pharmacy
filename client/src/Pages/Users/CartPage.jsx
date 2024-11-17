@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import AddressPage from "../../Components/AddressPage";
 import Summary from "../../Components/Summary";
 import { useAuth } from "../../Context/AuthContext";
+import { useHistory } from 'react-router-dom';
 import "./styles/fav-page.css";
 
 const CartPage = () => {
@@ -17,6 +18,7 @@ const CartPage = () => {
   const { currentUser, token } = useAuth();
   const [pharmacies, setPharmacies] = useState([]);
   const [selectedPharmacy, setSelectedPharmacy] = useState("");
+  const history = useHistory();
   useEffect(() => {
     const fetchCartData = async () => {
       if (currentUser) {

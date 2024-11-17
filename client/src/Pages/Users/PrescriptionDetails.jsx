@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from '../../Context/AuthContext';
 import {addToFav, addToFavF} from '../../Components/FavButton';
-import './styles/prescription-details.css';  // Import the CSS
+import './styles/prescription-details.css';
 
 const PrescriptionDetails = () => {
     const location = useLocation();

@@ -37,7 +37,7 @@ const Login = () => {
       console.log("Login successful:", data);
 
       if (!isAuthenticated && role == "Patient") {
-        history.push("/home");
+        history.push("/home/medicamente-otc");
       } else if (role == "Doctor") {
         history.push("/doctor");
       } else {
