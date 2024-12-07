@@ -99,15 +99,23 @@ const OrdersPage = () => {
                           Array.isArray(order.cart) &&
                           order.cart.flat().map((item, idx) => (
                             <tr key={idx}>
-                              <td>{item.title || "No title"}</td>
+                              <td>
+                                <img
+                                  src={item.photo}
+                                  alt={item.title}
+                                  className="product-image"
+                                />
+                                {item.title || "No title"}
+                              </td>
                               <td>{item.quantity || 1}</td>
                               <td>
-                                {item.price ? item.price.toFixed(2) : "0.00"} Lei
+                                {item.price ? item.price.toFixed(2) : "0.00"}{" "}
+                                Lei
                               </td>
                             </tr>
                           ))}
                         <tr className="total-price">
-                          <th>Total Price</th>
+                          <th>Pret Total</th>
                           <th></th>
                           <th>{order.totalPrice} Lei</th>
                         </tr>

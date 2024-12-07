@@ -11,6 +11,7 @@ const addNotification = async (req, res) => {
       prescriptionId,
       patientId,
       details,
+      data
     });
 
     await newNotification.save();

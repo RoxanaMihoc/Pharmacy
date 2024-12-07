@@ -1,8 +1,9 @@
 const Prescription = require('../models/prescriptionModel');
+const { prescriptionDB } = require("../config/database");
 
 exports.addPrescription = async (req, res, io, userSockets) => {
-    const { diagnosis, doctorId, patient, products, notes } = req.body;
-    console.log(patient, products);
+    const { diagnosis, doctorId, patient, products, advice, investigations } = req.body;
+    console.log("asa da",patient, products, advice);
 
     const generateRandomNumber = () => {
         return Math.floor(100000 + Math.random() * 900000).toString();
@@ -16,14 +17,25 @@ exports.addPrescription = async (req, res, io, userSockets) => {
             patient,
             diagnosis,
             products,
-            notes,
+            investigations,
+            advice,
             prescriptionNumber
         });
 
-        await newPrescription.save();
+    const patientCollectionName = `patient_${patient._id}`;
+    const patientCollection = prescriptionDB.collection(patientCollectionName);
+    await patientCollection.insertOne({ prescriptionId: newPrescription._id, ...newPrescription.toObject() });
+
+    // Create or update the doctor collection
+    const doctorCollectionName = `doctor_${doctorId}`;
+    const doctorCollection = prescriptionDB.collection(doctorCollectionName);
+    await doctorCollection.insertOne({ prescriptionId: newPrescription._id, ...newPrescription.toObject() });
+
+
         console.log(typeof(patient._id));
         console.log(userSockets[patient._id]);
         let date = newPrescription.date;
+        console.log(date);
 
         // Emit an event to the specific patient's socket ID if they are connected
         io.to(userSockets[patient._id].socketId).emit('new-prescription', {
@@ -34,9 +46,13 @@ exports.addPrescription = async (req, res, io, userSockets) => {
                 patient,
                 diagnosis,
                 products,
-                notes,
+                investigations,
+                advice,
                 date,
-            }
+            },
+            diagnosis,
+            investigations,
+            advice,
         });
         console.log("peste io");
 

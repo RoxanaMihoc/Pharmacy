@@ -54,25 +54,25 @@ const NotificationBell = () => {
     };
   }, []);
 
-  useEffect(() => {
-    socket.on("order-update", (message) => {
-      // Assuming the message contains the notification message and additional details
-      console.log("Order update received:", message);
-      const newNotification = {
-        id: message.orderId, // Assuming each message contains a unique order ID
-        message: message.message,
-        date: new Date().toISOString(), // Capture the date when the message is received
-      };
+  // useEffect(() => {
+  //   socket.on("order-update", (message) => {
+  //     // Assuming the message contains the notification message and additional details
+  //     console.log("Order update received:", message);
+  //     const newNotification = {
+  //       id: message.orderId, // Assuming each message contains a unique order ID
+  //       message: message.message,
+  //       date: new Date().toISOString(), // Capture the date when the message is received
+  //     };
 
-      // Update notifications to include the new pharmacy notification
-      setNotifications(prev => [newNotification, ...prev]);
-      setUnreadCount(prev => prev + 1);
-    });
+  //     // Update notifications to include the new pharmacy notification
+  //     setNotifications(prev => [newNotification, ...prev]);
+  //     setUnreadCount(prev => prev + 1);
+  //   });
 
-    return () => {
-      socket.off("order-update");
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("order-update");
+  //   };
+  // }, []);
 
   useEffect(() => {
     console.log("Setting up socket listeners", currentUser, role);
@@ -112,13 +112,24 @@ const NotificationBell = () => {
 
   function formatHour(dateString) {
     const date = new Date(dateString);
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
+;  
+    // Convert the date to local time zone
+    const localHours = date.getHours();
+    const localMinutes = date.getMinutes();
+    
+    // Determine AM/PM
+    const ampm = localHours >= 12 ? 'PM' : 'AM';
+    
+    // Convert 24-hour time to 12-hour format
+    const formattedHours = localHours % 12 || 12; // 0 becomes 12 in 12-hour format
+  
+    // Format minutes to always show two digits
+    const formattedMinutes = localMinutes < 10 ? '0' + localMinutes : localMinutes;
+  
+    // Return the formatted time
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
   }
+  
 
   return (
     <div>
@@ -133,9 +144,18 @@ const NotificationBell = () => {
           <h4>Notificări</h4>
           <ul>
             {notifications.map((notification, index) => (
-              <li key={index} onClick={() => handleNotificationClick(notification)}>
-                {notification.message}
-                <span className="notification-date">{formatHour(notification.date)}</span>
+              <li
+                key={index}
+                onClick={() => handleNotificationClick(notification)}
+              >
+                <div className="notification-container">
+                  <span className="notification-message">
+                    {notification.message}
+                  </span>
+                  <span className="notification-date">
+                    {formatHour(notification.prescriptionDetails.date)}
+                  </span>
+                </div>
               </li>
             ))}
           </ul>

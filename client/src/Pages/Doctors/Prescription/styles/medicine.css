@@ -1,132 +1,75 @@
-.prescription-list-container {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  margin: auto;
-  width: 80%;
-}
+/* General modal styles */
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Make sure modal takes full height of viewport */
+    margin: 0; /* Remove default margin to ensure proper centering */
+  }
+  
+  .modal-content {
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add some shadow for a modern look */
+  }
+  
+  /* Medication list styles */
+  .medication-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 500px; /* Limit the height of the list */
+    overflow-y: auto; /* Make the list scrollable if it's too long */
+  }
+  
+  .medication-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .medication-item.selected {
+    background-color: #d1e7dd; /* Light green background for selected items */
+    border-color: #0f5132; /* Dark green border for selected items */
+  }
+  
+  .medication-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+  
+  .medication-title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .no-results {
+    text-align: center;
+    color: #888;
+  }
+  
+  .button-fav-preview {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button-fav-preview:hover {
+    background-color: #0056b3;
+  }
 
-.prescription-item {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-}
 
-.prescription-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  cursor: pointer;
-  border-bottom: 1px solid #ccc;
-}
-
-.prescription-summary h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.prescription-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  background: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  justify-content: space-between;
-}
-
-.prescription-details input[type="text"], 
-.prescription-details input[type="number"] {
-  flex: 1 1 20%;
-  min-width: 150px;
-  height: auto;
-}
-
-.text-area-button {
-  flex: 1 1 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.text-area-button textarea {
-  flex: 1;
-  min-height: 100px;
-}
-
-.button-selected {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
-  margin-top: 10px;
-}
-
-
-.search-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.table-container {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  text-align: left;
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #f0f0f0;
-}
-
-.save-and-page{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.product-image {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
-  vertical-align: middle;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  padding: 5px 10px;
-  margin: 0 5px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-}
-
-.pagination span {
-  margin: 0 10px;
-}
-
-.save-button-med{
-  margin-top: 15px;
-  padding: 5px 10px;
-}
+  
+  
+  
+  

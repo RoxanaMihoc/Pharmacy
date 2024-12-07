@@ -67,3 +67,26 @@
     color: #666;
   }
   
+  .notification-container {
+    display: flex;
+    justify-content: space-between; /* Align items horizontally */
+    align-items: flex-end; /* Align items vertically */
+    position: relative; /* Ensures positioning for date adjustment */
+    padding: 10px; /* Optional: Adds spacing inside the container */
+    max-width: 400px; /* Optional: Set the width of the notification */
+  }
+  
+  .notification-message {
+    flex: 1; /* Allows the message to take up available space */
+    font-size: 14px; /* Customize font size */
+    color: #333; /* Notification text color */
+  }
+  
+  .notification-date {
+    position: absolute;
+    bottom: 5px; /* Adjusts distance from the bottom of the container */
+    right: 10px; /* Adjusts distance from the right edge of the container */
+    font-size: 12px; /* Smaller font for the date */
+    color: #888; /* Dimmed color for the date */
+  }
+  

@@ -18,7 +18,7 @@ import { faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import "./styles/home.css";
 
 const HomeDoctor = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("patients");
   const history= useHistory();
 
   const getTabName = (activeTab) => {

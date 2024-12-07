@@ -144,14 +144,20 @@ const ProductPage = () => {
               min={10}
               max={1000}
               value={priceRange[1]}
+              className="range-slider"
+              style={{
+                '--min': priceRange[0],
+                '--max': priceRange[1],
+                '--min-limit': 10,
+                '--max-limit': 1000,
+              }}
               onChange={(e) =>
                 handlePriceChange([priceRange[0], parseInt(e.target.value)])
               }
             />
 
             <p>
-              Preț: ${displayedPriceRange[0]} - Lei
-              {displayedPriceRange[1]}
+              Preț: {displayedPriceRange[0]} - {displayedPriceRange[1] } Lei
             </p>
             {/* <Button  onClick={handleFilter}>
               Filter

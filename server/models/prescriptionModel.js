@@ -23,6 +23,7 @@ const patientSchema = new mongoose.Schema({
   role: { type: String, default: 'patient' }
 });
 
+
 const prescriptionSchema = new mongoose.Schema({
     prescriptionNumber: { type: String, required: true, unique: true },
     doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor', required: true },
@@ -43,14 +44,14 @@ const prescriptionSchema = new mongoose.Schema({
           },
           dosage: String,
           duration: String,
-          reason: String,
-          sideEffects: String
+          notes: String,
       }
   ],
-    notes: String,
+    investigations: String,
+    advice: String,
     date: { type: Date, default: Date.now },
     status: { type: String, default: 'în așteptare' },
   });
 
-  module.exports = prescriptionDB.model('Prescriptions', prescriptionSchema, 'prescriptions');
+  module.exports = prescriptionDB.model('Prescriptions', prescriptionSchema);
   

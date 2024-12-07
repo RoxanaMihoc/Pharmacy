@@ -39,7 +39,7 @@ const Login = () => {
       if (!isAuthenticated && role == "Patient") {
         history.push("/home/medicamente-otc");
       } else if (role == "Doctor") {
-        history.push("/doctor");
+        history.push("/doctor/profile");
       } else {
         history.push("/pharmacy");
       }

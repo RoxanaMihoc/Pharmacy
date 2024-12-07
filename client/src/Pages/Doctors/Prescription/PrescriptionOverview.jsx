@@ -13,8 +13,11 @@ const PrescriptionOverview = () => {
   const patient = location.state?.patient;
   const diagnosis = location.state?.diagnosis;
   const selectedItems = location.state?.selectedItems;
+  const investigations = location.state?.investigations;
+  const advice= location.state?.advice;
+  console.log("ll", advice);
   const { currentUser } = useAuth();
-  console.log("In overview", patient, selectedItems);
+  console.log("In overview", patient, diagnosis, selectedItems);
 
   const sendPrescription = async () => {
     try {
@@ -24,12 +27,12 @@ const PrescriptionOverview = () => {
         diagnosis: diagnosis,
         products: selectedItems.map((item) => ({
           medication: item, // ID of the medication
-          dosage: item.dosage, // Dosage information
-          duration: item.duration, // Duration for which the medication is prescribed
-          reason: item.reason, // Reason for the prescription
-          sideEffects: item.sideEffects, // Possible side effects
+          dosage: item.details[0].dosage, // Dosage information
+          duration: item.details[0].hour, // Duration for which the medication is prescribed
+          notes: item.details[0].notes,
         })),
-        notes: "Additional notes here", // Additional notes, if any
+        investigations: investigations, // Reason for the prescription
+        advice: advice, // Possible side effects
       };
       const response = await fetch(
         "http://localhost:3000/home/add-prescription",
@@ -110,7 +113,7 @@ const PrescriptionOverview = () => {
           {selectedItems.map((item, index) => (
             <li key={index}>
               <span>
-                {item.title} - Cantitate: {item.quantity} - Note: {item.notes}
+                {item.title} - Cantitate: {item.quantity} - Note: {item.details[0].notes} - Durata {item.details[0].hour} - Doza -{item.details[0].dosage}
               </span>
             </li>
           ))}

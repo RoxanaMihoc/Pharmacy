@@ -159,3 +159,41 @@ input[type="range"] {
     font-weight: bold;
     margin-top: 100px;
 }
+
+.range-slider {
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(
+      to right,
+      #776e6e 0%,
+      #776e6e calc((var(--min) - var(--min-limit)) / (var(--max-limit) - var(--min-limit)) * 100%),
+      #d3d3d3 calc((var(--min) - var(--min-limit)) / (var(--max-limit) - var(--min-limit)) * 100%),
+      #d3d3d3 calc((var(--max) - var(--min-limit)) / (var(--max-limit) - var(--min-limit)) * 100%),
+      #776e6e calc((var(--max) - var(--min-limit)) / (var(--max-limit) - var(--min-limit)) * 100%),
+      #776e6e 100%
+    );
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s ease;
+  }
+  
+  .range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #776e6e;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .range-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #776e6e;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
