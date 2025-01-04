@@ -63,7 +63,7 @@ const PatientProfile = ({ onBack }) => {
 
   useEffect(() => {
     fetchPrescriptions();
-  }, []);
+  }, [patientId]);
 
   const fetchPrescriptions = async () => {
     try {

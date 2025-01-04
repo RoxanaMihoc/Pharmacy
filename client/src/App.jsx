@@ -27,7 +27,7 @@ const App = () => {
       case "Doctor":
         return "/doctor";
       default:
-        return "/login"; // assuming there's a login or another default page
+        return "/role";
     }
   };
 
@@ -39,6 +39,7 @@ const App = () => {
         {role === "Pharmacist" && <Route path="/pharmacy" component={Pharmacy} />}
         <Route path="/others" component={UserForm} />
         <Route path="/login" component={FirstPage} />
+        <Route path="/register" component={FirstPage} />
         <Route path="/role" component={RoleSelection} />
         <Route path="/doctors" component={DoctorSelection} />
         <Route path="/rem" component={Recommend} />

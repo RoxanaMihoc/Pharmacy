@@ -1,45 +1,102 @@
-.doctor-selection-container {
+.doctor-selection-container-nav {
+  min-height: 100vh; /* Use min-height if you want it to expand if content exceeds one screen */
+  background: linear-gradient(to top left, #2C3E50, rgb(224, 233, 235));
+}
+
+/* Navbar (adjust to your style) */
+.navbar {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  height: 100vh; /* Full viewport height */
-  padding: 20px;
-  background-color: #f4f4f4; /* Light grey background */
-  background: linear-gradient(to top left,  #2C3E50, #acb4d1);
+  background: #2f4858;
+  padding: 1rem 2rem;
 }
 
-.doctor-group {
-  margin: 10px 0;
-  padding: 15px; /* Reduced padding for a tighter look */
-  background-color: white; /* White background for each group */
-  border-radius: 8px; /* Rounded corners for the group */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtler shadow */
-  width: 60%; /* Reduced width to make the div smaller */
-  max-width: 600px; /* Maximum width to ensure it doesn't get too wide on larger screens */
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
 }
 
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.doctor-selection-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
+}
+
+.doctor-selection-container h1 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Each doctor "row" */
 .doctor-item {
-  padding: 10px;
-  margin: 5px 0;
-}
-
-.doctor-item label {
-  cursor: pointer; /* Pointer cursor on hover */
-  display: block; /* Ensure full width */
-  font-size: 16px; /* Larger font size */
-}
-
-/* input[type="radio"] {
-  margin-right: 10px; 
-} */
-
-.submit-button button {
-  padding: 10px 15px;
-  width:auto;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  transition: box-shadow 0.3s;
   cursor: pointer;
-  transition: background-color 0.3s;
+}
+
+.doctor-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Doctor photo styling */
+.doctor-photo {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* spacing between checkbox and name */
+  font-size: 1rem;
+}
+
+/* Style the radio input */
+.checkbox-label input[type="radio"] {
+  transform: scale(1.7); /* slightly larger radio button */
+  cursor: pointer;
+}
+
+.submit-button {
+  margin-top: 2rem;
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #2f4858;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #263848;
 }

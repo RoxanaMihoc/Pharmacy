@@ -1,10 +1,43 @@
-
 .first-page {
   display: flex;
+  flex-direction: column;
   justify-content:center;
   align-items: center;
-  background: linear-gradient(to top left,  #2C3E50, #acb4d1);
-  height: 100vh;
+  background: linear-gradient(to top left,  #2C3E50, rgb(224, 233, 235));
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: center;
+  background-color: #2C3E50;
+  padding: 1rem 2rem;
+}
+
+.nav-logo {
+  margin-left: 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.nav-links {
+  list-style-type: none;
+  display: flex;
+  margin-right: 200px;
+
+}
+
+.nav-links li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #cccccc;
 }
 
  .main-container {
@@ -12,7 +45,8 @@
   justify-content: center;
   max-width: 1200px;
   width: 45%;
-  min-height: 90vh;
+  padding: 4%;
+  min-height: 100vh;
 } 
 
 .login-container {
@@ -60,7 +94,7 @@
 }
 
 .input-container input::placeholder {
-  color: grey;
+  color: #2C3E50;
 }
 
 .buttons-container {
@@ -102,8 +136,8 @@
 }
 
 .button-container .login-selected {
-  color: #748394; /* Change color for selected state */
-  border-bottom: 2px solid #748394;
+  color: #2C3E50; /* Change color for selected state */
+  border-bottom: 2px solid #2C3E50;
 }
 
 .button-container .signup-unselected {
@@ -118,5 +152,15 @@ select {
   padding: 8px; /* Padding for better touch interaction */
   border-radius: 4px; /* Rounded corners for aesthetics */
   outline: none; /* Removes the default focus outline */
+}
+
+@media (max-width: 768px) {
+  .navbar {
+      flex-direction: column;
+      gap: 1rem;
+  }
+  .nav-links {
+    margin-right: 0;
+  }
 }
 

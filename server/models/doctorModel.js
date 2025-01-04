@@ -10,6 +10,7 @@ const doctorSchema = new mongoose.Schema({
   identifier: { type: String, required: true },
   role: { type: String, required: true },
   patients: { type: Array, required: true },
+  photo:{type: String},
 });
 
 doctorSchema.methods.comparePassword = async function (password) {

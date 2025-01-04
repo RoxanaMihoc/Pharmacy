@@ -8,6 +8,7 @@ const PrescriptionDetails = () => {
     const location = useLocation();
     const { notification } = location.state;
     const { currentUser} = useAuth();
+    console.log("lala", notification.prescriptionDetails);
 
     const addAllToCart = () => {
         notification.prescriptionDetails.products.forEach(async product => {
@@ -36,8 +37,8 @@ const PrescriptionDetails = () => {
                     <p className="detailCheckbox"><strong>Availability:</strong> {product.medication.availability}</p>
                     <p className="detailCheckbox"><strong>Price:</strong> ${product.medication.price}</p>
                     <p className="detailCheckbox"><strong>Dosage:</strong> {product.dosage}</p>
-                    <p className="detailCheckbox"><strong>Duration:</strong> {product.duration}</p>
-                    <p className="detailCheckbox"><strong>Reason:</strong> {product.reason}</p>
+                    <p className="detailCheckbox"><strong>Duration:</strong> {product.hours}</p>
+                    <p className="detailCheckbox"><strong>Reason:</strong> {product.advice}</p>
                     <p className="detailCheckbox"><strong>Side Effects:</strong> {product.sideEffects || 'None specified'}</p>
                     <p className="notes"><strong>Notes:</strong> {product.notes}</p>
                 </div>

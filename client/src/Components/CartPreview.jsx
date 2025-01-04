@@ -189,7 +189,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
                 </Row>
               ))
             ) : (
-              <div className="cart-message">No product in the cart.</div>
+              <div className="cart-message">Niciun produs in cos.</div>
             )}
       <div className="cart-summary">
           <p>Total {cart.length} produse:</p>

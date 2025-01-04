@@ -78,13 +78,13 @@ const Login = () => {
       <div className="buttons-container">
         {errorMessage && <p className="text-error" style={{ color: 'red'}}>{errorMessage}</p>}
           <button type="button" onClick={handleLogin}>
-            Login
+          Conectare
           </button>
           <button
             type="button"
             onClick={() => console.log("Forgot Password clicked")}
           >
-            Forgot Password
+            Ai uitat parola?
           </button>
         </div>
     </form>

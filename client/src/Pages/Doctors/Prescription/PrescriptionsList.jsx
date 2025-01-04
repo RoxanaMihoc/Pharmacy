@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAuth } from "../../../Context/AuthContext";
 import "./styles/prescription-list.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowAltCircleRight, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
@@ -9,18 +10,24 @@ const PrescriptionsList = () => {
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleId, setVisibleId] = useState(null);
+  const { currentUser, role} = useAuth();
   const itemsPerPage = 8; // Define how many prescriptions per page
   const history = useHistory();
+  console.log(currentUser, role);
+
 
   useEffect(() => {
     fetchPrescriptions();
-  }, []);
+  }, [currentUser,role]);
 
   const fetchPrescriptions = async () => {
     try {
-      const response = await fetch('http://localhost:3000/home/all-prescriptions');
+      const response = await fetch(`http://localhost:3000/home/all-prescriptions/${currentUser}`, {
+        method: 'GET'
+      });
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        // You may want to log response.status or response.text() to debug
+        throw new Error(`Failed to fetch data: ${response.status}`);
       }
       const data = await response.json();
       setPrescriptions(data);
