@@ -51,102 +51,100 @@ function validateIdentifier(identifier, role) {
 
 exports.register = async (req, res) => {
   try {
-    const {
-      firstName, lastName, email, password, identifier, role
-    } = req.body;
-    console.log(identifier,role);
+    const { firstName, lastName, email, password, identifier, role } = req.body;
+    console.log("In register", req.body);
 
-      if (role == "Patient") {
-        const {selectedDoctor, formData} = req.body;
-        const { gender, phoneNumber, address, city, postalCode, birthDate } =
-          formData;
-        let postal_code = postalCode;
-        let birth_date = birthDate;
-        let phone = phoneNumber;
-        let doctor = selectedDoctor;
-        console.log(formData);
-        // Check if the email is already taken
-        const existingUser = await User.findOne({ identifier });
-        if (existingUser) {
-          return res
-            .status(400)
-            .json({ message: "identifier is already registered." });
-        }
-
-        // Create a new user
-        const newUser = new User({
-          firstName,
-          lastName,
-          email,
-          password,
-          identifier,
-          role,
-          cart: [],
-          favorites: [],
-          doctor,
-          gender,
-          phone,
-          address,
-          city,
-          birth_date,
-          postal_code,
-        });
-        await newUser.save();
-        console.log("lala", newUser._id, selectedDoctor);
-        const patientId = newUser._id;
-        const doctorId = selectedDoctor;
-        const ret = await Doctor.findByIdAndUpdate(
-          doctorId,
-          { $addToSet: { patients: patientId } }, // Use $addToSet to avoid adding duplicates
-          { new: true, safe: true, upsert: false } // Options for the update operation
-        );
-        console.log(ret);
-        res.status(201).json({ message: "Patient registered successfully." });
-      } else if (role == "Doctor") {
-        // Check if the email is already taken
-        const existingUser = await Doctor.findOne({ identifier });
-        if (existingUser) {
-          return res
-            .status(400)
-            .json({ message: "Doctor is already registered." });
-        }
-
-        // Create a new user
-        const newUser = new Doctor({
-          firstName,
-          lastName,
-          email,
-          password,
-          identifier,
-          role,
-          patients: [],
-        });
-        await newUser.save();
-        res.status(201).json({ message: "Doctor registered successfully." });
-      } else {
-        console.log(identifier);
-        const existingUser = await Pharmacist.findOne({ identifier });
-        if (existingUser) {
-          return res
-            .status(400)
-            .json({ message: "Pharmacist is already registered." });
-        }
-
-        // Create a new user
-        const newUser = new Pharmacist({
-          firstName,
-          lastName,
-          email,
-          password,
-          identifier,
-          role,
-          patients: [],
-        });
-        await newUser.save();
-        res
-          .status(201)
-          .json({ message: "Pharmacist registered successfully." });
+    if (role == "Patient") {
+      const { selectedDoctor, birthDate, gender, height, weight,
+        maritalStatus, phoneNumber, address, postalCode, medicationList, city } = req.body;
+      let postal_code = postalCode;
+      let birth_date = birthDate;
+      let phone = phoneNumber;
+      let doctor = selectedDoctor;
+      // Check if the email is already taken
+      const existingUser = await User.findOne({ identifier });
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ message: "identifier is already registered." });
       }
+
+      // Create a new user
+      const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        password,
+        identifier,
+        role,
+        cart: [],
+        favorites: [],
+        doctor,
+        gender,
+        phone,
+        address,
+        city,
+        birth_date,
+        postal_code,
+        height,
+        weight, 
+        maritalStatus,
+        medicationList,
+      });
+      await newUser.save();
+      console.log("lala", newUser._id, selectedDoctor);
+      const patientId = newUser._id;
+      const doctorId = selectedDoctor;
+      const ret = await Doctor.findByIdAndUpdate(
+        doctorId,
+        { $addToSet: { patients: patientId } }, // Use $addToSet to avoid adding duplicates
+        { new: true, safe: true, upsert: false } // Options for the update operation
+      );
+      console.log(ret);
+      res.status(201).json({ message: "Patient registered successfully." });
+    } else if (role == "Doctor") {
+      // Check if the email is already taken
+      const existingUser = await Doctor.findOne({ identifier });
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ message: "Doctor is already registered." });
+      }
+
+      // Create a new user
+      const newUser = new Doctor({
+        firstName,
+        lastName,
+        email,
+        password,
+        identifier,
+        role,
+        patients: [],
+      });
+      await newUser.save();
+      res.status(201).json({ message: "Doctor registered successfully." });
+    } else {
+      console.log(identifier);
+      const existingUser = await Pharmacist.findOne({ identifier });
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ message: "Pharmacist is already registered." });
+      }
+
+      // Create a new user
+      const newUser = new Pharmacist({
+        firstName,
+        lastName,
+        email,
+        password,
+        identifier,
+        role,
+        patients: [],
+      });
+      await newUser.save();
+      res.status(201).json({ message: "Pharmacist registered successfully." });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -173,12 +171,16 @@ exports.login = async (req, res) => {
 
     if (user) {
       role = user.role;
-      console.log(`The role of the user with identifier ${identifier} is: ${role}`);
+      console.log(
+        `The role of the user with identifier ${identifier} is: ${role}`
+      );
     }
     console.log(user);
     // If the user doesn't exist or password is incorrect
     if (!user || !(await user.comparePassword(password))) {
-      return res.status(401).json({ message: "Invalid identifier or password." });
+      return res
+        .status(401)
+        .json({ message: "Invalid identifier or password." });
     }
 
     // Create and send a JWT token
@@ -202,7 +204,7 @@ exports.getCartbyId = async (req, res) => {
   try {
     const { currentUser } = req.params;
     //currentUser null for some reason
-    console.log("In cart",currentUser);
+    console.log("In cart", currentUser);
     let user = await User.findById(currentUser);
     if (!user) {
       // User not found

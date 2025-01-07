@@ -1,6 +1,6 @@
 // FirstPage.js
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,7 +27,9 @@ const FirstPage = () => {
     <div>
       <nav className="navbar">
         <div className="nav-logo">
-          <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
+        <Link to="/role" className="nav-logo">
+        <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
+      </Link>
         </div>
         <ul className="nav-links">
           <li>

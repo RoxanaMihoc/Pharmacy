@@ -64,7 +64,7 @@
     align-items: center;
     background: #607F8B;
     /* Darker panel background */
-    padding: 2rem;
+    padding: 4rem;
     justify-content: center;
 }
 
@@ -74,13 +74,18 @@
 }
 
 .hero-title {
-    font-size: 2.2rem;
+    font-size: 7rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
 .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-sub-subtitle {
+    font-size: 1.5rem;
     margin-bottom: 1.5rem;
 }
 

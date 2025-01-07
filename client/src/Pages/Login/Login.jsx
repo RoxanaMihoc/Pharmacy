@@ -76,7 +76,7 @@ const Login = () => {
         />
       </div>
       <div className="buttons-container">
-        {errorMessage && <p className="text-error" style={{ color: 'red'}}>{errorMessage}</p>}
+        {errorMessage && <p className="text-error" style={{ color: 'red'}}>Conectare nereușită. Încearcă din nou.</p>}
           <button type="button" onClick={handleLogin}>
           Conectare
           </button>

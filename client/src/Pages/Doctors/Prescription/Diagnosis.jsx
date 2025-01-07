@@ -1,36 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import "./styles/diagnosis.css"; // Updated CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEdit,
-  faX,
-  faPlus
-} from "@fortawesome/free-solid-svg-icons";
-import "./styles/diagnosis.css";
+import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 
 const Diagnosis = () => {
   const [filter, setFilter] = useState("");
   const [prescriptions, setPrescriptions] = useState([]);
+
+  // Textareas in the left column
   const [diagnosis, setDiagnosis] = useState("");
+  const [investigations, setInvestigations] = useState("");
 
-  const [selectedMedicines, setSelectedMedicines] = useState([]);
-  const [diagnoses, setDiagnoses] = useState([]);
-  const [investigations, setInvestigations] = useState([]);
-  const [advice, setAdvice] = useState([]);
-
-  const [showAddDiagnosisInput, setShowAddDiagnosisInput] = useState(false);
-  const [newDiagnosis, setNewDiagnosis] = useState("");
-
-  const [showAddInvestigationInput, setShowAddInvestigationInput] = useState(false);
-  const [newInvestigation, setNewInvestigation] = useState("");
-
-  const [showAddAdviceInput, setShowAddAdviceInput] = useState(false);
-  const [newAdvice, setNewAdvice] = useState("");
-
-  const [editingMedicineId, setEditingMedicineId] = useState(null);
-  const [newDosage, setNewDosage] = useState("");
-  const [newHours, setNewHours] = useState("");
-  const [newNotes, setNewNotes] = useState("");
+  // Start with 6 rows in the medicine table
+  const [tableData, setTableData] = useState(
+    Array.from({ length: 1 }, (_, i) => ({
+      rowNumber: i + 1,
+      medicineName: "",
+      doza: "",
+      cantitate: "",
+      detalii: "",
+      durata: "",
+      med: {},
+    }))
+  );
 
   const [showAllMedicines, setShowAllMedicines] = useState(false);
 
@@ -38,6 +31,7 @@ const Diagnosis = () => {
   const patient = location.state?.patient;
   const history = useHistory();
 
+  // Fetch the prescription list
   useEffect(() => {
     const fetchPrescriptions = async () => {
       try {
@@ -54,392 +48,240 @@ const Diagnosis = () => {
     fetchPrescriptions();
   }, []);
 
+  // Filter logic for the search bar
   const filteredPrescriptions = prescriptions.filter((med) =>
     med.title.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const handleAddDiagnosis = () => {
-    if (newDiagnosis.trim() !== "") {
-      setDiagnoses((prev) => [...prev, newDiagnosis.trim()]);
-      setNewDiagnosis("");
-      setShowAddDiagnosisInput(false);
-    }
-  };
-
-  const handleDeleteDiagnosis = (index) => {
-    setDiagnoses((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleAddInvestigation = () => {
-    if (newInvestigation.trim() !== "") {
-      setInvestigations((prev) => [...prev, newInvestigation.trim()]);
-      setNewInvestigation("");
-      setShowAddInvestigationInput(false);
-    }
-  };
-
-  const handleDeleteInvestigation = (index) => {
-    setInvestigations((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleAddAdvice = () => {
-    if (newAdvice.trim() !== "") {
-      setAdvice((prev) => [...prev, newAdvice.trim()]);
-      setNewAdvice("");
-      setShowAddAdviceInput(false);
-    }
-  };
-
-  const handleDeleteAdvice = (index) => {
-    setAdvice((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleAddMedicineDetail = (medicineId) => {
-    if (newDosage.trim() === "" && newHours.trim() === "" && newNotes.trim() === "") {
-      return;
-    }
-
-    setSelectedMedicines((prev) =>
-      prev.map((med) => {
-        if (med.id === medicineId) {
-          const newDetail = {
-            dosage: newDosage,
-            hours: newHours,
-            notes: newNotes
-          };
-          return { ...med, details: [...med.details, newDetail] };
-        }
-        return med;
-      })
-    );
-
-    setNewDosage("");
-    setNewHours("");
-    setNewNotes("");
-    setEditingMedicineId(null);
-  };
-
-  const handleDeleteMedicineDetail = (medicineId, detailIndex) => {
-    setSelectedMedicines((prev) =>
-      prev.map((med) => {
-        if (med.id === medicineId) {
-          const updatedDetails = med.details.filter((_, i) => i !== detailIndex);
-          return { ...med, details: updatedDetails };
-        }
-        return med;
-      })
-    );
-  };
-
+  // Handle medicine selection from overlays
   const handleSelectMedicine = (med) => {
-    if (selectedMedicines.some((m) => m.id === med.id)) {
-      return; // Don't add duplicates
+    // Check if medicine already in table
+    const existingRowIndex = tableData.findIndex(
+      (row) => row.medicineName.toLowerCase() === med.title.toLowerCase()
+    );
+
+    if (existingRowIndex !== -1) {
+      // If found, increment "cantitate"
+      const updatedTable = [...tableData];
+      const currentQty = parseInt(updatedTable[existingRowIndex].cantitate) || 0;
+      updatedTable[existingRowIndex].cantitate = (currentQty + 1).toString();
+      setTableData(updatedTable);
+    } else {
+      // Otherwise, find first empty row
+      const nextEmptyIndex = tableData.findIndex(
+        (row) => row.medicineName === ""
+      );
+      console.log("NUME",med);
+
+      if (nextEmptyIndex === -1) {
+        // If all 6 rows used, add a new row
+        const newRow = {
+          medicineName: med.title,
+          doza: "",
+          cantitate: "1",
+          detalii: "",
+          durata: "",
+          med: med,
+        };
+        setTableData((prev) => [...prev, newRow]);
+      } else {
+        // Fill that empty row
+        const updatedTable = [...tableData];
+        updatedTable[nextEmptyIndex].medicineName = med.title;
+        updatedTable[nextEmptyIndex].cantitate = "1";
+        updatedTable[nextEmptyIndex].med = med;
+        setTableData(updatedTable);
+        console.log("tabel", tableData)
+      }
     }
-    setSelectedMedicines((prev) => [...prev, { ...med, details: [] }]);
-    setFilter(""); 
-    setShowAllMedicines(false); 
+
+    setFilter("");
+    setShowAllMedicines(false);
   };
 
+  // Handle changes in the table’s input fields
+  const handleTableChange = (index, field, value) => {
+    const updated = [...tableData];
+    updated[index][field] = value;
+    setTableData(updated);
+  };
+
+  // Gather all data and navigate (or send to backend)
   const handleSave = () => {
-    // Gather all the data
     const dataToSend = {
-      patient: patient,
-      diagnosis: diagnosis,
-      investigations: investigations,
-      advice: advice,
-      selectedItems: selectedMedicines // includes {id, title, details:[{dosage, hours, notes}]}
+      patient,
+      diagnosis,
+      investigations,
+      prescribedMedicine: tableData,
     };
 
-    history.push('/doctor/prescription/path-to-overview', dataToSend);
+    history.push("/doctor/prescription/path-to-overview", dataToSend);
   };
 
   return (
-    <div className="page-container">
       <div className="diagnosis-page-container">
-        {/* Left Column */}
+        {/* LEFT COLUMN */}
+        <div className="overview-content">
         <div className="left-column">
-          <div className="patient-details">
-            <h2>Detalii Pacient</h2>
-            <p>
-              {patient?.firstName} {patient?.lastName}
-            </p>
-          </div>
 
-          {/* Diagnosis Section */}
-          <div className="section">
-            <div className="section-header-diagnosis">
-              <h3>Diagnostic</h3>
-              <textarea
-              placeholder="Add main diagnosis description..."
+          {/* Diagnosis section */}
+          <div className="text-section">
+            <h3>Diagnostic</h3>
+            <textarea
+              placeholder="Diagnostic..."
               value={diagnosis}
               onChange={(e) => setDiagnosis(e.target.value)}
-              style={{ width: "100%", height: "60px", marginBottom: "10px"}}
             />
-            </div>
-            <ul>
-              {diagnoses.map((diag, i) => (
-                <li key={i} className="list-item-with-actions">
-                  {diag}
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteDiagnosis(i)}
-                    title="Delete"
-                  >
-                    <FontAwesomeIcon icon={faX} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            {showAddDiagnosisInput && (
-              <div className="add-item-input">
-                <input
-                  type="text"
-                  placeholder="Add new diagnosis..."
-                  value={newDiagnosis}
-                  onChange={(e) => setNewDiagnosis(e.target.value)}
-                />
-                <button onClick={handleAddDiagnosis}>Add</button>
-                <button onClick={() => setShowAddDiagnosisInput(false)}>
-                  Cancel
-                </button>
-              </div>
-            )}
           </div>
 
-          {/* Investigation Section */}
-          <div className="section">
-            <div className="section-header">
-              <h3>Investigatii</h3>
-              <button
-                className="add-button"
-                onClick={() => setShowAddInvestigationInput(true)}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
-            </div>
-            <ul>
-              {investigations.map((inv, i) => (
-                <li key={i} className="list-item-with-actions">
-                  {inv}
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteInvestigation(i)}
-                    title="Delete"
-                  >
-                    <FontAwesomeIcon icon={faX} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            {showAddInvestigationInput && (
-              <div className="add-item-input">
-                <input
-                  type="text"
-                  placeholder="Add new investigation..."
-                  value={newInvestigation}
-                  onChange={(e) => setNewInvestigation(e.target.value)}
-                />
-                <button onClick={handleAddInvestigation}>Add</button>
-                <button onClick={() => setShowAddInvestigationInput(false)}>
-                  Cancel
-                </button>
-              </div>
-            )}
+          {/* Other investigations */}
+          <div className="text-section">
+            <h3>Investigații</h3>
+            <textarea
+              placeholder="Ex. X-Ray, Analize de sânge..."
+              value={investigations}
+              onChange={(e) => setInvestigations(e.target.value)}
+            />
           </div>
 
-          {/* Advice Section */}
-          <div className="section">
-            <div className="section-header">
-              <h3>Advice</h3>
-              <button
-                className="add-button"
-                onClick={() => setShowAddAdviceInput(true)}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
-            </div>
-            <ul>
-              {advice.map((ad, i) => (
-                <li key={i} className="list-item-with-actions">
-                  {ad}
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteAdvice(i)}
-                    title="Delete"
-                  >
-                    <FontAwesomeIcon icon={faX} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            {showAddAdviceInput && (
-              <div className="add-item-input">
-                <input
-                  type="text"
-                  placeholder="Add new advice..."
-                  value={newAdvice}
-                  onChange={(e) => setNewAdvice(e.target.value)}
-                />
-                <button onClick={handleAddAdvice}>Add</button>
-                <button onClick={() => setShowAddAdviceInput(false)}>
-                  Cancel
-                </button>
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* Right Column */}
+        {/* RIGHT COLUMN */}
         <div className="right-column">
-          <div className="medicine-section">
-            <div className="medicine-header">
-              <h3>Medicine (Rx)</h3>
+          <h3>Medicamente</h3>
+
+          {/* Search bar + "Toate" button + Overlays */}
+          <div className="search-wrapper">
+            <div className="search-row">
+              <input
+                type="text"
+                placeholder="Caută medicamente..."
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="medicine-search-input"
+              />
+              <button
+                className="show-all-button"
+                onClick={() => setShowAllMedicines(!showAllMedicines)}
+              >
+                Toate
+              </button>
             </div>
 
-            <div className="medicine-search-and-list-container">
-              <div className="search-row">
-                <input
-                  type="text"
-                  placeholder="Search medicines..."
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  className="medicine-search-input"
-                />
-                <button
-                  className="show-all-button"
-                  onClick={() => setShowAllMedicines(!showAllMedicines)}
-                >
-                  Show All
-                </button>
-              </div>
-
-              {/* Filtered Results Overlay */}
-              {filter.length > 0 && (
-                <div className="medicine-search-results-overlay">
-                  <ul className="medicine-search-results">
-                    {filteredPrescriptions.map((med) => (
-                      <li
-                        key={med.id}
-                        onClick={() => handleSelectMedicine(med)}
-                        className="medicine-search-result-item"
-                      >
-                        <img src={med.photo} alt={med.title} className="medicine-image" />
-                        {med.title}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Show All Medicines Overlay */}
-              {showAllMedicines && (
-                <div className="medicine-search-results-overlay">
-                  <ul className="medicine-search-results">
-                    {prescriptions.map((med) => (
-                      <li
-                        key={med.id}
-                        onClick={() => handleSelectMedicine(med)}
-                        className="medicine-search-result-item"
-                      >
-                        <img src={med.photo} alt={med.title} className="medicine-image" />
-                        {med.title}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {selectedMedicines.length > 0 && (
-                <ol className="selected-medicines-list">
-                  {selectedMedicines.map((med, index) => (
-                    <li key={med.id} className="selected-medicine-item">
-                      <div className="medicine-line">
-                        <span>{index + 1}. {med.title}</span>
-                        {editingMedicineId === med.id ? null : (
-                          <button
-                            className="add-button"
-                            onClick={() => {
-                              setEditingMedicineId(med.id);
-                              setNewDosage("");
-                              setNewHours("");
-                              setNewNotes("");
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faPlus} /> 
-                          </button>
-                        )}
-                      </div>
-
-                      <div className="medicine-details-section">
-                        {med.details && med.details.length > 0 && (
-                          <ul className="medicine-details-list">
-                            {med.details.map((detail, dIndex) => (
-                              <li key={dIndex} className="list-item-with-actions">
-                                <strong>Doza:</strong> {detail.dosage}, 
-                                <strong> Durata:</strong> {detail.hours}, 
-                                <strong> Note:</strong> {detail.notes}
-                                <button
-                                  className="delete-button"
-                                  onClick={() => handleDeleteMedicineDetail(med.id, dIndex)}
-                                  title="Delete Detail"
-                                >
-                                  <FontAwesomeIcon icon={faX} />
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-
-                        {editingMedicineId === med.id && (
-                          <div className="add-item-input medicine-detail-input">
-                            <input
-                              type="text"
-                              placeholder="Doza..."
-                              value={newDosage}
-                              onChange={(e) => setNewDosage(e.target.value)}
-                            />
-                            <input
-                              type="text"
-                              placeholder="Durata..."
-                              value={newHours}
-                              onChange={(e) => setNewHours(e.target.value)}
-                            />
-                            <input
-                              type="text"
-                              placeholder="Note..."
-                              value={newNotes}
-                              onChange={(e) => setNewNotes(e.target.value)}
-                            />
-                            <button onClick={() => handleAddMedicineDetail(med.id)}>
-                              Add
-                            </button>
-                            <button
-                              onClick={() => {
-                                setEditingMedicineId(null);
-                                setNewDosage("");
-                                setNewHours("");
-                                setNewNotes("");
-                              }}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        )}
-                      </div>
+            {/* Filtered Results */}
+            {filter.length > 0 && (
+              <div className="medicine-search-results-overlay">
+                <ul className="medicine-search-results">
+                  {filteredPrescriptions.map((med) => (
+                    <li
+                      key={med.id}
+                      onClick={() => handleSelectMedicine(med)}
+                      className="medicine-search-result-item"
+                    >
+                      <img
+                        src={med.photo}
+                        alt={med.title}
+                        className="medicine-image"
+                      />
+                      {med.title}
                     </li>
                   ))}
-                </ol>
-              )}
-            </div>
+                </ul>
+              </div>
+            )}
+
+            {/* Show All Medicines Overlay */}
+            {showAllMedicines && (
+              <div className="medicine-search-results-overlay">
+                <ul className="medicine-search-results">
+                  {prescriptions.map((med) => (
+                    <li
+                      key={med.id}
+                      onClick={() => handleSelectMedicine(med)}
+                      className="medicine-search-result-item"
+                    >
+                      <img
+                        src={med.photo}
+                        alt={med.title}
+                        className="medicine-image"
+                      />
+                      {med.title}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
+
+          {/* Medicine Table */}
+          <table className="medicine-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nume</th>
+                <th>Doză</th>
+                <th className="quantity-col">Cantitate</th>
+                <th>Alte detalii</th>
+                <th>Durata</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.rowNumber}</td>
+                  <td>{row.medicineName}</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={row.doza}
+                      onChange={(e) =>
+                        handleTableChange(index, "doza", e.target.value)
+                      }
+                      placeholder="Doza"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={row.cantitate}
+                      onChange={(e) =>
+                        handleTableChange(index, "cantitate", e.target.value)
+                      }
+                      placeholder="Cantitate"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={row.detalii}
+                      onChange={(e) =>
+                        handleTableChange(index, "detalii", e.target.value)
+                      }
+                      placeholder="Alte Detalii"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      value={row.durata}
+                      onChange={(e) =>
+                        handleTableChange(index, "durata", e.target.value)
+                      }
+                      placeholder="Durata"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
+        </div>
+        {/* Footer Buttons */}
       <div className="footer-buttons">
-        <button className="save-button" onClick={handleSave}>Save & Send</button>
-        <button className="preview-button">Preview</button>
-        <button className="template-button">Save as Template</button>
-        <button className="print-button">Print</button>
-        <button className="cancel-button">Cancel</button>
+        <button className="save-button" onClick={handleSave}>
+          Salvează
+        </button>
+        <button className="cancel-button">Renunță</button>
       </div>
     </div>
   );

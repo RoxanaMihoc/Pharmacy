@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema({
   birth_date: { type: String, required: true },
   postal_code: { type: String, required: true },
   photo:{type: String},
+  height: { type: Number, required: true },
+  weight: { type: Number, required: true },
+  maritalStatus: { type: String, required: true },
+  medicationList: { type: String, required: true },
+
 });
 
 userSchema.pre('save', async function (next) {

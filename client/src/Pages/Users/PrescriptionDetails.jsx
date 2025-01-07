@@ -33,14 +33,12 @@ const PrescriptionDetails = () => {
                 <div className="details">
                     <p className="detailItem title">{product.medication.title || 'No title provided'}</p>
                     <p className="detailItem"><strong>Brand:</strong> {product.medication.brand}</p>
-                    <p className="detailItem"><strong>Category:</strong> {product.medication.category}</p>
-                    <p className="detailCheckbox"><strong>Availability:</strong> {product.medication.availability}</p>
-                    <p className="detailCheckbox"><strong>Price:</strong> ${product.medication.price}</p>
-                    <p className="detailCheckbox"><strong>Dosage:</strong> {product.dosage}</p>
-                    <p className="detailCheckbox"><strong>Duration:</strong> {product.hours}</p>
-                    <p className="detailCheckbox"><strong>Reason:</strong> {product.advice}</p>
-                    <p className="detailCheckbox"><strong>Side Effects:</strong> {product.sideEffects || 'None specified'}</p>
-                    <p className="notes"><strong>Notes:</strong> {product.notes}</p>
+                    <p className="detailItem"><strong>Categorie:</strong> {product.medication.category}</p>
+                    <p className="detailCheckbox"><strong>Preț:</strong> {product.medication.price} RON</p>
+                    <p className="detailCheckbox"><strong>Doza:</strong> {product.doza}</p>
+                    <p className="detailCheckbox"><strong>Durata:</strong> {product.durata}</p>
+                    <p className="detailCheckbox"><strong>Cantitate:</strong> {product.cantitate}</p>
+                    <p className="detailCheckbox"><strong>Detalii:</strong> {product.detalii}</p>
                 </div>
             </div>
         ));
@@ -48,9 +46,11 @@ const PrescriptionDetails = () => {
 
     return (
         <div className="pres-container">
-            <h1 className="header">Prescription Details</h1>
+            <h1 className="header">Detalii Prescripție</h1>
             <div>
                 {renderProducts(notification.prescriptionDetails.products)}
+                <p className="detailCheckbox"><strong>Diagnostic:</strong> {notification.prescriptionDetails.diagnosis}</p>
+                <p className="detailCheckbox"><strong>Investigații:</strong> {notification.prescriptionDetails.investigations}</p>
             </div>
             <button onClick={addAllToCart} className="addAllButton">Add All to Cart</button>
         </div>

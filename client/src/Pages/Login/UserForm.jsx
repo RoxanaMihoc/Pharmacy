@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentMedical } from "@fortawesome/free-solid-svg-icons";
 import "./styles/user-form.css"; // Make sure you have a CSS file for styling
@@ -8,11 +8,10 @@ const UserForm = () => {
   const location = useLocation();
   const history = useHistory();
 
-  // These props may be coming from a previous page (optional)
   const {
-    firstName: signupFirstName,
-    lastName: signupLastName,
-    email: signupEmail,
+    firstName,
+    lastName,
+    email,
     password,
     identifier,
     role,
@@ -21,23 +20,22 @@ const UserForm = () => {
 
   // Form State: replicate the fields from your screenshots
   const [formData, setFormData] = useState({
-    firstName: signupFirstName || "",
-    lastName: signupLastName || "",
+    firstName: firstName || "",
+    lastName: lastName || "",
     birthDate: "", // Date of Birth
-    sex: "", // "Please Select", "Male", "Female" etc.
+    gender: "", // "Please Select", "Male", "Female" etc.
     height: "", // inches
     weight: "", // pounds
     maritalStatus: "", // Single, Married, etc.
     contactNumber: "", // phone format
-    email: signupEmail || "",
+    email: email || "",
     address: "", // street address
-    takingMeds: "", // "yes" or "no" for medications
-    // Emergency contact
-    emergencyContactFirstName: "",
-    emergencyContactLastName: "",
-    emergencyRelationship: "",
-    emergencyContactNumber: "",
+    city: "",
+    medicationList: "", // "yes" or "no" for medications
+    postalCode: "",
   });
+
+  console.log(formData);
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -61,26 +59,24 @@ const UserForm = () => {
         crossDomain: true,
         body: JSON.stringify({
           // Fields from previous step or sign-up
-          firstName: signupFirstName || formData.firstName,
-          lastName: signupLastName || formData.lastName,
-          email: signupEmail || formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
           password,
           identifier,
           role,
           selectedDoctor,
           // The new form data
           birthDate: formData.birthDate,
-          sex: formData.sex,
+          gender: formData.gender,
           height: formData.height,
           weight: formData.weight,
           maritalStatus: formData.maritalStatus,
-          contactNumber: formData.contactNumber,
+          phoneNumber: formData.contactNumber,
           address: formData.address,
-          takingMeds: formData.takingMeds,
-          emergencyContactFirstName: formData.emergencyContactFirstName,
-          emergencyContactLastName: formData.emergencyContactLastName,
-          emergencyRelationship: formData.emergencyRelationship,
-          emergencyContactNumber: formData.emergencyContactNumber,
+          postalCode: formData.postalCode,
+          medicationList: formData.medicationList,
+          city: formData.city,
         }),
       });
 
@@ -105,7 +101,9 @@ const UserForm = () => {
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-logo">
-          <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
+          <Link to="/role" className="nav-logo">
+            <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
+          </Link>
         </div>
         <ul className="nav-links">
           <li>
@@ -127,27 +125,27 @@ const UserForm = () => {
       {/* FORM CONTAINER */}
       <div className="doctor-selection-container-nav">
         <div className="form-container2">
-          <h1>User Information</h1>
+          <h1>Alte informatii</h1>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           <form onSubmit={handleRegister} className="user-details-form">
             {/* Name Fields */}
             <div className="form-row">
               <div className="form-group">
-                <label>Name</label>
+                <label>Nume</label>
                 <div className="form-row split">
                   <input
                     type="text"
-                    name="firstName"
-                    placeholder="First Name"
+                    name="Nume"
+                    placeholder="Nume"
                     value={formData.firstName}
                     onChange={handleChange}
                     required
                   />
                   <input
                     type="text"
-                    name="lastName"
-                    placeholder="Last Name"
+                    name="Prenume"
+                    placeholder="Prenume"
                     value={formData.lastName}
                     onChange={handleChange}
                     required
@@ -159,28 +157,27 @@ const UserForm = () => {
             {/* Date of Birth & Sex */}
             <div className="form-row">
               <div className="form-group">
-                <label>Date of Birth</label>
+                <label>Zi de naștere</label>
                 <input
                   type="date"
                   name="birthDate"
                   value={formData.birthDate}
                   onChange={handleChange}
-                  placeholder="MM-DD-YYYY"
+                  placeholder="DD-MM-YYYY"
                   required
                 />
               </div>
               <div className="form-group">
-                <label>Sex</label>
+                <label>Gen</label>
                 <select
-                  name="sex"
-                  value={formData.sex}
+                  name="gender"
+                  value={formData.gender}
                   onChange={handleChange}
                   required
                 >
-                  <option value="">Please Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  {/* Add more options if needed */}
+                  <option value="">Selectează</option>
+                  <option value="Feminin">Feminin</option>
+                  <option value="Masculin">Masculin</option>
                 </select>
               </div>
             </div>
@@ -188,23 +185,23 @@ const UserForm = () => {
             {/* Height & Weight */}
             <div className="form-row">
               <div className="form-group">
-                <label>Height (inches)</label>
+                <label>Înaltime (cm)</label>
                 <input
                   type="number"
                   name="height"
                   value={formData.height}
                   onChange={handleChange}
-                  placeholder="Height (inches)"
+                  placeholder="Înaltime"
                 />
               </div>
               <div className="form-group">
-                <label>Weight (pounds)</label>
+                <label>Greutate (kg)</label>
                 <input
                   type="number"
                   name="weight"
                   value={formData.weight}
                   onChange={handleChange}
-                  placeholder="Weight (pounds)"
+                  placeholder="Greutate"
                 />
               </div>
             </div>
@@ -212,17 +209,17 @@ const UserForm = () => {
             {/* Marital Status */}
             <div className="form-row">
               <div className="form-group">
-                <label>Marital Status</label>
+                <label>Status marital</label>
                 <select
                   name="maritalStatus"
                   value={formData.maritalStatus}
                   onChange={handleChange}
                 >
-                  <option value="">Please Select</option>
-                  <option value="Single">Single</option>
-                  <option value="Married">Married</option>
-                  <option value="Divorced">Divorced</option>
-                  <option value="Widowed">Widowed</option>
+                  <option value="">Selectează</option>
+                  <option value="Single">Singur</option>
+                  <option value="Married">Căsătorit</option>
+                  <option value="Divorced">Divorțat</option>
+                  <option value="Widowed">Văduv</option>
                 </select>
               </div>
             </div>
@@ -230,7 +227,7 @@ const UserForm = () => {
             {/* Contact Number & Email */}
             <div className="form-row">
               <div className="form-group">
-                <label>Contact Number</label>
+                <label>Număr de telefon</label>
                 <input
                   type="tel"
                   name="contactNumber"
@@ -244,41 +241,67 @@ const UserForm = () => {
                 <input
                   type="email"
                   name="email"
-                  placeholder="ex: myname@example.com"
+                  placeholder="ex: nume@exemplu.com"
                   value={formData.email}
                   onChange={handleChange}
                 />
-                <small>example@example.com</small>
+                <small>exemplu@exemplu.com</small>
               </div>
             </div>
 
             {/* Address */}
             <div className="form-row">
               <div className="form-group wide">
-                <label>Address</label>
+                <label>Adresă</label>
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  placeholder="Street Address"
+                  placeholder="Adresă"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group wide">
+                <label>Oraș</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="Oraș"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group wide">
+                <label>Cod Poștal</label>
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  placeholder="Cod poștal"
                 />
               </div>
             </div>
 
             {/* Taking medications? (Yes/No) */}
             <div className="form-row">
-              <label>Taking any medications, currently?</label>
+              <label>Luați un tratament in acest moment?</label>
               <div className="radio-group">
                 <label>
                   <input
                     type="radio"
                     name="takingMeds"
-                    value="Yes"
-                    checked={formData.takingMeds === "Yes"}
+                    value="Da"
+                    checked={formData.takingMeds === "Da"}
                     onChange={handleChange}
                   />
-                  Yes
+                  Da
                 </label>
                 <label>
                   <input
@@ -288,60 +311,27 @@ const UserForm = () => {
                     checked={formData.takingMeds === "No"}
                     onChange={handleChange}
                   />
-                  No
+                  Nu
                 </label>
               </div>
             </div>
 
-            {/* Emergency Contact Section */}
-            <h2>In case of emergency</h2>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Emergency Contact</label>
-                <div className="form-row split">
-                  <input
-                    type="text"
-                    name="emergencyContactFirstName"
-                    placeholder="First Name"
-                    value={formData.emergencyContactFirstName}
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="text"
-                    name="emergencyContactLastName"
-                    placeholder="Last Name"
-                    value={formData.emergencyContactLastName}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Relationship</label>
-                <input
-                  type="text"
-                  name="emergencyRelationship"
-                  value={formData.emergencyRelationship}
+            {/* Conditionally show a text area if takingMeds === "Da" */}
+            {formData.takingMeds === "Da" && (
+              <div className="form-row wide">
+                <label>Ce medicamente luați?</label>
+                <textarea
+                  name="medicationList"
+                  value={formData.medicationList}
                   onChange={handleChange}
-                  placeholder="Relationship"
+                  placeholder="Lista medicamentelor pe care le luați..."
                 />
               </div>
-              <div className="form-group">
-                <label>Contact Number</label>
-                <input
-                  type="tel"
-                  name="emergencyContactNumber"
-                  value={formData.emergencyContactNumber}
-                  onChange={handleChange}
-                  placeholder="(000) 000-0000"
-                />
-              </div>
-            </div>
+            )}
 
             {/* Submit */}
             <button className="button-form" type="submit">
-              Submit
+              Trimite
             </button>
           </form>
         </div>

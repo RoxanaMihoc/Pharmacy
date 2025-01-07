@@ -197,10 +197,10 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button className="button-fav-preview" onClick={switchToCartPage}>
+        <Button className="button-fav-preview" style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }} onClick={switchToCartPage}>
           Vezi detalii comandă
         </Button>
-        <Button className="button-fav-preview"  onClick={handleClose}>
+        <Button className="button-fav-preview" style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}  onClick={handleClose}>
          Închide
         </Button>
       </Modal.Footer>

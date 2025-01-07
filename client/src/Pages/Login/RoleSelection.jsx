@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTablets, faUsers, faArrowLeftLong, faCommentMedical } from '@fortawesome/free-solid-svg-icons';
 import './styles/page.css';
@@ -23,7 +23,9 @@ const PharmacyPage = () => {
     <div className="pharmacy-container">
       {/* Navigation */}
       <nav className="navbar">
-        <div className="nav-logo"><FontAwesomeIcon icon={faCommentMedical} /> MedMonitor</div>
+                <Link to="/role" className="nav-logo">
+                <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
+              </Link>
         <ul className="nav-links">
           <li><a href="#medicines">Medicines</a></li>
           <li><a href="#doctors">Doctors</a></li>
@@ -39,8 +41,9 @@ const PharmacyPage = () => {
       {/* Hero Section */}
       <header className="hero">
   <div className="hero-content">
-    <h1 className="hero-title">The Best Pharmacy For You and Your Family</h1>
-    <p className="hero-subtitle">Online purchase • Free delivery</p>
+    <h1 className="hero-title"> <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor</h1>
+    <p className="hero-subtitle">Cea mai bună alegere pentru tine și familia ta</p>
+    <p className="hero-sub-subtitle">Achiziții online • Livrare gratuită</p>
     <div className="hero-buttons">
       <button className="btn primary">Search medicine</button>
       <button className="btn secondary">Doctor’s consultation</button>
@@ -59,7 +62,7 @@ const PharmacyPage = () => {
 
       {/* Trending Topics */}
       <section className="trending-topics">
-        <h2>Trending Topics</h2>
+        <h2></h2>
         <div className="topics-grid">
           <div className="topic-card">
             <img
@@ -73,14 +76,14 @@ const PharmacyPage = () => {
               src={flu}
               alt="Flu Remedies icon"
             />
-            <p>FLU REMEDIES</p>
+            <p>Medicamente</p>
           </div>
           <div className="topic-card">
             <img
               src={pres}
               alt="Prescriptions icon"
             />
-            <p>PRESCRIPTIONS</p>
+            <p>Prescripții medicale</p>
           </div>
           <div className="topic-card">
             <img

@@ -11,7 +11,7 @@ import { useParams, Link } from "react-router-dom";
 import SecondaryMenu from "../../Components/SecondMenu";
 import { useAuth } from "../../Context/AuthContext";
 import { addToFav, addToFavF } from "../../Components/FavButton";
-import addToFavorites  from "../../Components/FavoritesButton";
+import addToFavorites from "../../Components/FavoritesButton";
 import "./styles/product-details.css"; // Import your CSS file
 
 const ProductDetails = () => {
@@ -19,10 +19,12 @@ const ProductDetails = () => {
   const [product, setProduct] = useState([{}]);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [brand, setBrand] = useState("");
-  const { currentUser} = useAuth();
+  const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState("description");
   const productsGridRef = useRef(null);
-  console.log(productId);
+
+  // Stare pentru afișare text complet/restricționat
+  const [showFullText, setShowFullText] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -46,7 +48,11 @@ const ProductDetails = () => {
     const fetchProductsByBrand = async () => {
       console.log(brand);
       try {
-        const response = await fetch(`http://localhost:3000/home/products?brand=${encodeURIComponent(product.brand)}`);
+        const response = await fetch(
+          `http://localhost:3000/home/products?brand=${encodeURIComponent(
+            product.brand
+          )}`
+        );
         const data = await response.json();
         console.log(data);
         setRelatedProducts(data);
@@ -61,13 +67,12 @@ const ProductDetails = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-        const result = await addToCart(currentUser, productId);
-        console.log("Product added to cart:", result);
-        if (result.success) {
-          const result = addToCartF(productId);
-          console.log(result);
-        }
-
+      const result = await addToCart(currentUser, productId);
+      console.log("Product added to cart:", result);
+      if (result.success) {
+        const result = addToCartF(productId);
+        console.log(result);
+      }
     } catch (error) {
       console.error("Failed to add product to cart:", error.message);
       // Handle error, show an error message to the user
@@ -75,24 +80,32 @@ const ProductDetails = () => {
   };
 
   const scrollLeft = () => {
-    productsGridRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    productsGridRef.current.scrollBy({ left: -200, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    productsGridRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    productsGridRef.current.scrollBy({ left: 200, behavior: "smooth" });
   };
 
   const handleAddToFavorites = async (productId) => {
     try {
-      const result = await addToFavorites(currentUser, productId, category, subcategory);
-      console.log('Product added to favorites:', result);
+      const result = await addToFavorites(
+        currentUser,
+        productId,
+        category,
+        subcategory
+      );
+      console.log("Product added to favorites:", result);
       // Handle success, update UI or show a message
     } catch (error) {
-      console.error('Failed to add product to favorites:', error.message);
+      console.error("Failed to add product to favorites:", error.message);
       // Handle error, show an error message to the user
     }
   };
 
+  const toggleShowFullText = () => {
+    setShowFullText((prev) => !prev);
+  };
 
   return (
     <div>
@@ -101,11 +114,11 @@ const ProductDetails = () => {
         <div className="product-page">
           <div className="product-container">
             <div className="product-image-container">
-              <h1>{product.title}</h1>
+              <h1 className="product-title">{product.title}</h1>
               <img
+                className="product-image-x"
                 src={product.photo}
                 alt={product.title}
-                className="product-image"
               />
             </div>
             <div className="product-details">
@@ -126,14 +139,12 @@ const ProductDetails = () => {
                   <FormControl type="number" defaultValue={1} min={1} />
                 </div>
                 <Button
-                  
                   className="add-to-cart"
                   onClick={() => handleAddToCart(product._id)}
                 >
                   Adaugă produs
                 </Button>
                 <Button
-                  
                   className="add-to-favorites"
                   onClick={() => handleAddToFavorites(product._id)}
                 >
@@ -161,42 +172,77 @@ const ProductDetails = () => {
           <div className="tab-content">
             {activeTab === "description" && (
               <div className="description">
-                <h2>Descriere</h2>
-                <p>{product.description}</p>
+                <h2>
+                  <strong>Descriere</strong>
+                </h2>
+
+                {product.description &&
+                  product.description
+                    .split(
+                      /(?<!www\.[\w\-]+\.[a-z]{2,})(?<!https?:\/\/[\w\-\.]+)(?<=\.)\s|(?<!www\.[\w\-]+\.[a-z]{2,})(?<!https?:\/\/[\w\-\.]+)(?<!\w)-\s/
+                    )
+                    .map((line, index) => {
+                      // Înlocuim numerele din text cu tag-uri <strong>
+                      const processedLine = line.replace(
+                        /(\d+)/g,
+                        "<strong>$1</strong>"
+                      );
+
+                      if (!showFullText && index > 2) return null; // Afișează doar primele 3 propoziții
+                      return (
+                        <p
+                          key={index}
+                          dangerouslySetInnerHTML={{
+                            __html: processedLine + (index === 2 && !showFullText ? "..." : ""),
+                          }}
+                        ></p>
+                      );
+                    })}
+
+                <button className="show-more-button" onClick={toggleShowFullText}>
+                  {showFullText ? "Afișează mai puțin" : "Afișează mai mult"}
+                </button>
               </div>
             )}
             {activeTab === "usefulInfo" && (
               <div className="useful-info">
                 <h2>Informatii utile</h2>
-                {/* Add any useful information content here */}
                 <p>Informatii suplimentare despre produs.</p>
               </div>
             )}
           </div>
         </div>
+
         <div className="related-products">
           <h2>Alte produse ale producatorului {product.brand}</h2>
           <div className="products-navigation">
-            <button className="card-nav-button" onClick={scrollLeft}>Prev</button>
+            <button className="card-nav-button" onClick={scrollLeft}>
+              ⇦
+            </button>
             <div className="products-grid" ref={productsGridRef}>
-
-              { relatedProducts.length > 0 ?(
-              relatedProducts.map((relatedProduct) => (
-                <div className="product-card" key={relatedProduct._id}>
-                  <Link to={`/home/product/details/${relatedProduct._id}`}>
-                  <img src={relatedProduct.photo} alt={relatedProduct.title} className="product-card-image" />
-                  <p className="product-title">{relatedProduct.title}</p>
-                  </Link>
-                  <p className="product-brand">{relatedProduct.brand}</p>
-                  <p className="product-price">{relatedProduct.price} LEI</p>
-                  <button className="card-add-to-cart">ADAGĂ ÎN COȘ</button>
-                </div>
-              ))
-            ) : 
-            (<div> No product</div>)
-          }
+              {relatedProducts.length > 0 ? (
+                relatedProducts.map((relatedProduct) => (
+                  <div className="product-card" key={relatedProduct._id}>
+                    <Link to={`/home/product/details/${relatedProduct._id}`}>
+                      <img
+                        src={relatedProduct.photo}
+                        alt={relatedProduct.title}
+                        className="product-card-image"
+                      />
+                      <p className="product-title">{relatedProduct.title}</p>
+                    </Link>
+                    <p className="product-brand">{relatedProduct.brand}</p>
+                    <p className="product-price">{relatedProduct.price} RON</p>
+                    <button className="card-add-to-cart">ADAUGĂ ÎN COȘ</button>
+                  </div>
+                ))
+              ) : (
+                <div> No product</div>
+              )}
             </div>
-            <button className="card-nav-button" onClick={scrollRight}>Next</button>
+            <button className="card-nav-button" onClick={scrollRight}>
+              ⇨
+            </button>
           </div>
         </div>
       </div>

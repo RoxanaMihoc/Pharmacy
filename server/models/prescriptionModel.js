@@ -42,13 +42,15 @@ const prescriptionSchema = new mongoose.Schema({
               subcategory2: String,
               title: String,
           },
-          dosage: String,
-          duration: String,
-          notes: String,
+          cantitate: String,
+          detalii: String,
+          doza: String,
+          durata: String,
+
+
       }
   ],
     investigations: String,
-    advice: String,
     date: { type: Date, default: Date.now },
     status: { type: String, default: 'în așteptare' },
   });

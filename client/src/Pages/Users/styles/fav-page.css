@@ -47,13 +47,13 @@
 
 /* General button styles */
  .step-button {
-  margin: 0 10px; /* Spacing between buttons */
-  border-radius: 20px; /* Rounded borders */
-  padding: 10px 20px; /* Padding around text */
-  font-weight: bold; /* Bold font for button text */
-  flex-grow: 1; /* Buttons will grow to fit the container */
-  text-align: center; /* Center text within the button */
-  border: none; /* Remove border */
+  margin: 0 10px; 
+  border-radius: 20px; 
+  padding: 10px 20px; 
+  font-weight: bold; 
+  flex-grow: 1; 
+  text-align: center; 
+  border: none; 
   background-color: #6d757d;
 }
 
@@ -63,8 +63,8 @@
   color: white; 
 }
 
-.button-wrapper .step-button:hover {
-  background-color:  #776e6e;
+.step-button:hover {
+  background-color:  #776e6e !important;
   color: white; 
 }
 

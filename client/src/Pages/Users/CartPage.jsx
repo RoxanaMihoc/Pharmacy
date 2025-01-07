@@ -373,6 +373,7 @@ const CartPage = () => {
                   activeStep === "Cos de cumparaturi" ? "active" : ""
                 }`}
                 onClick={() => setActiveStep("Cos de cumparaturi")}
+                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
               >
                 Cos de cumparaturi
               </Button>
@@ -382,6 +383,7 @@ const CartPage = () => {
                   activeStep === "Adresa si contact" ? "active" : ""
                 }`}
                 onClick={() => setActiveStep("Adresa si contact")}
+                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
               >
                 Adresa si contact
               </Button>
@@ -392,16 +394,18 @@ const CartPage = () => {
                 }`}
                 onClick={() => setActiveStepState("Sumar comanda")}
                 disabled={!canProceedToSummary()}
+                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
               >
                 Sumar comanda
               </Button>
               <Button
                 
-                className={`step-button ${
+                className={`step-button custom-step-button ${
                   activeStep === "Comanda plasata" ? "active" : ""
                 }`}
                 onClick={() => setActiveStep("Comanda plasata")}
                 disabled={!orderSubmitted}
+                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
               >
                 Comanda plasata
               </Button>

@@ -2,9 +2,9 @@ const Prescription = require("../models/prescriptionModel");
 const { prescriptionDB } = require("../config/database");
 
 exports.addPrescription = async (req, res, io, userSockets) => {
-  const { diagnosis, doctorId, patient, products, advice, investigations } =
+  const { diagnosis, doctorId, patient, products, investigations } =
     req.body;
-  console.log("asa da", patient, products, advice);
+  console.log("Prescriptie::::::", products);
 
   const generateRandomNumber = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -19,7 +19,6 @@ exports.addPrescription = async (req, res, io, userSockets) => {
       diagnosis,
       products,
       investigations,
-      advice,
       prescriptionNumber,
     });
 
@@ -53,12 +52,10 @@ exports.addPrescription = async (req, res, io, userSockets) => {
         diagnosis,
         products,
         investigations,
-        advice,
         date,
       },
       diagnosis,
       investigations,
-      advice,
     });
     console.log("peste io");
 
