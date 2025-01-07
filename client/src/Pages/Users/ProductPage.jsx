@@ -7,6 +7,8 @@ import addToFavorites from '../../Components/FavoritesButton';
 import "./styles/product-page.css"; // Import your CSS file
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowAltCircleRight, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ProductPage = () => {
   const [brands, setBrands] = useState([]);
@@ -16,10 +18,11 @@ const ProductPage = () => {
   const { currentUser } = useAuth();
   const { category, subcategory } = useParams();
   const [products, setProducts] = useState([]);
+  const prescriptionId = null;
 
   // PAGINATION - START
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(12); // Sau 12, după preferință
+  const [productsPerPage] = useState(9); // Sau 12, după preferință
   // PAGINATION - END
 
   console.log(category + " " + subcategory);
@@ -113,7 +116,7 @@ const ProductPage = () => {
 
   const handleAddToFav = async (productId) => {
     try {
-      const result = await addToFav(currentUser, productId, category, subcategory);
+      const result = await addToFav(currentUser, productId, prescriptionId);
       console.log('Product added to cart:', result);
       if (result.success) {
         const result2 = addToFavF(productId);
@@ -251,7 +254,7 @@ const ProductPage = () => {
                 {currentPage > 1 && (
                   <button 
                   // className="add-fav-card"
-                  onClick={handlePrevPage}>Pagina anterioara</button>
+                  onClick={handlePrevPage}><FontAwesomeIcon icon={faArrowAltCircleLeft} /></button>
                 )}
 
                 {Array.from({ length: totalPages }, (_, i) => (
@@ -267,7 +270,7 @@ const ProductPage = () => {
                 {currentPage < totalPages && (
                   <button 
                   // className="add-fav-card"
-                  onClick={handleNextPage}>Pagina urmatoare</button>
+                  onClick={handleNextPage}><FontAwesomeIcon icon={faArrowAltCircleRight} /></button>
                 )}
               </div>
             )}

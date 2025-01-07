@@ -10,11 +10,13 @@ import PrescriptionDetails from "./PrescriptionDetails";
 import Prescriptions from "./Prescriptions";
 import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../../Context/AuthContext";
 import OrderPage from "./OrdersPage";
 import {
   faBell,
   faHeart,
   faBagShopping,
+  faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/home.css";
 import {
@@ -32,6 +34,7 @@ const HomeUser = () => {
   const [subcategory, setSubcategory] = useState("");
   const location = useLocation();
   const history = useHistory();
+   const { currentUser, name } = useAuth();
 
   const handleShowCartPreview = async () => {
     if (location.pathname !== "/home/cart") {
@@ -86,12 +89,17 @@ const HomeUser = () => {
               >
                 <FontAwesomeIcon icon={faBagShopping} />
               </button>
+              <button className="icon-button">
+                            <FontAwesomeIcon icon={faUserCircle} />
+                            <strong> {name}</strong>{" "}
+                          </button>
             </div>
             <CartPreview
               show={showCartPreview}
               handleClose={handleCloseCartPreview}
               switchToCartPage={switchToCartPage}
             />
+
           </div>
           <Switch className="page">
             <Route path="/home/prescriptions" component={Prescriptions} />

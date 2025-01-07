@@ -54,8 +54,7 @@ exports.addPrescription = async (req, res, io, userSockets) => {
         investigations,
         date,
       },
-      diagnosis,
-      investigations,
+      prescriptionNumber,
     });
     console.log("peste io");
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import PatientList from './PatientList';
 import { useLocation, useHistory } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
 import PatientProfile from './PatientProfile';
 import Recommend from "./Prescription/Recommend";
 import {
@@ -20,6 +21,8 @@ import "./styles/home.css";
 const HomeDoctor = () => {
   const [activeTab, setActiveTab] = useState("patients");
   const history= useHistory();
+  const { currentUser, name } = useAuth();
+  console.log(name);
 
   const getTabName = (activeTab) => {
     const tabNames = {
@@ -41,12 +44,17 @@ const HomeDoctor = () => {
           <div className="top-nav">
             {getTabName(activeTab)}
             <div className="nav-icons">
+
               <button className="icon-button">
                 <FontAwesomeIcon icon={faBell} />
               </button>
-              <button className="icon-button">
+
+              <div className="nav-icons-profile">
+            <button className="icon-button">
                 <FontAwesomeIcon icon={faUserCircle} />
+                <strong> {name}</strong>{" "}
               </button>
+              </div>
             </div>
           </div>
           <Switch>

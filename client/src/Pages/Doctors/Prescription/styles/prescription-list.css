@@ -41,9 +41,9 @@
   text-align: left;
   padding: 12px;
   border-bottom: 1px solid #ccc;
-}
+} */
 
-.prescriptions-table th {
+ .prescriptions-table th {
   background-color: #f8f9fa;
 }
 
@@ -52,29 +52,24 @@
   vertical-align: top;
 }
 
-.product-details {
+.product-detail-prescription {
   display: flex;
   align-items: center;
   margin-top: 10px;
 }
 
-.product-image-4 {
-  width: 100px;
-  height: 100px;
-  margin-right: 15px;
+.product-detail-pres {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
-.product-details div {
+.product-details-pres div {
   flex-grow: 1;
 }
 
-.product-details p {
+.product-details-pres p {
   margin: 5px 0;
-}
-
-.diagnostic-section {
-  margin-bottom: 10px;
-  font-size: 16px;
 }
 
 .prescription-details {
@@ -84,22 +79,185 @@
 }
 
 .pagination {
-  margin-top: 20px;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Spațiu între elemente */
 }
 
 .pagination button {
-  margin: 0 5px;
+  background-color: #cec2c2;
+  border: 2px solid #e1dfdf;
+  border-radius: 20px;
   padding: 5px 10px;
-  color: white;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.pagination button:disabled {
-  background-color: #ccc;
+.pagination button:hover {
+  background-color: #776e6e;
+}
+
+.pagination span {
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: #6e6b6b;
+}
+
+.pagination .active-page {
+  font-size: 46px;
+  color: #2F4858; /* Culoarea numărului paginii active */
+}
+
+.summary-section {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.summary-section h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.summary-section p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.summary-stats .stat {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-stats .stat h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+.summary-stats .stat p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+
+.med-diag {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Details Section */
+.product-details-prescription {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual product details */
+.product-details-pres {
+  display: flex;
+  gap: 15px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Photo and name section */
+.name-photo {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.product-image-4 {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Product information */
+.product-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.product-price {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Dosage and additional details */
+.dosage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dosage p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Diagnosis and Investigations Section */
+.diagnosis-invest {
+  flex: 1;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.diagnosis-invest p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.diagnosis-invest strong {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Additional styling for table rows */
+.prescriptions-table tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+.prescriptions-table tr:hover {
+  background-color: #f1f1f1;
 }
 
 

@@ -37,8 +37,9 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
 
   useEffect(() => {
     const populateCartItems = async () => {
+      console.log(cartItems.productId);
       const promises = cartItems.map(async (id) => {
-        const { success, data } = await fetchCartItems(id);
+        const { success, data } = await fetchCartItems(id.productId);
         if (success) {
           return data;
         }

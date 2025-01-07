@@ -1,16 +1,12 @@
-import React, { useState} from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
-
-const addToFav = async (userId, productId) => {
+const addToFav = async (userId, productId, prescriptionId) => {
   try {
-    console.log('Product added to cart:', userId, productId);
+    console.log('Product added to cart:', userId, productId, prescriptionId);
     const response = await fetch(`http://localhost:3000/home/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userId, productId }),
+      body: JSON.stringify({ userId, productId, prescriptionId}),
     });
 
     if (!response.ok) {

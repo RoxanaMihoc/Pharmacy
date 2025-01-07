@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import "./summary.css";
 
 const Summary = ({
@@ -17,11 +17,11 @@ const Summary = ({
   const [price, setTotalPrice] = useState(0);
   const pharmacist = "66760074556be02d8a3594e6";
   const history = useHistory();
+  console.log(cartItems);
 
   const handlePharmacy = () => {
     history.push("/home/medicamente-otc");
   };
-  
 
   useEffect(() => {
     const priceAfterInsurance = calculateTotalPrice(cartItems);
@@ -75,6 +75,7 @@ const Summary = ({
 
   const submitOrder = async () => {
     try {
+      console.log(cartItems);
       const response = await fetch(`http://localhost:3000/home/orders`, {
         method: "POST",
         headers: {
@@ -116,8 +117,6 @@ const Summary = ({
     }
   };
 
-
-
   return (
     <div>
       <Container>
@@ -127,47 +126,47 @@ const Summary = ({
             <div className="details-order">
               <h3> Produse:</h3>
               {cartItems.length > 0 ? (
-                cartItems.map((itemArray, index) => (
+                cartItems.map((item, index) => (
                   <Row className="product-row" key={index}>
-                    {itemArray.map((product, productIndex) => (
-                      <React.Fragment key={productIndex}>
-                        <Col xs={4}>
-                          <img
-                            src={product.photo}
-                            alt={product.title}
-                            className="cartImage"
+                    {/* Access the product data from the "0" field */}
+                    <React.Fragment>
+                      <Col xs={4}>
+                        <img
+                          src={item[0]?.photo} // Access photo from the product object
+                          alt={item[0]?.title} // Access title from the product object
+                          className="cartImage"
+                        />
+                      </Col>
+                      <Col xs={8}>
+                        <div className="title">{item[0]?.title}</div>
+                        <div>
+                          Cantitate:{" "}
+                          <FormControl
+                            type="number"
+                            defaultValue={1}
+                            min={1}
+                            readOnly
                           />
-                        </Col>
-                        <Col xs={8}>
-                          <div className="title">{product.title}</div>
-                          <div>
-                            Cantitate:{" "}
-                            <FormControl
-                              type="number"
-                              defaultValue={1}
-                              min={1}
-                              readOnly
-                            />
-                          </div>
-                          <div className="price-detail">
-                            {product.insurance === "no" ? (
-                              <div>Preț: {product.price} Lei</div>
-                            ) : (
-                              <div>Acoperit de asigurare</div>
-                            )}
-                          </div>
-                        </Col>
-                      </React.Fragment>
-                    ))}
+                        </div>
+                        <div className="price-detail">
+                          {item[0]?.insurance === "no" ? (
+                            <div>Preț: {item[0]?.price} Lei</div>
+                          ) : (
+                            <div>Acoperit de asigurare</div>
+                          )}
+                        </div>
+                        {/* Display the presId */}
+                        <div className="prescription-id">
+                          <strong>Prescripție ID:</strong> {item.presId}
+                        </div>
+                      </Col>
+                    </React.Fragment>
                   </Row>
                 ))
               ) : (
                 <div>
                   Niciun produs in coș.
-                  <button
-                    className="go-to-button"
-                    onClick={handlePharmacy}
-                  >
+                  <button className="go-to-button" onClick={handlePharmacy}>
                     Caută produse în farmacie.
                   </button>
                 </div>

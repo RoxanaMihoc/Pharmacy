@@ -10,7 +10,6 @@ import {
 import { useParams, Link } from "react-router-dom";
 import SecondaryMenu from "../../Components/SecondMenu";
 import { useAuth } from "../../Context/AuthContext";
-import { addToFav, addToFavF } from "../../Components/FavButton";
 import addToFavorites from "../../Components/FavoritesButton";
 import "./styles/product-details.css"; // Import your CSS file
 
@@ -27,6 +26,7 @@ const ProductDetails = () => {
   const [showFullText, setShowFullText] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top of the page
     const fetchProduct = async () => {
       try {
         const response = await fetch(

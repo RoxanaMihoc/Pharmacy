@@ -35,6 +35,11 @@
     gap: 20px;
 }
 
+.nav-icons-profile
+{
+    align-items: center;
+}
+
 .icon-button {
     background: none;
     border: none;

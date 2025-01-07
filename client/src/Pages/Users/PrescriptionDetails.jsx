@@ -1,20 +1,20 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from '../../Context/AuthContext';
-import {addToFav, addToFavF} from '../../Components/FavButton';
+import {addToFav} from '../../Components/FavButton';
 import './styles/prescription-details.css';
 
 const PrescriptionDetails = () => {
     const location = useLocation();
     const { notification } = location.state;
     const { currentUser} = useAuth();
-    console.log("lala", notification.prescriptionDetails);
+    console.log("lala", notification);
 
     const addAllToCart = () => {
         notification.prescriptionDetails.products.forEach(async product => {
             try {
                 console.log(product.medication._id);
-                const result = await addToFav(currentUser, product.medication._id);
+                const result = await addToFav(currentUser, product.medication._id, notification.prescriptionNumber);
                 console.log('Product added to cart:', result);
               } catch (error) {
                 console.error('Failed to add product to cart:', error.message);
@@ -52,7 +52,8 @@ const PrescriptionDetails = () => {
                 <p className="detailCheckbox"><strong>Diagnostic:</strong> {notification.prescriptionDetails.diagnosis}</p>
                 <p className="detailCheckbox"><strong>Investigații:</strong> {notification.prescriptionDetails.investigations}</p>
             </div>
-            <button onClick={addAllToCart} className="addAllButton">Add All to Cart</button>
+            <button onClick={addAllToCart} className="addAllButton">Cumpara acum</button>
+            <button onClick={addAllToCart} className="addAllButton">Cumpara mai tarziu</button>
         </div>
     );
 };

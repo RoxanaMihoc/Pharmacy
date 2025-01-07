@@ -3,12 +3,11 @@ import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import AddressPage from "../../Components/AddressPage";
 import Summary from "../../Components/Summary";
 import { useAuth } from "../../Context/AuthContext";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import "./styles/fav-page.css";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [isCartItems, setIsCartItems] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState([]);
@@ -31,7 +30,6 @@ const CartPage = () => {
             throw new Error("Failed to fetch cart data");
           }
           const data = await response.json();
-          console.log("data " + data.id);
           setCartItems(data);
         } catch (error) {
           console.error("Error fetching cart data:", error);
@@ -43,18 +41,22 @@ const CartPage = () => {
   }, [currentUser]);
 
   useEffect(() => {
+    console.log("ALAL", cartItems);
     const populateCartItems = async () => {
       const promises = cartItems.map(async (id) => {
-        const { success, data } = await fetchCartItems(id);
+        const { success, data } = await fetchCartItems(id.productId);
         if (success) {
-          return data;
+          return { ...data, presId: id.prescriptionId };
         }
         return null;
       });
 
       const resolvedData = await Promise.all(promises);
-      setCart(resolvedData.filter((item) => item !== null));
-      console.log(cart);
+
+      // Filter out null values and set the cart state
+      const filteredData = resolvedData.filter((item) => item !== null);
+      setCart(filteredData); // Update the cart state with enriched data
+      console.log("Cart with presId", filteredData);
     };
 
     const fetchCartItems = async (productId) => {
@@ -92,7 +94,7 @@ const CartPage = () => {
   }, [cart]);
 
   const handleRemoveItem = async (e, productId) => {
-    // e.preventDefault();
+    e.preventDefault();
 
     try {
       // Send request to remove item from cart
@@ -245,58 +247,58 @@ const CartPage = () => {
         return (
           <>
             {cart.length > 0 ? (
-              cart.map((itemArray, index) => (
+              cart.map((item, index) => (
                 <Row className="product-row" key={index}>
-                  {itemArray.map((product, productIndex) => (
-                    <React.Fragment key={productIndex}>
-                      <Col xs={3}>
-                        <img
-                          src={product.photo}
-                          alt={product.title}
-                          className="cartImage"
-                        />
-                      </Col>
-                      <Col xs={3} className="title">
-                        {product.title}
-                      </Col>
-                      <Col xs={2}>
-                        <FormControl
-                          type="number"
-                          defaultValue={1}
-                          min={1}
-                          onChange={(e) =>
-                            handleQuantityChange(
-                              product._id,
-                              parseInt(e.target.value)
-                            )
-                          }
-                        />
-                      </Col>
-                      <Col xs={2}>{product.price} Lei</Col>
-                      <Col xs={2} className="delete-col">
-                        <Button
-                          variant="danger"
-                          onClick={(e) => handleRemoveItem(e, product._id)}
-                        >
-                          X
-                        </Button>
-                      </Col>
-                    </React.Fragment>
-                  ))}
+                  <Col xs={3}>
+                    <img
+                      src={item[0]?.photo} // Access photo from nested "0"
+                      alt={item[0]?.title} // Access title from nested "0"
+                      className="cartImage"
+                    />
+                  </Col>
+                  <Col xs={3} className="title">
+                    {item[0]?.title}
+                  </Col>
+                  <Col xs={2}>
+                    <FormControl
+                      type="number"
+                      defaultValue={1}
+                      min={1}
+                      onChange={(e) =>
+                        handleQuantityChange(
+                          item[0]?.id, // Use ID from nested "0"
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                  </Col>
+                  <Col xs={2}>{item[0]?.price} Lei</Col>
+                  <Col xs={2} className="delete-col">
+                    <Button
+                      variant="danger"
+                      onClick={(e) => handleRemoveItem(e, item[0]?.id)}
+                    >
+                      X
+                    </Button>
+                  </Col>
+                  {/* Show presId */}
+                  <Col xs={12} className="prescription-id">
+                    <div>
+                      <strong>Prescripție ID:</strong> {item.presId}
+                    </div>
+                  </Col>
                 </Row>
               ))
             ) : (
               <div className="empty-cart">
-                  <h2>Niciun produs in coș.</h2>
-                  <h3>Continuă cumpăraturile si adauga produse in coș.</h3>
-                  <button
-                    className="go-to-button"
-                    onClick={handlePharmacy}
-                  >
-                    Caută produse în farmacie.
-                  </button>
-                </div>
+                <h2>Niciun produs in coș.</h2>
+                <h3>Continuă cumpăraturile și adaugă produse în coș.</h3>
+                <button className="go-to-button" onClick={handlePharmacy}>
+                  Caută produse în farmacie.
+                </button>
+              </div>
             )}
+
             <div>
               {cart.length > 0 && (
                 <div className="ppppp">
@@ -368,44 +370,56 @@ const CartPage = () => {
           <Col className="button-center">
             <div className="button-wrapper">
               <Button
-                
                 className={`step-button ${
                   activeStep === "Cos de cumparaturi" ? "active" : ""
                 }`}
                 onClick={() => setActiveStep("Cos de cumparaturi")}
-                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
+                style={{
+                  backgroundColor: "#776e6e",
+                  color: "white",
+                  border: "none",
+                }}
               >
                 Cos de cumparaturi
               </Button>
               <Button
-                
                 className={`step-button ${
                   activeStep === "Adresa si contact" ? "active" : ""
                 }`}
                 onClick={() => setActiveStep("Adresa si contact")}
-                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
+                style={{
+                  backgroundColor: "#776e6e",
+                  color: "white",
+                  border: "none",
+                }}
               >
                 Adresa si contact
               </Button>
               <Button
-                
                 className={`step-button ${
                   activeStep === "Sumar comanda" ? "active" : ""
                 }`}
                 onClick={() => setActiveStepState("Sumar comanda")}
                 disabled={!canProceedToSummary()}
-                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
+                style={{
+                  backgroundColor: "#776e6e",
+                  color: "white",
+                  border: "none",
+                }}
               >
                 Sumar comanda
               </Button>
               <Button
-                
                 className={`step-button custom-step-button ${
                   activeStep === "Comanda plasata" ? "active" : ""
                 }`}
                 onClick={() => setActiveStep("Comanda plasata")}
                 disabled={!orderSubmitted}
-                style={{ backgroundColor: '#776e6e', color: 'white', border: 'none' }}
+                style={{
+                  backgroundColor: "#776e6e",
+                  color: "white",
+                  border: "none",
+                }}
               >
                 Comanda plasata
               </Button>
