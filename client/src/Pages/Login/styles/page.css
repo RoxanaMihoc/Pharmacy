@@ -158,6 +158,15 @@
     font-weight: 600;
 }
 
+.button-role{
+    border:none;
+    background-color: transparent;
+}
+
+.button-role:hover{
+    border:none;
+    background-color: transparent;
+}
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;

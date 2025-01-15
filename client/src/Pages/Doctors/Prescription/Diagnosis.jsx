@@ -228,7 +228,7 @@ const Diagnosis = () => {
             <tbody>
               {tableData.map((row, index) => (
                 <tr key={index}>
-                  <td>{row.rowNumber}</td>
+                  <td>{index + 1 }</td>
                   <td>{row.medicineName}</td>
                   <td>
                     <input

@@ -244,3 +244,23 @@ exports.getFavoritesbyId = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+exports.getDetailsOfCurrentUser = async (req, res) => {
+  try {
+    const { currentUser } = req.params;
+    //currentUser null for some reason
+    console.log("In details about user", currentUser);
+    let user = await User.findById(currentUser);
+    if (!user) {
+      // User not found
+      console.log("User not found");
+      return;
+    }
+
+    console.log(user);
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

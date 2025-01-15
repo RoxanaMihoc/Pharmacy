@@ -18,6 +18,7 @@ const Sidebar = ({ onNavigate, setActiveTab }) => {
             <li onClick={() => handleNavigate('/home/medicamente-otc','product')}><FontAwesomeIcon icon={faStore} />  Farmacie</li>
             <li onClick={() => handleNavigate('/home/orders', 'orders')}> <FontAwesomeIcon icon={faCubesStacked} /> Comenzi</li>
             <li onClick={() => handleNavigate('/home/prescriptions', 'prescriptions')}> <FontAwesomeIcon icon={faTablets} /> Rețete</li>
+            <li onClick={() => handleNavigate('/home/current-prescription', 'current_prescription')}> <FontAwesomeIcon icon={faTablets} /> Rețeta Curentă</li>
             <li onClick={logout} ><FontAwesomeIcon icon={faArrowLeftLong} />  Logout</li>
             </ul>
         </div>

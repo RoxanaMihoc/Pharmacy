@@ -1,28 +1,22 @@
-import React, { useState, useEffect } from 'react'; 
-import { useHistory } from 'react-router-dom';
-import "./styles/pres-details.css"
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import "./styles/pres-details.css";
 import { useAuth } from "../../Context/AuthContext";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleRight, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 const PrescriptionsList = () => {
   const [prescriptions, setPrescriptions] = useState([]);
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleId, setVisibleId] = useState(null);
-  const { currentUser, role } = useAuth();
+  const { currentUser } = useAuth();
+  const [currentPrescriptionId, setCurrentPrescriptionId] = useState(null); // State for the current prescription
   const itemsPerPage = 8; // Define how many prescriptions per page
-  const history = useHistory();
-
-  const [summaryStats, setSummaryStats] = useState({
-    prescriptionsThisMonth: 0,
-    patientsRequestingRefill: 0,
-    newPatientRequests: 0,
-  });
 
   useEffect(() => {
     fetchPrescriptions();
-  }, [currentUser, role]);
+  }, [currentUser]);
 
   const fetchPrescriptions = async () => {
     try {
@@ -42,6 +36,52 @@ const PrescriptionsList = () => {
     }
   };
 
+  const handleMarkAsCurrent = async (prescriptionId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/home/prescription/${prescriptionId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ current: true, currentUser: currentUser, }), // Mark as current in the database
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to mark the prescription as current.");
+      }
+  
+      setCurrentPrescriptionId(prescriptionId); // Update state to reflect the change
+    } catch (error) {
+      console.error("Error marking prescription as current:", error);
+      alert("An error occurred while marking the prescription as current.");
+    }
+  };
+  
+  const handleRemoveCurrent = async () => {
+    try {
+      if (!currentPrescriptionId) return;
+      let prescriptionId = currentPrescriptionId;
+      const response = await fetch(`http://localhost:3000/home/prescription/remove-current/${prescriptionId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ current: false,
+          currentUser: currentUser,
+         }), // Remove as current in the database
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to remove the current prescription.");
+      }
+  
+      setCurrentPrescriptionId(null); // Update state to reflect the change
+    } catch (error) {
+      console.error("Error removing current prescription:", error);
+      alert("An error occurred while removing the current prescription.");
+    }
+  };
+  
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value.toLowerCase());
@@ -73,8 +113,7 @@ const PrescriptionsList = () => {
 
   return (
     <div className="prescriptions-list-page">
-
-      {/* Search Bar and Add Button */}
+      {/* Search Bar */}
       <div className="search-add-bar">
         <input
           type="text"
@@ -110,61 +149,80 @@ const PrescriptionsList = () => {
                   <button onClick={() => toggleDetails(prescription._id)}>
                     {visibleId === prescription._id ? "Ascunde" : "Vezi"}
                   </button>
+                  {!currentPrescriptionId && (
+                    <button
+                      className="mark-current"
+                      onClick={() => handleMarkAsCurrent(prescription._id)}
+                    >
+                      Setează ca activă
+                    </button>
+                  )}
+                  {currentPrescriptionId === prescription._id && (
+                    <button
+                      className="remove-current"
+                      onClick={handleRemoveCurrent}
+                    >
+                      Elimină ca activă
+                    </button>
+                  )}
                 </td>
               </tr>
               {visibleId === prescription._id && (
-  <tr>
-    <td colSpan="5">
-      <div className="med-diag">
-        {/* Product Details Section */}
-        <div className="product-details-prescription">
-          {prescription.products.map((product, index) => (
-            <div key={index} className="product-details-pres">
-              <div className="name-photo">
-                <img
-                  src={product.medication.photo}
-                  alt={product.medication.title}
-                  className="product-image-4"
-                />
-                <div>
-                  <p className="product-title">
-                    <strong>{product.medication.title}</strong> - {product.medication.brand}
-                  </p>
-                  <p className="product-price">Preț: {product.medication.price.toFixed(2)} Lei</p>
-                </div>
-              </div>
-              <div className="dosage">
-                <p>
-                  <strong>Doză:</strong> {product.doza}
-                </p>
-                <p>
-                  <strong>Durată:</strong> {product.durata}
-                </p>
-                <p>
-                  <strong>Cantitate:</strong> {product.cantitate}
-                </p>
-                <p>
-                  <strong>Alte detalii:</strong> {product.detalii}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+                <tr>
+                  <td colSpan="5">
+                    <div className="med-diag">
+                      {/* Product Details Section */}
+                      <div className="product-details-prescription">
+                        {prescription.products.map((product, index) => (
+                          <div key={index} className="product-details-pres">
+                            <div className="name-photo">
+                              <img
+                                src={product.medication.photo}
+                                alt={product.medication.title}
+                                className="product-image-4"
+                              />
+                              <div>
+                                <p className="product-title">
+                                  <strong>{product.medication.title}</strong> -{" "}
+                                  {product.medication.brand}
+                                </p>
+                                <p className="product-price">
+                                  Preț: {product.medication.price.toFixed(2)} Lei
+                                </p>
+                              </div>
+                            </div>
+                            <div className="dosage">
+                              <p>
+                                <strong>Doză:</strong> {product.doza}
+                              </p>
+                              <p>
+                                <strong>Durată:</strong> {product.durata}
+                              </p>
+                              <p>
+                                <strong>Cantitate:</strong> {product.cantitate}
+                              </p>
+                              <p>
+                                <strong>Alte detalii:</strong> {product.detalii}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
 
-        {/* Diagnosis and Investigation Section */}
-        <div className="diagnosis-invest">
-          <p>
-            <strong>Diagnostic:</strong> {prescription.diagnosis}
-          </p>
-          <p>
-            <strong>Investigații:</strong> {prescription.investigations}
-          </p>
-        </div>
-      </div>
-    </td>
-  </tr>
-)}
-
+                      {/* Diagnosis and Investigation Section */}
+                      <div className="diagnosis-invest">
+                        <p>
+                          <strong>Diagnostic:</strong> {prescription.diagnosis}
+                        </p>
+                        <p>
+                          <strong>Investigații:</strong>{" "}
+                          {prescription.investigations}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
             </React.Fragment>
           ))}
         </tbody>

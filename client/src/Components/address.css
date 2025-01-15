@@ -1,32 +1,59 @@
-/* src/components/OrderDetailsForm.css */
-
-.order-details {
-  padding: 20px;
-  border-radius: 8px;
-  margin: 0 auto;
-}
-
 h2 {
   text-align: center;
+  padding-bottom: 20px;
 }
-.section-all{
+
+h3 {
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+.section-all {
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  gap: 100px; /* Adds space between child divs */
+  gap: 40px; /* Reduce spațiul dintre secțiuni pentru un aspect uniform */
+  align-items: stretch; /* Asigură că toate secțiunile au aceeași înălțime */
+}
+
+.section-details{
+
+    flex: 1; /* Asigură că secțiunile ocupă aceeași lățime */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.section-payment-delivery {
+  flex: 1; /* Asigură că secțiunile ocupă aceeași lățime */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  
 }
 
 .section-details {
-  margin-bottom: 10px;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  padding: 60px;
+  border-radius: 28px;
+  border: 1px solid #8b8989;
+  background-color: #e9e8e8;
+}
+
+.section-payment,
+.section-delivery {
+  padding: 60px; /* Ajustează padding-ul pentru a se potrivi cu secțiunea din stânga */
+  border-radius: 28px;
+  border: 1px solid #8b8989;
+  background-color: #e9e8e8;
+  flex: 1; /* Asigură că secțiunile au aceeași înălțime */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .personal-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px; 
+  
   margin-bottom: 10px;
 }
 
@@ -46,36 +73,34 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-.additional-info{
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
+.additional-info {
+  display: flex;
 }
-  textarea {
+
+.additional-info label {
+  width: 100%;
+}
+
+textarea {
   height: 100px;
   align-items: center;
   justify-content: center;
   width: calc(100% - 10px);
 }
 
-.section-payment {
-  margin-bottom: 10px;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.payment-methods {
+.payment-methods,
+.delivery-methods {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 2px;
 }
 
-.method{
+.method {
   display: flex;
-  flex-direction: row;
-  gap:10px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .method label {
@@ -84,7 +109,7 @@ textarea {
   cursor: pointer;
 }
 
-.section{
+.section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -97,8 +122,14 @@ textarea {
   color: white;
   text-align: center;
   border: none;
-  border-radius: 4px;
+  border-radius: 14px;
   font-size: 16px;
   cursor: pointer;
+  background-color: #8b8989;
 }
-
+.delivery-info {
+  font-size: 14px;
+  color: #333;
+  margin-top: 5px;
+  margin-left: 20px;
+}

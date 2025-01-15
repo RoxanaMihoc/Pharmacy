@@ -46,13 +46,14 @@ const prescriptionSchema = new mongoose.Schema({
           detalii: String,
           doza: String,
           durata: String,
-
-
+          progressHistory: { date: Date, dosesTaken: Number},
       }
   ],
     investigations: String,
     date: { type: Date, default: Date.now },
     status: { type: String, default: 'în așteptare' },
+    currentPrescription: { type: Boolean, default: false },
+
   });
 
   module.exports = prescriptionDB.model('Prescriptions', prescriptionSchema);

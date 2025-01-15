@@ -48,7 +48,7 @@ router.getProductsByCategory = async (req, res) => {
 // for product/productId
 router.getProductsById = async (req, res) => {
   const { productId } = req.params;
-  console.log(productId);
+  console.log("Product: ",productId);
 
   query = { _id: productId };
 

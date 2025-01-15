@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
   weight: { type: Number, required: true },
   maritalStatus: { type: String, required: true },
   medicationList: { type: String, required: true },
+  allergies: { type: String, required: true },
 
 });
 

@@ -27,10 +27,10 @@ const PharmacyPage = () => {
                 <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
               </Link>
         <ul className="nav-links">
-          <li><a href="#medicines">Medicines</a></li>
-          <li><a href="#doctors">Doctors</a></li>
-          <li><a href="#blog">Blog</a></li>
-          <li><a href="#faq">FAQ</a></li>
+        <button className="button-role" onClick={() => handleRoleSelectionLogIn('Doctor')}>Doctor</button>
+        <button className="button-role" onClick={() => handleRoleSelectionLogIn('Pharmacist')}>Pharmacist</button>
+        <button className="button-role" >Blog</button>
+        <button className="button-role" >FAQ</button>
         </ul>
         <div className="nav-buttons">
           <button className="btn sign-up" onClick={() => handleRoleSelectionSignUp('Patient')}>Înregistrare</button>
@@ -43,7 +43,7 @@ const PharmacyPage = () => {
   <div className="hero-content">
     <h1 className="hero-title"> <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor</h1>
     <p className="hero-subtitle">Cea mai bună alegere pentru tine și familia ta</p>
-    <p className="hero-sub-subtitle">Achiziții online • Livrare gratuită</p>
+    <p className="hero-sub-subtitle">Prescripții medicale • Achiziții online • Livrare gratuită  </p>
     <div className="hero-buttons">
       <button className="btn primary">Search medicine</button>
       <button className="btn secondary">Doctor’s consultation</button>

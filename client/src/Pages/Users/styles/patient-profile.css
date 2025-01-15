@@ -1,0 +1,182 @@
+.patient-profile-container {
+    width: 80%;
+    margin: 0 auto; /* Center the content horizontally */
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px;
+    margin-top:30px;
+  }
+  
+  .profile-left {
+    width: 40%; /* Increase the width for better spacing */
+  }
+  
+  .profile-right {
+    width: 60%; /* Adjust the width to balance with the left section */
+  }
+  
+  .profile-card,
+  .allergies-section,
+  .notes-section,
+  .general-section,
+  .prescription-section {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 30px; /* Make sections bigger */
+    margin-bottom: 30px; /* Increase spacing between sections */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-card {
+    text-align: center;
+  }
+  
+  .profile-avatar {
+    width: 150px; /* Increase the avatar size */
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  
+  .patient-name {
+    font-size: 2rem; /* Increase the font size for the name */
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  
+  .status {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .status.active {
+    color: green;
+  }
+  
+  .status.inactive {
+    color: red;
+  }
+  
+  .info p {
+    margin: 10px 0; /* Increase spacing between information lines */
+    font-size: 1rem; /* Increase the font size */
+  }
+  
+  .tags {
+    margin-top: 15px;
+  }
+  
+  .tags span {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin: 5px 5px 0 0;
+  }
+  
+  .allergies-section h4,
+  .notes-section h4,
+  .general-section h3,
+  .prescription-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .allergies-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .allergies-section li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+  
+  .allergies-section .high {
+    color: red;
+  }
+  
+  .allergies-section .medium {
+    color: orange;
+  }
+  
+  .add-allergy {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .add-allergy:hover {
+    background-color: #0056b3;
+  }
+  
+  .notes-section p {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .add-allergy-form {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-allergy-form input,
+  .add-allergy-form select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .add-allergy-form button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .add-allergy-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .prescription-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .prescription-section li {
+    margin: 10px 0;
+    font-size: 1rem;
+  }
+  

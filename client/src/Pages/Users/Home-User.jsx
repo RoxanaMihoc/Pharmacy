@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import CartPreview from "../../Components/CartPreview";
 import CartPage from "./CartPage";
 import FavoritesPage from "./FavoritesPage";
+import PatientProfile from "./PatientProfile";
 import ProductPage from "./ProductPage";
 import ProductDetails from "./ProductDetails";
 import NotificationBell from "./NotificationBell";
@@ -12,6 +13,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../Context/AuthContext";
 import OrderPage from "./OrdersPage";
+import CurrentPrescription from "./CurrentPrescription";
 import {
   faBell,
   faHeart,
@@ -55,6 +57,11 @@ const HomeUser = () => {
     setActiveTab("favorites");
   };
 
+  const handleUserButton = () => {
+    handleNavigate("/home/profile");
+    setActiveTab("profile");
+  };
+
   const getTabName = (activeTab) => {
     const tabNames = {
       product: "Farmacie",
@@ -62,6 +69,8 @@ const HomeUser = () => {
       prescriptions:"Rețete",
       orders:"Comenzi",
       cart:"Coș",
+      profile: "Profile",
+      current_prescription: "Rețetă curentă",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
@@ -89,7 +98,7 @@ const HomeUser = () => {
               >
                 <FontAwesomeIcon icon={faBagShopping} />
               </button>
-              <button className="icon-button">
+              <button className="icon-button" onClick={handleUserButton}>
                             <FontAwesomeIcon icon={faUserCircle} />
                             <strong> {name}</strong>{" "}
                           </button>
@@ -106,6 +115,8 @@ const HomeUser = () => {
             <Route path="/home/cart" component={CartPage} />
             <Route path="/home/favorites" component={FavoritesPage} />
             <Route path="/home/orders" component={OrderPage} />
+            <Route path="/home/current-prescription" component={CurrentPrescription} />
+            <Route path="/home/profile" component={PatientProfile} />
             <Route
               path="/home/prescription/:patientId"
               component={PrescriptionDetails}
