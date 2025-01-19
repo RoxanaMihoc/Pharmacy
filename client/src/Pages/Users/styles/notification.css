@@ -20,14 +20,17 @@
   
   .notification-panel {
     position: absolute;
-    right: 0;
-    top: 40px;
+    right: 10px; /* Adjusts the position from the right side */
+    top: 60px; /* Adjusts the position to appear below the white nav bar */
     width: 400px;
+    max-height: 1000px; /* Increased height to accommodate more content */
     background: white;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 100;
     border-radius: 8px;
+    overflow-y: auto; /* Allows scrolling if the content exceeds max height */
   }
+  
   
   .notification-panel h4 {
     padding: 10px;
@@ -36,13 +39,14 @@
     border-bottom: 1px solid #e7e7e7;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+    
   }
   
   .notification-panel ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    max-height: 200px;
+    max-height: 900px;
     overflow-y: auto;
   }
   
@@ -88,5 +92,27 @@
     right: 10px; /* Adjusts distance from the right edge of the container */
     font-size: 12px; /* Smaller font for the date */
     color: #888; /* Dimmed color for the date */
+  }
+  
+  .load-more-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: 10px; /* Add spacing above */
+  }
+  
+  .load-more-button {
+    background: none; /* Remove background */
+    border: none; /* Remove border */
+    color: #007bff; /* Set text color */
+    cursor: pointer; /* Show pointer cursor */
+    font-size: 14px; /* Adjust font size */
+    text-align: center; /* Align text */
+    padding: 0; /* Remove padding */
+  }
+  
+  .load-more-button:hover {
+    text-decoration: underline; /* Add underline on hover */
+    color: #0056b3; /* Slightly darker color on hover */
   }
   

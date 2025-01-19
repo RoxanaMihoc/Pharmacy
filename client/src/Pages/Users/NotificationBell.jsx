@@ -11,39 +11,83 @@ const socket = io("http://localhost:3000");
 const NotificationBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [visibleNotifications, setVisibleNotifications] = useState(6); // Track visible notifications
   const { currentUser, role } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();
   const notificationRef = useRef(null);
 
-   //   const fetchNotifications = async () => {
-  //     try {
-  //         const response = await fetch(`http://localhost:3000/home/notification/${currentUser}`, {
-  //             headers: {
-  //                 'Content-Type': 'application/json',
-  //             },
-  //         });
+  // Normalize notification structure
+  const normalizeNotification = (notification) => {
+    if (notification.notification) {
+      // From database
+      return {
+        ...notification.notification,
+        id: notification.id || notification.notification.id, // Ensure ID is normalized
+      };
+    }
+    // Direct from WebSocket
+    return notification;
+  };
 
-  //         if (!response.ok) {
-  //             throw new Error("Failed to fetch notifications");
-  //         }
+  // Sort notifications by date
+  const sortNotifications = (notificationsArray) => {
+    return notificationsArray.sort((a, b) => {
+      const dateA = new Date(a.prescriptionDetails.date);
+      const dateB = new Date(b.prescriptionDetails.date);
+      return dateB - dateA; // Newest first
+    });
+  };
 
-  //         const notifications = await response.json();
-  //         console.log(notifications);
-  //         setAllNotifications(notifications);
-  //     } catch (error) {
-  //         console.error("Error fetching notifications:", error);
-  //         alert("Failed to fetch notifications");
-  //     }
-  // };
+  // Fetch notifications from the database
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/home/notifications/${currentUser}/${role}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  // useEffect(() => {
-  //     fetchNotifications();
-  // }, []);
+      if (!response.ok) {
+        throw new Error("Failed to fetch notifications");
+      }
+
+      const fetchedNotifications = await response.json();
+      const normalized = fetchedNotifications.map(normalizeNotification);
+      setNotifications(sortNotifications(normalized)); // Sort before setting state
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
+  // Save new notification to the database
+  const saveNotificationToDatabase = async (notification) => {
+    try {
+      await fetch(`http://localhost:3000/home/add-notification`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: currentUser,
+          role: role,
+          notification: notification,
+        }),
+      });
+    } catch (error) {
+      console.error("Error saving notification to the database:", error);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
         setShowNotifications(false);
       }
     };
@@ -54,37 +98,31 @@ const NotificationBell = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   socket.on("order-update", (message) => {
-  //     // Assuming the message contains the notification message and additional details
-  //     console.log("Order update received:", message);
-  //     const newNotification = {
-  //       id: message.orderId, // Assuming each message contains a unique order ID
-  //       message: message.message,
-  //       date: new Date().toISOString(), // Capture the date when the message is received
-  //     };
-
-  //     // Update notifications to include the new pharmacy notification
-  //     setNotifications(prev => [newNotification, ...prev]);
-  //     setUnreadCount(prev => prev + 1);
-  //   });
-
-  //   return () => {
-  //     socket.off("order-update");
-  //   };
-  // }, []);
-
   useEffect(() => {
     console.log("Setting up socket listeners", currentUser, role);
     socket.emit("register", currentUser, role);
 
     const handleNewNotification = (notification) => {
       console.log("Notification received:", notification);
-      if (!notifications.some(notif => notif.id === notification.id)) {
-        setNotifications(prev => [notification, ...prev]);
-        setUnreadCount(prev => prev + 1);
+      const normalizedNotification = normalizeNotification(notification);
+
+      if (
+        !notifications.some((notif) => notif.id === normalizedNotification.id)
+      ) {
+        const updatedNotifications = sortNotifications([
+          normalizedNotification,
+          ...notifications,
+        ]);
+        setNotifications(updatedNotifications);
+        setUnreadCount((prev) => prev + 1);
+
+        // Save notification to the database
+        saveNotificationToDatabase(normalizedNotification);
       } else {
-        console.log("Duplicate notification received, ignoring:", notification.id);
+        console.log(
+          "Duplicate notification received, ignoring:",
+          normalizedNotification.id
+        );
       }
     };
 
@@ -96,40 +134,45 @@ const NotificationBell = () => {
     };
   }, [notifications, currentUser]);
 
+  const toggleNotifications = async () => {
+    if (!showNotifications) {
+      await fetchNotifications(); // Fetch notifications only when opening
+    }
+    setShowNotifications(!showNotifications);
+    if (showNotifications) {
+      setUnreadCount(0); // Reset unread count
+    }
+  };
+
   const handleNotificationClick = (notification) => {
+    // Subtract from unread count only if greater than 0
+    setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
+
     history.push({
       pathname: `/home/prescription/${notification.id}`,
       state: { notification },
     });
   };
 
-  const toggleNotifications = () => {
-    setShowNotifications(!showNotifications);
-    if (showNotifications) {
-      setUnreadCount(0);
-    }
+  const loadMoreNotifications = () => {
+    setVisibleNotifications((prev) => prev + 6); // Increase visible notifications by 6
   };
 
   function formatHour(dateString) {
     const date = new Date(dateString);
-;  
-    // Convert the date to local time zone
+
     const localHours = date.getHours();
     const localMinutes = date.getMinutes();
-    
-    // Determine AM/PM
-    const ampm = localHours >= 12 ? 'PM' : 'AM';
-    
-    // Convert 24-hour time to 12-hour format
-    const formattedHours = localHours % 12 || 12; // 0 becomes 12 in 12-hour format
-  
-    // Format minutes to always show two digits
-    const formattedMinutes = localMinutes < 10 ? '0' + localMinutes : localMinutes;
-  
-    // Return the formatted time
+
+    const ampm = localHours >= 12 ? "PM" : "AM";
+
+    const formattedHours = localHours % 12 || 12;
+
+    const formattedMinutes =
+      localMinutes < 10 ? "0" + localMinutes : localMinutes;
+
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   }
-  
 
   return (
     <div>
@@ -143,22 +186,34 @@ const NotificationBell = () => {
         <div className="notification-panel" ref={notificationRef}>
           <h4>Notificări</h4>
           <ul>
-            {notifications.map((notification, index) => (
-              <li
-                key={index}
-                onClick={() => handleNotificationClick(notification)}
-              >
-                <div className="notification-container">
-                  <span className="notification-message">
-                    {notification.message}
-                  </span>
-                  <span className="notification-date">
-                    {formatHour(notification.prescriptionDetails.date)}
-                  </span>
-                </div>
-              </li>
-            ))}
+            {notifications
+              .slice(0, visibleNotifications)
+              .map((notification, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleNotificationClick(notification)}
+                >
+                  <div className="notification-container">
+                    <span className="notification-message">
+                      {notification.message}
+                    </span>
+                    <span className="notification-date">
+                      {formatHour(notification.prescriptionDetails.date)}
+                    </span>
+                  </div>
+                </li>
+              ))}
           </ul>
+          {notifications.length > visibleNotifications && (
+            <div className="load-more-container">
+              <button
+                className="load-more-button"
+                onClick={loadMoreNotifications}
+              >
+                Vezi mai mult
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -258,3 +258,65 @@ input[type="range"] {
     font-size: 46px;
     color: #2F4858; /* Culoarea numărului paginii active */
 }
+
+@media (max-width: 1135px) {
+    .filter-container {
+        padding: 10px;
+        position: relative;
+    }
+
+    .product-list-container {
+        padding: 10px;
+    }
+
+    .card-porduct-page {
+        max-width: 100%;
+        flex-direction: column;
+    }
+
+    .card-img {
+        max-height: 150px;
+    }
+
+    .pagination button {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .add-fav-card {
+        font-size: 12px;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+    .filter-container {
+        padding: 5px;
+    }
+
+    .product-list-container {
+        padding: 5px;
+    }
+
+    .card-porduct-page {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .card-img {
+        max-height: 120px;
+    }
+
+    .pagination {
+        gap: 5px;
+    }
+
+    .pagination button {
+        font-size: 10px;
+        padding: 3px 5px;
+    }
+
+    .add-fav-card {
+        font-size: 10px;
+    }
+}

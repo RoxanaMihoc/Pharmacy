@@ -1,9 +1,10 @@
 .current-prescription-container {
-  max-width: 1200px;
+  width: 100%; /* Make it take full width for responsiveness */
+  max-width: 1200px; /* Restrict max width for larger screens */
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
-  font-size: 18px; /* Increased base font size for the container */
+  font-size: 18px; /* Base font size */
 }
 
 .current-prescription-container-all {
@@ -32,12 +33,6 @@
   font-size: 18px; /* Larger text for details and notes */
 }
 
-.notes-box {
-  position: relative;
-  background-color: #e9e8e8;
-  width: 100%;
-}
-
 .notes-box h3 {
   margin-top: 0;
   font-size: 24px; /* Increased size for headings */
@@ -46,24 +41,6 @@
 .notes-box p {
   margin: 10px 0;
   font-size: 18px; /* Increased size for notes text */
-}
-
-.add-note-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px; /* Increased button size */
-  height: 32px;
-  border: none;
-  background: #007bff;
-  color: white;
-  border-radius: 50%;
-  font-size: 18px; /* Larger button text */
-  cursor: pointer;
-}
-
-.add-note-button:hover {
-  background: #0056b3;
 }
 
 .medication-table {
@@ -78,12 +55,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  justify-self: center;
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #f9f9f9;
   margin-bottom: 15px;
   padding: 20px;
-  gap: 60px;
+  gap: 20px;
   flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
 
@@ -91,13 +69,13 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  flex: 1; /* Allow the medication info to adjust dynamically */
+  flex: 1;
   width: 100%;
   font-size: 18px; /* Increased text size for medication details */
 }
 
 .medication-info img {
-  width: 400px;
+  width: 300px;
   height: 200px;
   border-radius: 10px;
   object-fit: cover;
@@ -106,7 +84,7 @@
 .medication-progress {
   text-align: center;
   flex: 1;
-  min-width: 200px; /* Prevent shrinking too much */
+  min-width: 200px;
   font-size: 18px; /* Increased text size for progress */
 }
 
@@ -114,7 +92,7 @@
   background-color: #e0e0e0;
   border-radius: 5px;
   overflow: hidden;
-  height: 14px; /* Slightly larger progress bar height */
+  height: 14px;
   margin: 10px 0;
   width: 100%;
 }
@@ -125,52 +103,86 @@
   transition: width 0.3s ease;
 }
 
-/* Media Queries for Responsiveness */
+.button-doza {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-doza button {
+  margin-top: 20px;
+}
+
+/* Responsive Styling */
 @media (max-width: 768px) {
-  .prescription-layout {
-    flex-direction: column; /* Stack sections vertically on smaller screens */
+  .current-prescription-container {
+    padding: 10px; /* Reduce padding on smaller screens */
   }
 
-  .medication-row {
-    flex-direction: column; /* Stack medication details and progress vertically */
-    align-items: flex-start; /* Align items to the left */
-    gap: 10px;
+  .prescription-layout {
+    flex-direction: column; /* Stack sections vertically */
+    gap: 20px;
+  }
+
+  .prescription-details-div,
+  .add-notes-section {
+    font-size: 16px; /* Slightly smaller text for smaller screens */
+    padding: 15px; /* Reduce padding for smaller screens */
   }
 
   .medication-info img {
-    width: 80px;
-    height: 80px;
+    width: 100%; /* Full width image */
+    height: auto; /* Maintain aspect ratio */
   }
 
-  .progress-bar-container {
-    height: 10px; /* Adjust progress bar height for smaller screens */
+  .medication-row {
+    flex-direction: column; /* Stack medication info and progress */
+    align-items: flex-start; /* Align content to the left */
+    padding: 15px;
   }
 
   .medication-info {
-    font-size: 16px; /* Adjust text size for smaller screens */
+    flex-direction: column; /* Stack details vertically */
+    align-items: flex-start; /* Align to the left */
+  }
+
+  .progress-bar-container {
+    height: 10px; /* Smaller progress bar */
+  }
+
+  .notes-box h3 {
+    font-size: 20px; /* Adjust font size for smaller screens */
+  }
+
+  .notes-box p {
+    font-size: 16px; /* Adjust text size for notes */
+  }
+
+  .add-note-button {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+
+  .button-doza button {
+    font-size: 16px; /* Smaller button text */
+    padding: 10px; /* Add padding for better click area */
   }
 }
 
 @media (max-width: 480px) {
-  .prescription-details-div,
-  .add-notes-section {
-    padding: 10px;
-  }
-
   .medication-row {
-    padding: 10px;
+    gap: 10px;
   }
 
-  .medication-info img {
-    width: 70px;
-    height: 70px;
+  .medication-info {
+    font-size: 14px; /* Smaller text for very small screens */
   }
 
-  .progress-bar-container {
-    height: 8px;
-  }
-
-  .current-prescription-container {
-    font-size: 16px; /* Adjust base font size for very small screens */
+  .add-note-button {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
   }
 }

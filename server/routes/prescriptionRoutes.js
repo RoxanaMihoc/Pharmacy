@@ -9,6 +9,7 @@ router.get('/current-prescription/:currentUser',prescriptionController.getCurent
 router.patch('/prescription/:prescriptionId',prescriptionController.setPrescriptionsAsCurrent);
 router.patch('/prescription/remove-current/:prescriptionId',prescriptionController.setPrescriptionsAsNotCurrent);
 router.put('/update-progress/:prescriptionId',prescriptionController.updateProgress);
+router.put("/delete-progress/:prescriptionId", prescriptionController.deleteLastProgress);
 module.exports = (io, userSockets) => {
   console.log("in rout",userSockets);
     router.post('/add-prescription', (req, res) => prescriptionController.addPrescription(req, res, io, userSockets));

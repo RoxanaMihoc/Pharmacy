@@ -55,4 +55,4 @@ const notificationSchema = new mongoose.Schema({
   dateReceived: { type: Date, default: Date.now },
 });
 
-module.exports = notifDB.model('Notifications', notificationSchema, 'notifications');
+module.exports = notifDB.model('Notifications', notificationSchema);

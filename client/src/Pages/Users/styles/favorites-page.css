@@ -1,4 +1,4 @@
-.product-page {
+.product-list-favorites-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -18,7 +18,7 @@
 }
 
 .favorite-body .add-fav-card {
-    font-family: "Poppins", sans-serif;
+   font-family: Arial, sans-serif;
     background-color: #ddd8d8;
     border: 2px solid #b4b1b1;
     border-radius: 20px;

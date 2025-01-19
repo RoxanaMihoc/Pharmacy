@@ -2,9 +2,6 @@
     width: 80%;
     margin: 20px auto;
     padding: 20px;
-    background-color: #f4f4f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -34,11 +31,12 @@
   
   /* Profile card styling */
   .profile-card {
-    background-color: #fff;
     padding: 16px;
-    border-radius: 8px;
     text-align: center; 
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 28px;
+  border: 1px solid #8b8989;
+  background-color: #e9e8e8;
   }
   
   .profile-avatar {
@@ -92,9 +90,10 @@
   .prescription-details-2,
   .diagnosis-info,
   .investigation-info {
-    background-color: #f4f4f9;
+    border-radius: 28px;
+    border: 1px solid #8b8989;
+    background-color: #e9e8e8;
     padding: 10px;
-    border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     width: 100%;
     margin-bottom: 10px;
@@ -122,19 +121,10 @@
     text-align: center;
   }
   
-  .send-button {
-    background-color: #28a745;
+  .send-button,  .generate-pdf-button, .menu-back {
     color: #fff;
-  }
-  .send-button:hover {
     opacity: 0.9;
-  }
-  .generate-pdf-button {
-    background-color: #ffc107;
-    color: #000;
-  }
-  .generate-pdf-button:hover {
-    opacity: 0.9;
+    height: 80px;
   }
   
   /* ---- Styling for each medicine item ---- */
@@ -176,4 +166,34 @@
     font-weight: 600;
     color: #333;
   }
+
+  .button-reteta{
+    display: flex;
+    flex-direction: row;
+  }
+  .send-reteta{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .status-message {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .status-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+  
+  .status-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+  
   

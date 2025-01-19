@@ -118,8 +118,8 @@ const FavoritesPage = () => {
     <div>
       <Container>
         <Row>
-          <Col md={9} className="product-list-container">
-          <h1>Listă de favorite</h1>
+          <Col md={9} className="product-list-favorites-container">
+          <h2>Listă de favorite</h2>
             <Row>
               {favorites.map((subArray, subArrayIndex) =>
                 subArray.map((product, index) => (

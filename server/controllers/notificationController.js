@@ -1,48 +1,55 @@
 const Notification = require("../models/notificationModel");
+const { notifDB } = require("../config/database");
 
 const addNotification = async (req, res) => {
-  console.log("in notif");
-  const { prescriptionId, details } = req.body;
-  const patientId = details.patient._id;
-  console.log(patientId, details);
-
   try {
-    const newNotification = new Notification({
-      prescriptionId,
-      patientId,
-      details,
-      data
+    const { userId, role, notification } = req.body;
+    console.log("in notig", userId, role,  notification);
+
+    // Determine the collection name dynamically based on the role
+    const collectionName =
+      role === "Patient" ? `patient_${userId}` : `doctor_${userId}`;
+
+    const patientCollection = notifDB.collection(collectionName);
+
+    // Save the notification to the collection
+    await patientCollection.insertOne({
+      userId,
+      role,
+      notification,
     });
 
-    await newNotification.save();
-
-    res
-      .status(201)
-      .json({
-        message: "Notification created successfully",
-        data: newNotification,
-      });
+    res.status(201).json({ message: "Notification saved successfully" });
   } catch (error) {
-    console.error("Error creating notification:", error);
-    res.status(500).json({ error: "Internal server was errored" });
+    console.error("Error saving notification:", error);
+    res.status(500).json({ error: "Failed to save notification" });
   }
 };
 
-const getNotificationbyPatientId = async (req, res) => {
+const getNotificationsByRole = async (req, res) => {
   try {
-    console.log("in get notif");
-    const { currentUser } = req.params;
-    query = { patientId: currentUser };
-    const notification = await Notification.find(
-      query,
-      "details dateReceived"
-    );
-    console.log(notification);
-    res.json(notification);
+    console.log(" in get notif: Fetching notifications by role...");
+    const { currentUser, role } = req.params; // Extract role and currentUser from params
+
+    // Determine the collection dynamically based on the role
+    const collectionName =
+      role === "Patient" ? `patient_${currentUser}` : `doctor_${currentUser}`;
+    const collection = notifDB.collection(collectionName);
+
+    // Query the notifications
+    const notifications = await collection
+    .find({}) // No projection, retrieves all fields
+    .sort({ dateReceived: -1 }) // Sort notifications by date (newest first)
+    .toArray();
+
+
+    console.log(notifications);
+    res.status(200).json(notifications);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching notifications:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-module.exports = { addNotification, getNotificationbyPatientId };
+
+module.exports = { addNotification, getNotificationsByRole };

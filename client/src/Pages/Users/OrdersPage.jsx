@@ -26,7 +26,7 @@ const OrdersPage = () => {
         throw new Error("Failed to fetch orders");
       }
       const data = await response.json();
-      console.log(data);
+      console.log(data[0].cart);
       setOrders(data);
     } catch (error) {
       console.error("Error:", error.message);
@@ -47,88 +47,95 @@ const OrdersPage = () => {
   };
 
   return (
-    <Container className="orders-container">
-      <Table striped bordered hover responsive className="table-orders">
-        <thead>
-          <tr>
-            <th>Numărul comenzii</th>
-            <th>Nume Pacient</th>
-            <th>Email</th>
-            <th>Telefon</th>
-            <th>Adresă</th>
-            <th>Status</th>
-            <th>Acțiuni</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <React.Fragment key={order._id}>
-              <tr>
-                <td>#{order.orderNumber}</td>
-                <td>
-                  {order.firstName} {order.lastName}
-                </td>
-                <td>{order.email}</td>
-                <td>{order.phone}</td>
-                <td>{`${order.address}, ${order.city}, ${order.county}`}</td>
-                <td>{order.status}</td>
-                <td>
-                  <Button
-                    variant="link"
-                    onClick={() => toggleDetails(order._id)}
-                  >
-                    {visibleOrderId === order._id
-                      ? "Ascunde produse"
-                      : "Vezi produse"}
-                  </Button>
-                </td>
-              </tr>
-              {visibleOrderId === order._id && (
+    <div className="orders-page-container">
+      {" "}
+      <h2>Comenzi</h2>
+      <Container className="orders-container-user">
+        <Table striped bordered hover responsive className="table-orders">
+          <thead>
+            <tr>
+              <th>Numărul comenzii</th>
+              <th>Nume Pacient</th>
+              <th>Email</th>
+              <th>Telefon</th>
+              <th>Adresă</th>
+              <th>Status</th>
+              <th>Acțiuni</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <React.Fragment key={order._id}>
                 <tr>
-                  <td colSpan="7">
-                    <Table size="sm">
-                      <thead>
-                        <tr>
-                          <th>Produs</th>
-                          <th>Cantitate</th>
-                          <th>Preț</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {order.cart &&
-                          Array.isArray(order.cart) &&
-                          order.cart.flat().map((item, idx) => (
-                            <tr key={idx}>
-                              <td>
-                                <img
-                                  src={item.photo}
-                                  alt={item.title}
-                                  className="product-image"
-                                />
-                                {item.title || "No title"}
-                              </td>
-                              <td>{item.quantity || 1}</td>
-                              <td>
-                                {item.price ? item.price.toFixed(2) : "0.00"}{" "}
-                                Lei
-                              </td>
-                            </tr>
-                          ))}
-                        <tr className="total-price">
-                          <th>Pret Total</th>
-                          <th></th>
-                          <th>{order.totalPrice} Lei</th>
-                        </tr>
-                      </tbody>
-                    </Table>
+                  <td>#{order.orderNumber}</td>
+                  <td>
+                    {order.firstName} {order.lastName}
+                  </td>
+                  <td>{order.email}</td>
+                  <td>{order.phone}</td>
+                  <td>{`${order.address}, ${order.city}, ${order.county}`}</td>
+                  <td>{order.status}</td>
+                  <td>
+                    <button
+                      variant="primary" // Use the "primary" variant to make it look like a proper button
+                      onClick={() => toggleDetails(order._id)}
+                      className="toggle-details-button" // Add a class for further custom styling
+                    >
+                      {visibleOrderId === order._id
+                        ? "Ascunde produse"
+                        : "Vezi produse"}
+                    </button>
                   </td>
                 </tr>
-              )}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
+                {visibleOrderId === order._id && (
+                  <tr>
+                    <td colSpan="7">
+                      <Table size="sm">
+                        <thead>
+                          <tr>
+                            <th>Produs</th>
+                            <th>Cantitate</th>
+                            <th>Preț</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {order.cart &&
+                            Array.isArray(order.cart) &&
+                            order.cart.flat().map((item, idx) => (
+                              <tr key={idx}>
+                                <td>
+                                  <img
+                                    src={item[0].photo}
+                                    alt={item.title}
+                                    className="product-image"
+                                  />
+                                  {item[0].title || "No title"}
+                                </td>
+                                <td>{item[0].quantity || 1}</td>
+                                <td>
+                                  {item[0].price
+                                    ? item[0].price.toFixed(2)
+                                    : "0.00"}{" "}
+                                  Lei
+                                </td>
+                              </tr>
+                            ))}
+                          <tr className="total-price">
+                            <th>Pret Total</th>
+                            <th></th>
+                            <th>{order.totalPrice} Lei</th>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </Table>
+      </Container>
+    </div>
   );
 };
 

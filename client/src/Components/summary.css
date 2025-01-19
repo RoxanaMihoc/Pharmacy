@@ -26,17 +26,17 @@
 
 .details-order{
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 28px;
+  border: 1px solid #8b8989;
+  background-color: #e9e8e8;
   margin-left: 20px;
 }
 
 .address-details{
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 28px;
+  border: 1px solid #8b8989;
+  background-color: #e9e8e8;
   margin-left: 20px;
 }
 .address-details p {
@@ -62,9 +62,9 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 28px;
+  border: 1px solid #8b8989;
+  background-color: #e9e8e8;
   margin-left: 20px;
 
 }

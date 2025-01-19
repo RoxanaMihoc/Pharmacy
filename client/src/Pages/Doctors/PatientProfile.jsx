@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./styles/patient-profile.css";
+import "./styles/patient-profile-doctor.css";
 import { useParams, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowAltCircleRight, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
@@ -182,7 +182,7 @@ const PatientProfile = ({ onBack }) => {
   };
 
   return (
-    <div className="patient-profile-container">
+    <div className="patient-profile-container-doctor">
       <button className="button-back" onClick={handleBack}>
         Înapoi la lista pacienților
       </button>

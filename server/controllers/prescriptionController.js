@@ -193,19 +193,19 @@ exports.getCurentPrescription = async (req, res) => {
 
 exports.updateProgress = async (req, res) => {
   try {
-    const { medIndex, progressHistory, currentUser} = req.body;
+    const { medicationId, progressHistory, currentUser } = req.body;
     const { prescriptionId } = req.params;
 
     console.log(
       "Updating progress",
-      medIndex,
+      medicationId,
       progressHistory,
       currentUser,
-      prescriptionId,
+      prescriptionId
     );
 
-    let collectionName = `patient_${currentUser}`;
-    let collection = prescriptionDB.collection(collectionName);
+    const collectionName = `patient_${currentUser}`;
+    const collection = prescriptionDB.collection(collectionName);
 
     // Find the prescription by ID
     const prescription = await collection.findOne({
@@ -216,13 +216,19 @@ exports.updateProgress = async (req, res) => {
       return res.status(404).send({ message: "Prescription not found" });
     }
 
-    // Check if progressHistory exists for the specified product
-    const product = prescription.products[medIndex];
-    if (!product) {
+    // Find the medication in the products array by its _id
+    const productIndex = prescription.products.findIndex(
+      (product) => product._id.toString() === medicationId
+    );
+
+    if (productIndex === -1) {
       return res
         .status(404)
         .send({ message: "Medication not found in prescription" });
     }
+
+    const product = prescription.products[productIndex];
+    console.log("Prod ",  product);
 
     // Ensure progressHistory exists
     if (!Array.isArray(product.progressHistory)) {
@@ -240,7 +246,7 @@ exports.updateProgress = async (req, res) => {
 
     if (existingEntryIndex !== -1) {
       // If entry exists, update the dosesTaken and add the current time to timeTaken
-      product.progressHistory[existingEntryIndex].dosesTaken +=
+      product.progressHistory[existingEntryIndex].dosesTaken =
         progressHistory[0].dosesTaken;
       if (
         !Array.isArray(product.progressHistory[existingEntryIndex].timeTaken)
@@ -250,35 +256,92 @@ exports.updateProgress = async (req, res) => {
       product.progressHistory[existingEntryIndex].timeTaken.push(currentTime);
     } else {
       // If entry does not exist, add a new one with the time
+      console.log(product.progressHistory)
       product.progressHistory.push({
         date: today,
         dosesTaken: progressHistory[0].dosesTaken,
         timeTaken: [currentTime],
       });
     }
-    console.log(progressHistory[medIndex])
-    // Update the databas
 
-      const updateResult = await collection.updateOne(
-        { _id: new ObjectId(prescriptionId) },
-        {
-          $set: {
-            [`products.${medIndex}.progressHistory`]: product.progressHistory, // Update the progressHistory
-          },
-        }
-      );
+    // Update the database
+    const updateResult = await collection.updateOne(
+      { _id: new ObjectId(prescriptionId) },
+      {
+        $set: {
+          [`products.${productIndex}.progressHistory`]: product.progressHistory, // Update the progressHistory
+        },
+      }
+    );
 
-      if (updateResult.matchedCount === 0) {
-        return res.status(404).send({ message: "Prescription not found" });
-      }
-  
-      if (updateResult.modifiedCount === 0) {
-        return res.status(400).send({ message: "Progress update failed" });
-      }
-  
-      res.status(200).send({ message: "Progress history updated successfully" });
+    if (updateResult.matchedCount === 0) {
+      return res.status(404).send({ message: "Prescription not found" });
+    }
+
+    if (updateResult.modifiedCount === 0) {
+      return res.status(400).send({ message: "Progress update failed" });
+    }
+
+    res.status(200).send({ message: "Progress history updated successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+exports.deleteLastProgress = async (req, res) => {
+  try {
+    const { medicationId, currentUser } = req.body; // Extract medication ID and user ID
+    const { prescriptionId } = req.params; // Get the prescription ID from the route
+
+    console.log("Deleting last progress for medication", medicationId);
+
+    const collectionName = `patient_${currentUser}`;
+    const collection = prescriptionDB.collection(collectionName);
+
+    // Find the prescription by ID
+    const prescription = await collection.findOne({
+      _id: new ObjectId(prescriptionId),
+    });
+
+    if (!prescription) {
+      return res.status(404).send({ message: "Prescription not found" });
+    }
+
+    // Find the medication within the products array
+    const productIndex = prescription.products.findIndex(
+      (product) => product._id.toString() === medicationId
+    );
+
+    if (productIndex === -1) {
+      return res.status(404).send({ message: "Medication not found in prescription" });
+    }
+
+    const product = prescription.products[productIndex];
+
+    // Ensure progressHistory exists and has entries
+    if (!Array.isArray(product.progressHistory) || product.progressHistory.length === 0) {
+      return res.status(400).send({ message: "No progress history to delete." });
+    }
+
+    // Remove the last progress entry
+    product.progressHistory.pop();
+
+    // Update the database
+    const updateResult = await collection.updateOne(
+      { _id: new ObjectId(prescriptionId) },
+      { $set: { [`products.${productIndex}.progressHistory`]: product.progressHistory } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res.status(400).send({ message: "Failed to update progress history." });
+    }
+
+    res.status(200).send({ message: "Last progress entry deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting last progress entry:", error);
+    res.status(500).send({ error: "Internal Server Error" });
+  }
+};
+
+

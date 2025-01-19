@@ -19,6 +19,7 @@ import {
   faHeart,
   faBagShopping,
   faUserCircle,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/home.css";
 import {
@@ -31,6 +32,7 @@ import {
 const HomeUser = () => {
   const [activeTab, setActiveTab] = useState("product");
   const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const [showSidebar, setShowSidebar] = useState(false); // Manage sidebar visibility
   const [showCartPreview, setShowCartPreview] = useState(false);
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
@@ -42,6 +44,10 @@ const HomeUser = () => {
     if (location.pathname !== "/home/cart") {
       setShowCartPreview(true);
     }
+  };
+
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev); // Toggle sidebar visibility
   };
 
   const handleCloseCartPreview = () => setShowCartPreview(false);
@@ -77,12 +83,16 @@ const HomeUser = () => {
 
   const handleNavigate = (path) => {
     history.push(path);
+    setShowSidebar(false); // Automatically hide sidebar on navigation
   };
 
   return (
     <div>
       <div className="home-doctor">
-        <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} />
+      {/* <button className="menu-button" onClick={toggleSidebar}>
+          <FontAwesomeIcon icon={faBars} />
+        </button> */}
+        <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} className={`sidebar ${showSidebar ? "active" : "hidden"}`} />
         <div className="page-content">
           <div className="top-nav">
             {getTabName(activeTab)}
@@ -99,8 +109,8 @@ const HomeUser = () => {
                 <FontAwesomeIcon icon={faBagShopping} />
               </button>
               <button className="icon-button" onClick={handleUserButton}>
-                            <FontAwesomeIcon icon={faUserCircle} />
-                            <strong> {name}</strong>{" "}
+                            <FontAwesomeIcon icon={faUserCircle} style={{ marginRight: "8px" }} />
+                            <strong> {name}</strong>
                           </button>
             </div>
             <CartPreview

@@ -13,44 +13,28 @@ const PrescriptionOverview = () => {
   const history = useHistory();
   const { currentUser } = useAuth();
 
+  const [statusMessage, setStatusMessage] = useState(""); // State for success or failure message
+  const [statusType, setStatusType] = useState(""); // To differentiate success or error
+
   // Grab all data from location.state
   const patient = location.state?.patient;
   const diagnosis = location.state?.diagnosis;
   const prescribedMedicine = location.state?.prescribedMedicine;
-  console.log(location.state?.prescribedMedicine.med);
   const investigations = location.state?.investigations;
-  console.log(location.state?.patient.birth_date);
   const age = calculateAge(location.state?.patient.birth_date);
-  console.log(age);
 
   function calculateAge(birthDateString) {
-    // Convert the birthDateString into a Date object
     const [day, month, year] = birthDateString.split("-");
-  
-    // 2. Construct a valid Date object: note that months are zero-based in JS
     const birthDate = new Date(Number(year), Number(month) - 1, Number(day));
-    
-    // 3. Create a "today" reference
     const today = new Date();
-  
-    // 4. Get the rough difference in years
     let age = today.getFullYear() - birthDate.getFullYear();
-  
-    // 5. Check if birthday has happened yet this year
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-  
     return age;
   }
 
-  console.log("In overview (prescribedMedicine):", prescribedMedicine);
-
-  // Send the prescription to the backend
   const sendPrescription = async () => {
     try {
       const prescriptionData = {
@@ -78,15 +62,25 @@ const PrescriptionOverview = () => {
       }
       const result = await response.json();
 
-      alert("Prescription sent successfully!");
+      // Set success message
+      setStatusMessage("Rețetă trimisă cu success!");
+      setStatusType("success");
+
       console.log(result);
     } catch (error) {
       console.error("Error sending prescription:", error);
-      alert("Failed to send prescription");
+      // Set error message
+      setStatusMessage("Rețeta nu a fost trimisa! Încearcă mai târziu!");
+      setStatusType("error");
     }
+
+    // Clear message after 5 seconds
+    setTimeout(() => {
+      setStatusMessage("");
+      setStatusType("");
+    }, 5000);
   };
 
-  // Generate a PDF of the page
   const generatePDF = () => {
     setTimeout(() => {
       const input = document.getElementsByClassName("overview-container")[0];
@@ -110,18 +104,18 @@ const PrescriptionOverview = () => {
     }, 500);
   };
 
+  const handleBack=() =>{
+    history.push("/doctor/profile");
+  }
+
   return (
     <div className="overview-container">
-      <h1>Sumar Prescripție</h1>
+      <h1>Sumar Rețetă</h1>
 
       {/* Two-column layout */}
       <div className="diagnosis-content">
-        {/* Left column */}
         <div className="overview-left">
-
-          {/* Profile card (similar to screenshot) */}
           <div className="profile-card">
-            {/* Example: use actual patient data or placeholders */}
             <img
               src={patient?.photo}
               alt="Patient Avatar"
@@ -132,8 +126,6 @@ const PrescriptionOverview = () => {
             <p>Vârsta: {age}</p>
             <button className="btn view-profile">Vezi Profil</button>
           </div>
-
-          {/* Patient Info */}
           <div className="patient-info">
             <h2>Informații Pacient</h2>
             <p>Nume: {patient?.lastName}</p>
@@ -144,8 +136,6 @@ const PrescriptionOverview = () => {
             <p>Data nașterii: {patient?.birth_date}</p>
           </div>
         </div>
-
-        {/* Right column: Diagnosis, Investigations, Medicines */}
         <div className="overview-right">
           <div className="diagnosis-info">
             <h2>Diagnostic</h2>
@@ -158,47 +148,52 @@ const PrescriptionOverview = () => {
           <div className="prescription-details-2">
             <h2>Medicamente selectate</h2>
             <ul>
-  {prescribedMedicine
-    ?.filter((item) => item.medicineName.trim() !== "")
-    .map((item, index) => (
-      <li key={index}>
-        <span className="medicine-name">{item.medicineName}</span>
-        
-        <div className="medicine-detail-row">
-          <span className="label">Cantitate:</span>
-          <span>{item.cantitate}</span>
-        </div>
-
-        <div className="medicine-detail-row">
-          <span className="label">Doză:</span>
-          <span>{item.doza}</span>
-        </div>
-
-        <div className="medicine-detail-row">
-          <span className="label">Durata:</span>
-          <span>{item.durata}</span>
-        </div>
-
-        <div className="medicine-detail-row">
-          <span className="label">Detalii:</span>
-          <span>{item.detalii}</span>
-        </div>
-      </li>
-    ))
-  }
-</ul>
-
+              {prescribedMedicine
+                ?.filter((item) => item.medicineName.trim() !== "")
+                .map((item, index) => (
+                  <li key={index}>
+                    <span className="medicine-name">{item.medicineName}</span>
+                    <div className="medicine-detail-row">
+                      <span className="label">Cantitate:</span>
+                      <span>{item.cantitate}</span>
+                    </div>
+                    <div className="medicine-detail-row">
+                      <span className="label">Doză:</span>
+                      <span>{item.doza}</span>
+                    </div>
+                    <div className="medicine-detail-row">
+                      <span className="label">Durata:</span>
+                      <span>{item.durata}</span>
+                    </div>
+                    <div className="medicine-detail-row">
+                      <span className="label">Detalii:</span>
+                      <span>{item.detalii}</span>
+                    </div>
+                  </li>
+                ))}
+            </ul>
           </div>
         </div>
       </div>
-
-      {/* Buttons at the bottom */}
+      <div className="send-reteta">
+      {statusMessage && (
+        <div className={`status-message ${statusType}`}>
+          {statusMessage}
+        </div>
+      )}
+      <div className="button-reteta">
       <button onClick={sendPrescription} className="send-button">
         Trimite Prescripție
       </button>
       <button onClick={generatePDF} className="generate-pdf-button">
         Generează PDF
       </button>
+
+      <button className="menu-back" onClick={handleBack}>
+        Meniu
+      </button>
+    </div>
+    </div>
     </div>
   );
 };

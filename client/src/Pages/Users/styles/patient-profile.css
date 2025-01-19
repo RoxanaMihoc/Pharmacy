@@ -26,9 +26,9 @@
   .notes-section,
   .general-section,
   .prescription-section {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 28px;
+    border: 1px solid #8b8989;
+    background-color: #e9e8e8;
     padding: 30px; /* Make sections bigger */
     margin-bottom: 30px; /* Increase spacing between sections */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
