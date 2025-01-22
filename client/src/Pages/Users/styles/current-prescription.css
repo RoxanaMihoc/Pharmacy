@@ -3,52 +3,45 @@
   max-width: 1200px; /* Restrict max width for larger screens */
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
   font-size: 18px; /* Base font size */
 }
 
 .current-prescription-container-all {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: 1fr; /* Single column layout for the container */
+  gap: 30px;
 }
 
 .prescription-layout {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 40px; /* Adds spacing between sections */
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal-width columns for 1.1 and 1.2 */
+  gap: 30px; /* Spacing between 1.1 and 1.2 */
 }
 
-.prescription-details-div,
+.prescription-details-3,
 .add-notes-section {
-  flex: 2;
+  background-color: #fff;
   padding: 20px;
-  background-color: #e9e8e8;
-  border: 1px solid #8b8989;
-  border-radius: 28px;
-  min-width: 300px; /* Prevent the sections from shrinking too much */
-  font-size: 18px; /* Larger text for details and notes */
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.notes-box h3 {
+.add-notes-section h3 {
   margin-top: 0;
   font-size: 24px; /* Increased size for headings */
 }
 
-.notes-box p {
+.add-notes-section p {
   margin: 10px 0;
-  font-size: 18px; /* Increased size for notes text */
 }
 
 .medication-table {
-  padding: 20px;
-  background-color: #e9e8e8;
-  border: 1px solid #8b8989;
-  border-radius: 28px;
+  background-color: #fff;
+   /* border: 1px solid #8b8989; */
+   border-radius: 15px;
   font-size: 18px; /* Larger text for medications table */
+  grid-column: 1 / -1;
 }
 
 .medication-row {
@@ -58,11 +51,14 @@
   justify-self: center;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: #f9f9f9;
   margin-bottom: 15px;
   padding: 20px;
   gap: 20px;
   flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.medication-table h3 {
+  margin-top: 10px;
 }
 
 .medication-info {

@@ -3,7 +3,6 @@
   margin: 20px auto;
   background-color: #fff;
   padding: 20px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 
@@ -90,7 +89,7 @@
   border-radius: 20px;
   padding: 5px 10px;
   cursor: pointer;
- font-family: Arial, sans-serif;
+ 
   font-size: 14px;
   font-weight: bold;
   color: #000000;
@@ -103,7 +102,7 @@
 
 .pagination span {
   cursor: pointer;
- font-family: Arial, sans-serif;
+ 
   font-size: 20px;
   font-weight: bold;
   color: #6e6b6b;
@@ -114,60 +113,13 @@
   color: #2F4858; /* Culoarea numărului paginii active */
 }
 
-.summary-section {
-  margin-bottom: 20px;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  text-align: left;
-}
-
-.summary-section h2 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.summary-section p {
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
-.summary-stats {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.summary-stats .stat {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
-  flex: 1;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.summary-stats .stat h3 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #007bff;
-}
-
-.summary-stats .stat p {
-  margin: 5px 0 0;
-  font-size: 1rem;
-  color: #666;
-}
-
-
 .med-diag {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  background-color: #f9f9f9;
+  background-color: #fff;
   padding: 15px;
   border-radius: 8px;
   margin-top: 10px;

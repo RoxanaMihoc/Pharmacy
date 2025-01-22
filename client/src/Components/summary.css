@@ -26,17 +26,17 @@
 
 .details-order{
   padding: 20px;
-  border-radius: 28px;
-  border: 1px solid #8b8989;
-  background-color: #e9e8e8;
+   border-radius: 15px;
+   /* border: 1px solid #8b8989; */
+  background-color: transparent;
   margin-left: 20px;
 }
 
 .address-details{
   padding: 20px;
-  border-radius: 28px;
-  border: 1px solid #8b8989;
-  background-color: #e9e8e8;
+   border-radius: 15px;
+   /* border: 1px solid #8b8989; */
+  background-color: transparent;
   margin-left: 20px;
 }
 .address-details p {
@@ -62,9 +62,9 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  border-radius: 28px;
-  border: 1px solid #8b8989;
-  background-color: #e9e8e8;
+   border-radius: 15px;
+   /* border: 1px solid #8b8989; */
+  background-color: transparent;
   margin-left: 20px;
 
 }

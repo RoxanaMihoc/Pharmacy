@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       const [header, payload, signature] = token.split(".");
       const decodedPayload = JSON.parse(atob(payload));
-      console.log( "Paiload",decodedPayload);
+      console.log( "lalal Paiload",decodedPayload);
       setCurrentUser(decodedPayload.userId);
       setRole(decodedPayload.role);
       setCurrentUserName(decodedPayload.firstName + " " + decodedPayload.lastName);

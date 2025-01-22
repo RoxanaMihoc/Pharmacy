@@ -102,29 +102,6 @@ const PrescriptionsList = () => {
 
   return (
     <div className="prescriptions-list-page">
-      {/* Summary Section */}
-      <div className="summary-section">
-        <p>
-          Ai <strong>{summaryStats.patientsRequestingRefill}</strong>{" "}
-          pacienți care solicită reînnoirea rețetelor și{" "}
-          <strong>{summaryStats.newPatientRequests}</strong> noi retete.
-        </p>
-        <div className="summary-stats">
-          <div className="stat">
-            <h3>{summaryStats.prescriptionsThisMonth}</h3>
-            <p>Prescriptions this month</p>
-          </div>
-          <div className="stat">
-            <h3>{summaryStats.patientsRequestingRefill}</h3>
-            <p>Patients requesting refill</p>
-          </div>
-          <div className="stat">
-            <h3>{summaryStats.newPatientRequests}</h3>
-            <p>New patient requests</p>
-          </div>
-        </div>
-      </div>
-
       {/* Search Bar and Add Button */}
       <div className="search-add-bar">
         <input

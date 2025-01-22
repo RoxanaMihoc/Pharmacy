@@ -194,44 +194,40 @@ const CurrentPrescription = () => {
       <h2>Rețeta curentă</h2>
       <div className="current-prescription-container-all">
         <div className="prescription-layout">
-          <div className="prescription-details-div">
-            <div className="prescription-details">
-              {currentPrescription ? (
-                <div>
-                  <h3>Detalii Rețetă</h3>
-                  <p>
-                    <strong>Număr Rețeta:</strong>{" "}
-                    {currentPrescription.prescriptionNumber}
-                  </p>
-                  <p>
-                    <strong>Diagnostic:</strong> {currentPrescription.diagnosis}
-                  </p>
-                  <p>
-                    <strong>Investigații:</strong>{" "}
-                    {currentPrescription.investigations}
-                  </p>
-                  <p>
-                    <strong>Doctor:</strong>{" "}
-                    {currentPrescription.patient.lastName}
-                  </p>
-                  <p>
-                    <strong>Rețetă emisă în data de:</strong>{" "}
-                    {new Date(currentPrescription.date).toLocaleDateString()}
-                  </p>
-                </div>
-              ) : (
+          <div className="prescription-details-3">
+            {currentPrescription ? (
+              <div>
+                <h3>Detalii Rețetă</h3>
                 <p>
-                  Nu există nicio rețetă activă. Selectați o rețetă pentru a
-                  continua.
+                  <strong>Număr Rețeta:</strong>{" "}
+                  {currentPrescription.prescriptionNumber}
                 </p>
-              )}
-            </div>
+                <p>
+                  <strong>Diagnostic:</strong> {currentPrescription.diagnosis}
+                </p>
+                <p>
+                  <strong>Investigații:</strong>{" "}
+                  {currentPrescription.investigations}
+                </p>
+                <p>
+                  <strong>Doctor:</strong>{" "}
+                  {currentPrescription.patient.lastName}
+                </p>
+                <p>
+                  <strong>Rețetă emisă în data de:</strong>{" "}
+                  {new Date(currentPrescription.date).toLocaleDateString()}
+                </p>
+              </div>
+            ) : (
+              <p>
+                Nu există nicio rețetă activă. Selectați o rețetă pentru a
+                continua.
+              </p>
+            )}
           </div>
           <div className="add-notes-section">
-            <div className="notes-box">
-              <h3>Notes</h3>
-              <p>{notes}</p>
-            </div>
+            <h3>Notes</h3>
+            <p>{notes}</p>
           </div>
         </div>
 

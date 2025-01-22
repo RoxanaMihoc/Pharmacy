@@ -3,15 +3,20 @@
 import { useAuth } from "../../Context/AuthContext";
 import React, { useState, useEffect } from "react";
 import "./styles/orders.css"; // Ensure to create this CSS file
-import { useLocation } from "react-router-dom";
-import { Container, Table, Button, Accordion, Card } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowAltCircleRight,
+  faArrowAltCircleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const { currentUser } = useAuth();
+  const [filter, setFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [visibleOrderId, setVisibleOrderId] = useState(null);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     fetchOrders();
@@ -46,12 +51,28 @@ const OrdersPage = () => {
     setVisibleOrderId(visibleOrderId === orderId ? null : orderId);
   };
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  // Pagination calculations
+  const indexOfLastOrder = currentPage * itemsPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(orders.length / itemsPerPage);
+
   return (
     <div className="orders-page-container">
       {" "}
       <h2>Comenzi</h2>
-      <Container className="orders-container-user">
-        <Table striped bordered hover responsive className="table-orders">
+      <div className="orders-container-user">
+        {/* Search Bar */}
+        <div className="search-add-bar">
+          <input type="text" placeholder="Caută comandă..." />
+        </div>
+
+        {/* Prescriptions Table */}
+        <table className="table-orders">
           <thead>
             <tr>
               <th>Numărul comenzii</th>
@@ -133,8 +154,34 @@ const OrdersPage = () => {
               </React.Fragment>
             ))}
           </tbody>
-        </Table>
-      </Container>
+        </table>
+
+        {/* Pagination */}
+        <div className="pagination">
+          <button
+            disabled={currentPage <= 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            <FontAwesomeIcon icon={faArrowAltCircleLeft} />
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <span
+              key={index + 1}
+              disabled={currentPage === index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={currentPage === index + 1 ? "active-page" : ""}
+            >
+              {index + 1}
+            </span>
+          ))}
+          <button
+            disabled={currentPage >= totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            <FontAwesomeIcon icon={faArrowAltCircleRight} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

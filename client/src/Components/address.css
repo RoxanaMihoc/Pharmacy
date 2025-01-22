@@ -33,7 +33,7 @@ h3 {
 
 .section-details {
   padding: 60px;
-  border-radius: 28px;
+  border-radius: 15px;
   border: 1px solid #898a8b;
   background-color: #e9e8e8;
 }
@@ -41,9 +41,9 @@ h3 {
 .section-payment,
 .section-delivery {
   padding: 60px; /* Ajustează padding-ul pentru a se potrivi cu secțiunea din stânga */
-  border-radius: 28px;
-  border: 1px solid #8b8989;
-  background-color: #e9e8e8;
+   border-radius: 15px;
+   border: 1px solid #8b8989;
+   background-color: #fff;
   flex: 1; /* Asigură că secțiunile au aceeași înălțime */
   display: flex;
   flex-direction: column;

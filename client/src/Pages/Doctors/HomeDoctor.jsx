@@ -5,6 +5,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import PatientProfile from './PatientProfile';
 import Recommend from "./Prescription/Recommend";
+import NotificationBell from "./NotificationBell";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,6 +18,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import "./styles/home.css";
+import DoctorStatistics from "./DoctorStatistics";
 
 const HomeDoctor = () => {
   const [activeTab, setActiveTab] = useState("patients");
@@ -25,9 +27,11 @@ const HomeDoctor = () => {
   console.log(name);
 
   const getTabName = (activeTab) => {
+    console.log(activeTab)
     const tabNames = {
       patients: "Pacienți",
       prescription: "Rețete",
+      statistici:"Statistici",
     };
     return tabNames[activeTab] || "Page Not Found";
   };
@@ -44,10 +48,7 @@ const HomeDoctor = () => {
           <div className="top-nav">
             {getTabName(activeTab)}
             <div className="nav-icons">
-
-              <button className="icon-button">
-                <FontAwesomeIcon icon={faBell} />
-              </button>
+            <NotificationBell />
 
               <div className="nav-icons-profile">
             <button className="icon-button">
@@ -58,10 +59,11 @@ const HomeDoctor = () => {
             </div>
           </div>
           <Switch>
+          <Route path="/doctor/stats" component={DoctorStatistics} />
             <Route path="/doctor/profile/:patientId" component={PatientProfile} />
             <Route path="/doctor/profile" component={PatientList} />
             <Route path="/doctor/prescription" component={Recommend} />
-            <Redirect from="/home" exact to="/doctor/dashboard" />
+            <Redirect from="/home" exact to="/doctor/stats" />
             <Route component={() => <div>Page not found</div>} />
           </Switch>
         </div>

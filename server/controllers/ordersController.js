@@ -3,9 +3,10 @@ const express = require("express");
 const router = express.Router();
 
 exports.addToOrders = async (req, res, io, userSockets) => {
-  const { cartItems, addressDetails, totalPrice, user, pharmacist } = req.body;
+  const { cartItems, addressDetails, totalPrice, user, pharmacist, doctor } = req.body;
   console.log("In add to orders:", pharmacist);
   console.log("In add to orders:", cartItems);
+  console.log("In add to orders:", doctor);
 
   const generateRandomNumber = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -46,10 +47,12 @@ exports.addToOrders = async (req, res, io, userSockets) => {
     });
     console.log("Attempting to save:", newOrder);
     await newOrder.save();
-    console.log("Sockets: ", userSockets, userSockets[pharmacist]);
+    console.log("Sockets: ", userSockets[doctor]);
+
     let date = newOrder.date;
     console.log(date);
 
+    // Notify the pharmacist
     if (userSockets[pharmacist] && userSockets[pharmacist].socketId) {
       io.to(userSockets[pharmacist].socketId).emit("new-order", {
         id: newOrder._id,
@@ -71,7 +74,25 @@ exports.addToOrders = async (req, res, io, userSockets) => {
           status: "Comandă trimisă",
           pharmacist: pharmacist,
           orderNumber,
-          orderNumber,
+          date,
+        },
+      });
+    }
+
+    // Notify the doctor if the prescription ID exists in cart items
+    // const presIdExists = cartItems.some((item) => item.presId !== null);
+    if ( userSockets[doctor] && userSockets[doctor].socketId) {
+      io.to(userSockets[doctor].socketId).emit("new-order", {
+        id: newOrder._id,
+        message: `${firstName} ${lastName} a achiziționat o prescripție.`,
+        orderDetails: {
+          firstName,
+          lastName,
+          phone,
+          email,
+          cart: cartItems,
+          presId: cartItems.find((item) => item.presId !== null)?.presId || null,
+          totalPrice: totalPrice,
           date,
         },
       });
@@ -86,6 +107,7 @@ exports.addToOrders = async (req, res, io, userSockets) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
 exports.getAllOrders = async (req, res) => {
   try {
     console.log("In orders admin");

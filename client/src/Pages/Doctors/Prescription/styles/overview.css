@@ -34,9 +34,9 @@
     padding: 16px;
     text-align: center; 
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    border-radius: 28px;
-  border: 1px solid #8b8989;
-  background-color: #e9e8e8;
+     border-radius: 15px;
+   /* border: 1px solid #8b8989; */
+  background-color: transparent;
   }
   
   .profile-avatar {
@@ -90,9 +90,9 @@
   .prescription-details-2,
   .diagnosis-info,
   .investigation-info {
-    border-radius: 28px;
-    border: 1px solid #8b8989;
-    background-color: #e9e8e8;
+     border-radius: 15px;
+     /* border: 1px solid #8b8989; */
+    background-color: transparent;
     padding: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     width: 100%;

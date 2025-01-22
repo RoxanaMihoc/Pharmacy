@@ -15,6 +15,7 @@ const Summary = ({
   const { currentUser } = useAuth();
   const user = currentUser;
   const [price, setTotalPrice] = useState(0);
+  const [doctor, setDoctor] = useState("");
   const pharmacist = "66760074556be02d8a3594e6";
   const history = useHistory();
   console.log(cartItems);
@@ -73,6 +74,26 @@ const Summary = ({
     }
   };
 
+  useEffect(() => {
+    const getDoctor = async () => {
+        if (currentUser) {
+          try {
+            const response = await fetch(
+              `http://localhost:3000/home/details/${currentUser}`
+            );
+            if (!response.ok) {
+              throw new Error("Failed to fetch patient data");
+            }
+            const data = await response.json();
+            setDoctor(data.doctor);
+          } catch (error) {
+            console.error("Error fetching patient data:", error);
+          }
+        }
+      };
+
+    getDoctor();
+  }, [currentUser]);
   const submitOrder = async () => {
     try {
       console.log(cartItems);
@@ -87,6 +108,7 @@ const Summary = ({
           user,
           totalPrice,
           pharmacist,
+          doctor,
         }),
       });
       const data = await response.json();

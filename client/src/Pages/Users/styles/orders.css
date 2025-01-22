@@ -1,34 +1,23 @@
-.orders-container-user {
-  padding: 20px;
-  background-color: #e9e8e8;
-  border: 1px solid #8b8989;
-  border-radius: 28px;
+
+.orders-page-container {
+  width: 100%; /* Make it take full width for responsiveness */
   margin: 0 auto;
-  max-width: 1200px; /* Limit the maximum width */
+  padding: 20px;
+  font-size: 18px; /* Base font size */
+}
+.orders-container-user {
+  width: 90%;
+  padding: 20px;
+  background-color: transparent;
+   /* border: 1px solid #8b8989; */
+   border-radius: 15px;
+  margin: 20px auto;
 }
 
-/* Main table styles */
-.table-orders {
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
-  border-radius: 8px;
-  width: 100%; /* Full width for responsiveness */
-}
-
-.table-orders thead th {
-  font-weight: bold;
-  text-align: center;
-  padding: 12px;
-  font-size: 16px;
-}
-
-.table-orders tbody tr {
-  transition: background-color 0.2s ease;
-}
-
-.table-orders tbody tr:hover {
-  background-color: #f1f1f1;
+.table-orders{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
 .table-orders td,
@@ -38,6 +27,13 @@
   border: 1px solid #dee2e6;
   vertical-align: middle;
   font-size: 14px; /* Adjust font size for better readability on smaller screens */
+}
+
+.table-orders tbody tr {
+  transition: background-color 0.2s ease;
+}
+.table-orders tbody tr:hover {
+  background-color: #f1f1f1;
 }
 
 /* Inner table for products */
@@ -79,14 +75,6 @@
   text-decoration: underline;
 }
 
-.orders-page-container {
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  font-size: 16px; /* Adjusted for responsiveness */
-  max-width: 1200px; /* Limit width for larger screens */
-}
-
 /* Button for toggling details */
 .toggle-details-button {
   background-color: #828e99;
@@ -103,6 +91,26 @@
 .toggle-details-button:hover {
   background-color: #6c757d;
 }
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+}
+
 
 /* Media Queries for Responsiveness */
 

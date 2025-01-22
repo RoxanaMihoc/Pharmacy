@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import CartPreview from "../../Components/CartPreview";
 import CartPage from "./CartPage";
@@ -82,16 +82,35 @@ const HomeUser = () => {
   };
 
   const handleNavigate = (path) => {
+    console.log("Path", path);
     history.push(path);
-    setShowSidebar(false); // Automatically hide sidebar on navigation
   };
+
+  const handleResize = () => {
+    if (window.innerWidth <= 768) {
+      setShowSidebar(true); // Automatically hide sidebar on smaller screens
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener on mount
+    window.addEventListener("resize", handleResize);
+
+    // Trigger resize logic on initial load
+    handleResize();
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div>
       <div className="home-doctor">
-      {/* <button className="menu-button" onClick={toggleSidebar}>
+      <button className="menu-button" onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faBars} />
-        </button> */}
+        </button>
         <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} className={`sidebar ${showSidebar ? "active" : "hidden"}`} />
         <div className="page-content">
           <div className="top-nav">
@@ -139,7 +158,7 @@ const HomeUser = () => {
               path="/home/:category/:subcategory?"
               component={ProductPage}
             />
-            <Redirect from="/home" exact to="/home/product-page" />
+            <Redirect from="/home" exact to="/home/medicamente-otc" />
             <Route component={() => <div>Page not found</div>} />
           </Switch>
         </div>

@@ -67,6 +67,18 @@
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
+  flex-direction: row;
+  gap: 7vh;
+  flex: 0 40%;
+}
+
+.header-details {
+  padding: 16px;
+  text-align: center; 
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+   border-radius: 15px;
+   /* border: 1px solid #8b8989; */
+background-color: transparent;
 }
 
 .header-photo {
@@ -77,24 +89,15 @@
   object-fit: cover;
 }
 
-.header-details h1 {
-  margin: 0;
-  color: #333;
-  font-size: 24px;
-  width:300px;
+.profile-card, .user-profile2 {
+  width: 48%; /* Equal width for both sections */
+  padding: 20px;
+  background-color: transparent;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header-details {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin: 20px;
-  overflow: hidden; /* Ensures nothing overflows the rounded corners */
-}
 
 .user-profile2 {
   display: flex;
@@ -102,8 +105,9 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
+   border-radius: 15px;
+   /* border: 1px solid #8b8989; */
+background-color: transparent;
   margin-top: 20px;
 }
 

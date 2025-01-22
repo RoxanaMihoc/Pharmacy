@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowAltCircleRight,
+  faArrowAltCircleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import "./styles/pres-details.css";
 
 const PrescriptionsList = () => {
@@ -32,7 +35,9 @@ const PrescriptionsList = () => {
       setPrescriptions(data);
 
       // Find and set the active prescription
-      const activePrescription = data.find((p) => p.currentPrescription === true);
+      const activePrescription = data.find(
+        (p) => p.currentPrescription === true
+      );
       if (activePrescription) {
         setCurrentPrescriptionId(activePrescription._id);
       }
@@ -43,13 +48,16 @@ const PrescriptionsList = () => {
 
   const handleMarkAsCurrent = async (prescriptionId) => {
     try {
-      const response = await fetch(`http://localhost:3000/home/prescription/${prescriptionId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ currentPrescription: true, currentUser }),
-      });
+      const response = await fetch(
+        `http://localhost:3000/home/prescription/${prescriptionId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ currentPrescription: true, currentUser }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to mark the prescription as current.");
@@ -102,7 +110,10 @@ const PrescriptionsList = () => {
 
   const lastIndex = currentPage * itemsPerPage;
   const firstIndex = lastIndex - itemsPerPage;
-  const currentPrescriptions = filteredPrescriptions.slice(firstIndex, lastIndex);
+  const currentPrescriptions = filteredPrescriptions.slice(
+    firstIndex,
+    lastIndex
+  );
 
   const totalPages = Math.ceil(filteredPrescriptions.length / itemsPerPage);
 
@@ -145,7 +156,8 @@ const PrescriptionsList = () => {
                 <tr>
                   <td>{prescription.prescriptionNumber}</td>
                   <td>
-                    {prescription.patient.firstName} {prescription.patient.lastName}
+                    {prescription.patient.firstName}{" "}
+                    {prescription.patient.lastName}
                   </td>
                   <td>{new Date(prescription.date).toLocaleDateString()}</td>
                   <td>{prescription.status}</td>
@@ -158,7 +170,7 @@ const PrescriptionsList = () => {
                         className="remove-current"
                         onClick={handleRemoveCurrent}
                       >
-                        Elimină ca activă
+                        Elimină
                       </button>
                     ) : (
                       !currentPrescriptionId && (
@@ -188,11 +200,12 @@ const PrescriptionsList = () => {
                                 />
                                 <div>
                                   <p className="product-title">
-                                    <strong>{product.medication.title}</strong> -{" "}
-                                    {product.medication.brand}
+                                    <strong>{product.medication.title}</strong>{" "}
+                                    - {product.medication.brand}
                                   </p>
                                   <p className="product-price">
-                                    Preț: {product.medication.price.toFixed(2)} Lei
+                                    Preț: {product.medication.price.toFixed(2)}{" "}
+                                    Lei
                                   </p>
                                 </div>
                               </div>
@@ -204,10 +217,12 @@ const PrescriptionsList = () => {
                                   <strong>Durată:</strong> {product.durata}
                                 </p>
                                 <p>
-                                  <strong>Cantitate:</strong> {product.cantitate}
+                                  <strong>Cantitate:</strong>{" "}
+                                  {product.cantitate}
                                 </p>
                                 <p>
-                                  <strong>Alte detalii:</strong> {product.detalii}
+                                  <strong>Alte detalii:</strong>{" "}
+                                  {product.detalii}
                                 </p>
                               </div>
                             </div>
@@ -217,10 +232,12 @@ const PrescriptionsList = () => {
                         {/* Diagnosis and Investigation */}
                         <div className="diagnosis-invest">
                           <p>
-                            <strong>Diagnostic:</strong> {prescription.diagnosis}
+                            <strong>Diagnostic:</strong>{" "}
+                            {prescription.diagnosis}
                           </p>
                           <p>
-                            <strong>Investigații:</strong> {prescription.investigations}
+                            <strong>Investigații:</strong>{" "}
+                            {prescription.investigations}
                           </p>
                         </div>
                       </div>
@@ -241,13 +258,14 @@ const PrescriptionsList = () => {
             <FontAwesomeIcon icon={faArrowAltCircleLeft} />
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
-            <button
+            <span
               key={index + 1}
               disabled={currentPage === index + 1}
               onClick={() => handlePageChange(index + 1)}
+              className={currentPage === index + 1 ? "active-page" : ""}
             >
               {index + 1}
-            </button>
+            </span>
           ))}
           <button
             disabled={currentPage >= totalPages}

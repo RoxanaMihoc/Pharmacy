@@ -4,6 +4,7 @@
     flex-direction: column; /* Stack children vertically */
     align-items: stretch; /* Stretch children to fill the width */
     flex: 1; /* Take up all available space */
+    overflow-y: auto;
 }
 
 .home-doctor {
@@ -84,16 +85,14 @@
     background-color: #34495E; /* Lighter background on hover */
 }
 
-/* @media (max-width: 768px) {
-    .sidebar {
-        flex: 0 0 200px; 
-        transform: translateX(-100%); 
-    }
+.sidebar.hidden {
+  display: none;
+  transform: translateX(-100%);
+}
 
-    .sidebar.active {
-        transform: translateX(0); 
-    }
-} */
+.sidebar.active {
+  transform: translateX(0);
+}
 
 .top-nav {
     background-color: #f8f9fa;
@@ -133,6 +132,27 @@
     flex: 1; /* Allow the title to grow */
     text-align: center; /* Center the title */
   }
+
+  /* Menu button */
+.menu-button {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #2C3E50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 20px;
+  border-radius: 5px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.menu-button:hover {
+  background-color: #1a242f;
+}
+
   
   /* Responsive Styling */
   @media (max-width: 768px) {
@@ -155,4 +175,23 @@
       font-size: 18px; /* Adjust the title size */
     }
   }
-  
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    z-index: 999;
+  }
+
+  .page-content {
+    margin-left: 0;
+  }
+}
