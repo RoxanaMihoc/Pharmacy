@@ -26,17 +26,18 @@
 
 .details-order{
   padding: 20px;
-   border-radius: 15px;
-   /* border: 1px solid #8b8989; */
-  background-color: transparent;
   margin-left: 20px;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  background-color: #fff;
 }
 
 .address-details{
   padding: 20px;
-   border-radius: 15px;
-   /* border: 1px solid #8b8989; */
-  background-color: transparent;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  background-color: #fff;
   margin-left: 20px;
 }
 .address-details p {
@@ -62,9 +63,9 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-   border-radius: 15px;
-   /* border: 1px solid #8b8989; */
-  background-color: transparent;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  background-color: #fff;
   margin-left: 20px;
 
 }
@@ -76,11 +77,12 @@
 
 .go-to-button {
   display: block;
-  width: 100%;
   padding: 10px;
-  font-size: 18px;
   color: white;
+  text-align: center;
   border: none;
-  border-radius: 5px;
+  border-radius: 14px;
+  font-size: 16px;
   cursor: pointer;
+  background-color: #828e99;
 }

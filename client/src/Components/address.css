@@ -11,49 +11,53 @@ h3 {
 .section-all {
   display: flex;
   justify-content: center;
-  gap: 40px; /* Reduce spațiul dintre secțiuni pentru un aspect uniform */
-  align-items: stretch; /* Asigură că toate secțiunile au aceeași înălțime */
+  gap: 40px;
+  /* Reduce spațiul dintre secțiuni pentru un aspect uniform */
+  align-items: stretch;
+  /* Asigură că toate secțiunile au aceeași înălțime */
 }
 
-.section-details{
+.section-details {
 
-    flex: 1; /* Asigură că secțiunile ocupă aceeași lățime */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  flex: 1;
+  /* Asigură că secțiunile ocupă aceeași lățime */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  background-color: #fff;
+  padding: 60px;
 }
+
 .section-payment-delivery {
-  flex: 1; /* Asigură că secțiunile ocupă aceeași lățime */
+  flex: 1;
+  /* Asigură că secțiunile ocupă aceeași lățime */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 40px;
-  
-}
 
-.section-details {
-  padding: 60px;
-  border-radius: 15px;
-  border: 1px solid #898a8b;
-  background-color: #e9e8e8;
 }
 
 .section-payment,
 .section-delivery {
-  padding: 60px; /* Ajustează padding-ul pentru a se potrivi cu secțiunea din stânga */
-   border-radius: 15px;
-   border: 1px solid #8b8989;
-   background-color: #fff;
-  flex: 1; /* Asigură că secțiunile au aceeași înălțime */
+  padding: 60px;
+  /* Ajustează padding-ul pentru a se potrivi cu secțiunea din stânga */
+  border-radius: 15px;
+  background-color: #fff;
+  flex: 1;
+  /* Asigură că secțiunile au aceeași înălțime */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .personal-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  
+
   margin-bottom: 10px;
 }
 
@@ -125,8 +129,9 @@ textarea {
   border-radius: 14px;
   font-size: 16px;
   cursor: pointer;
-  background-color: #8b8989;
+  background-color: #828e99;
 }
+
 .delivery-info {
   font-size: 14px;
   color: #333;

@@ -41,7 +41,7 @@ const Login = () => {
       } else if (role == "Doctor") {
         history.push("/doctor/profile");
       } else {
-        history.push("/pharmacy");
+        history.push("/home/medicamente-otc");
       }
     } catch (error) {
       console.error("Login failed:", error.message);
