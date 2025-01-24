@@ -6,8 +6,8 @@ import "./styles/orders.css"; // Ensure to create this CSS file
 import { Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowAltCircleRight,
-  faArrowAltCircleLeft,
+  faArrowRightLong,
+  faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
 
 const OrdersPage = () => {
@@ -158,12 +158,13 @@ const OrdersPage = () => {
 
         {/* Pagination */}
         <div className="pagination">
-          <button
+          <span
+          className="transparent-button"
             disabled={currentPage <= 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
-            <FontAwesomeIcon icon={faArrowAltCircleLeft} />
-          </button>
+            <FontAwesomeIcon icon={faArrowLeftLong} />
+          </span>
           {Array.from({ length: totalPages }, (_, index) => (
             <span
               key={index + 1}
@@ -174,12 +175,13 @@ const OrdersPage = () => {
               {index + 1}
             </span>
           ))}
-          <button
+          <span
+          className="transparent-button"
             disabled={currentPage >= totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
-            <FontAwesomeIcon icon={faArrowAltCircleRight} />
-          </button>
+            <FontAwesomeIcon icon={faArrowRightLong} />
+          </span>
         </div>
       </div>
     </div>

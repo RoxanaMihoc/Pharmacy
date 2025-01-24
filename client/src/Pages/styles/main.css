@@ -6,13 +6,14 @@ body {
 }
 
 button {
-  background-color: #828e99; /* Primary blue */
+  background-color: #828e99; 
   color: black;
-  border-radius: 10px;
+  border-radius: 15px;
   border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #b5b7c4; /* Darker blue on hover */
+  background-color: #b5b7c4; 
 }
+

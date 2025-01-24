@@ -40,7 +40,7 @@
 .table-orders table {
   margin-top: 10px;
   width: 100%; /* Ensure it scales within the parent container */
-  border-radius: 8px;
+  border-radius: 8px; 
 }
 
 .table-orders table thead th {

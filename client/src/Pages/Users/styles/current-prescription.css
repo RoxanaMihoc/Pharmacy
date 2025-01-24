@@ -1,6 +1,6 @@
 .current-prescription-container {
   width: 100%; /* Make it take full width for responsiveness */
-  max-width: 1200px; /* Restrict max width for larger screens */
+  max-width: 1400px; /* Restrict max width for larger screens */
   margin: 0 auto;
   padding: 20px;
   font-size: 18px; /* Base font size */

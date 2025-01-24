@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowAltCircleRight,
-  faArrowAltCircleLeft,
+  faArrowRightLong,
+  faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/pres-details.css";
 
@@ -251,12 +251,13 @@ const PrescriptionsList = () => {
 
         {/* Pagination */}
         <div className="pagination">
-          <button
+          <span
+          className="transparent-button"
             disabled={currentPage <= 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
-            <FontAwesomeIcon icon={faArrowAltCircleLeft} />
-          </button>
+            <FontAwesomeIcon icon={faArrowLeftLong} />
+          </span>
           {Array.from({ length: totalPages }, (_, index) => (
             <span
               key={index + 1}
@@ -267,12 +268,13 @@ const PrescriptionsList = () => {
               {index + 1}
             </span>
           ))}
-          <button
+          <span
+          className="transparent-button"
             disabled={currentPage >= totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
-            <FontAwesomeIcon icon={faArrowAltCircleRight} />
-          </button>
+            <FontAwesomeIcon icon={faArrowRightLong} />
+          </span>
         </div>
       </div>
     </div>

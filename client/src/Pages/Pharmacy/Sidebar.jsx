@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from "../../Context/AuthContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCubesStacked, faArrowLeftLong, faStore, faCommentMedical } from '@fortawesome/free-solid-svg-icons';
+import { faCubesStacked,faArrowLeftLong , faStore, faCommentMedical } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = ({ onNavigate, setActiveTab }) => {
     const { logout } = useAuth();

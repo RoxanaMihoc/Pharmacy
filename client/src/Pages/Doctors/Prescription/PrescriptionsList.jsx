@@ -4,8 +4,8 @@ import { useAuth } from "../../../Context/AuthContext";
 import "./styles/prescription-list.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowAltCircleRight,
-  faArrowAltCircleLeft,
+  faArrowRightLong,
+  faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
 
 const PrescriptionsList = () => {
@@ -201,27 +201,30 @@ const PrescriptionsList = () => {
 
       {/* Pagination */}
       <div className="pagination">
-        <button
+        <span
+        className="transparent-button"
           disabled={currentPage <= 1}
           onClick={() => handlePageChange(currentPage - 1)}
         >
-          <FontAwesomeIcon icon={faArrowAltCircleLeft} />
-        </button>
+          <FontAwesomeIcon icon={faArrowLeftLong} />
+        </span>
         {Array.from({ length: totalPages }, (_, index) => (
-          <button
+          <span
             key={index + 1}
             disabled={currentPage === index + 1}
             onClick={() => handlePageChange(index + 1)}
+            className={currentPage === index + 1 ? "active-page" : ""}
           >
             {index + 1}
-          </button>
+          </span>
         ))}
-        <button
+        <span
+        className="transparent-button"
           disabled={currentPage >= totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
         >
-          <FontAwesomeIcon icon={faArrowAltCircleRight} />
-        </button>
+          <FontAwesomeIcon icon={faArrowRightLong} />
+        </span>
       </div>
     </div>
   );

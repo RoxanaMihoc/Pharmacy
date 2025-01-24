@@ -8,7 +8,7 @@ import "./styles/product-page.css"; // Import your CSS file
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleRight, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightLong, faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 
 const ProductPage = () => {
   const [brands, setBrands] = useState([]);
@@ -252,9 +252,9 @@ const ProductPage = () => {
             {totalPages > 1 && (
               <div className="pagination">
                 {currentPage > 1 && (
-                  <button 
-                  // className="add-fav-card"
-                  onClick={handlePrevPage}><FontAwesomeIcon icon={faArrowAltCircleLeft} /></button>
+                  <span
+                  className="transparent-button"
+                  onClick={handlePrevPage}><FontAwesomeIcon icon={faArrowLeftLong} /></span>
                 )}
 
                 {Array.from({ length: totalPages }, (_, i) => (
@@ -268,9 +268,9 @@ const ProductPage = () => {
                 ))}
 
                 {currentPage < totalPages && (
-                  <button 
-                  // className="add-fav-card"
-                  onClick={handleNextPage}><FontAwesomeIcon icon={faArrowAltCircleRight} /></button>
+                  <span
+                  className="transparent-button"
+                  onClick={handleNextPage}><FontAwesomeIcon icon={faArrowRightLong} /></span>
                 )}
               </div>
             )}

@@ -44,20 +44,34 @@
   margin-top: 20px;
 }
 
-.prescriptions-table th,
-.prescriptions-table td {
-  text-align: left;
-  padding: 12px;
-  border-bottom: 1px solid #ccc;
+.prescriptions-table table thead th {
+  background-color: #6c757d;
+  color: #fff;
+  font-size: 14px; /* Adjust font size */
 }
 
-*/ .prescriptions-table th {
-  background-color: #f8f9fa;
+.prescriptions-table table tbody tr {
+  border-bottom: 1px solid #eaeaea;
 }
 
-.prescriptions-table td {
-  background-color: #ffffff;
-  vertical-align: top;
+.prescriptions-table table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.prescriptions-table td,
+.prescriptions-table th {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #dee2e6;
+  vertical-align: middle;
+  font-size: 14px; /* Adjust font size for better readability on smaller screens */
+}
+
+.prescriptions-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+.prescriptions-table tbody tr:hover {
+  background-color: #f1f1f1;
 }
 
 .product-detail-prescription {

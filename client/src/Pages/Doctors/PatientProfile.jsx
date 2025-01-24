@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./styles/patient-profile-doctor.css";
 import { useParams, useHistory } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleRight, faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRightLong,
+  faArrowLeftLong,
+} from "@fortawesome/free-solid-svg-icons";
 
 const PatientProfile = ({ onBack }) => {
   const [patient, setPatient] = useState(null);
@@ -12,12 +15,13 @@ const PatientProfile = ({ onBack }) => {
   const [prescriptions, setPrescriptions] = useState([]);
   const patientId = useParams();
   const user = patientId.patientId;
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState("current-pres");
   const [visibleId, setVisibleId] = useState(null);
-  const history= useHistory();
-  const itemsPerPage = 4; // Number of prescriptions per page
+  const history = useHistory();
+  const itemsPerPage = 5; // Number of prescriptions per page
   const totalPages = Math.ceil(prescriptions.length / itemsPerPage);
   const [currentPrescription, setCurrentPrescription] = useState(null);
+  const [showHistory, setShowHistory] = useState(false);
   console.log(patient);
   const [age, setAge] = useState(0);
 
@@ -26,11 +30,11 @@ const PatientProfile = ({ onBack }) => {
   };
 
   const nextPage = () => {
-    setCurrentPage(current => (current < totalPages ? current + 1 : current));
+    setCurrentPage((current) => (current < totalPages ? current + 1 : current));
   };
 
   const prevPage = () => {
-    setCurrentPage(current => (current > 1 ? current - 1 : current));
+    setCurrentPage((current) => (current > 1 ? current - 1 : current));
   };
 
   const firstIndex = (currentPage - 1) * itemsPerPage;
@@ -84,8 +88,8 @@ const PatientProfile = ({ onBack }) => {
       const current = data.find(
         (prescription) => prescription.currentPrescription === true
       );
-      setCurrentPrescription(current || null); 
-      console.log(currentPrescription)
+      setCurrentPrescription(current || null);
+      console.log(currentPrescription);
     } catch (error) {
       setError(error.message);
     }
@@ -103,9 +107,9 @@ const PatientProfile = ({ onBack }) => {
       .padStart(2, "0")}-${date.getFullYear()}`;
   };
 
-  const handleBack=() =>{
+  const handleBack = () => {
     history.push("/doctor/profile");
-  }
+  };
 
   const formatDate2 = (date) => {
     // If the date is already in DD/MM/YYYY format, return it directly
@@ -127,133 +131,196 @@ const PatientProfile = ({ onBack }) => {
       case "current-pres":
         return (
           <div className="current-press">
-          <h2>Reteta Nr: {currentPrescription?.prescriptionNumber}</h2>
-          {currentPrescription ? (
-            currentPrescription.products.map((med, medIndex) => {
-              const totalDoses = med.durata * med.doza;
-              const takenDoses = med.progressHistory
-                ? med.progressHistory.reduce(
-                    (acc, entry) => acc + entry.dosesTaken,
-                    0
-                  )
-                : 0;
-              const progress = Math.min(
-                (takenDoses / totalDoses) * 100,
-                100
-              ).toFixed(2);
+            <h2>Reteta Nr: {currentPrescription?.prescriptionNumber}</h2>
+            {currentPrescription ? (
+              currentPrescription.products.map((med, medIndex) => {
+                const totalDoses = med.durata * med.doza;
+                const takenDoses = med.progressHistory
+                  ? med.progressHistory.reduce(
+                      (acc, entry) => acc + entry.dosesTaken,
+                      0
+                    )
+                  : 0;
+                const progress = Math.min(
+                  (takenDoses / totalDoses) * 100,
+                  100
+                ).toFixed(2);
 
-              return (
-                <div key={medIndex} className="medication-row">
-                  <div className="medication-info">
-                    <img
-                      src={med.medication.photo}
-                      alt={med.medication.title}
-                    />
-                    <div>
-                      <h4>{med.medication.title}</h4>
-                      <p>{med.medication.brand}</p>
+                return (
+                  <div key={medIndex} className="medication-row">
+                    <div className="medication-info">
+                      <img
+                        src={med.medication.photo}
+                        alt={med.medication.title}
+                      />
+                      <div>
+                        <h4>{med.medication.title}</h4>
+                        <p>{med.medication.brand}</p>
+                        <p>
+                          <b>Doză:</b> {med.doza} pe zi
+                          <p></p>
+                          <b>Durată:</b> {med.durata} zile
+                        </p>
+                        <button
+                          className="history-button"
+                          onClick={() => setShowHistory(!showHistory)}
+                        >
+                          {showHistory ? "Ascunde Istoric" : "Afișează Istoric"}
+                        </button>
+                      </div>
+                    </div>
+                    {showHistory && ( 
+                      <div className="history-details">
+                        <h4>Istoric:</h4>
+                        <p>Progres:</p>
+                        <ul>
+                          {med.progressHistory &&
+                            med.progressHistory.map((entry, index) =>
+                              entry.date && entry.dosesTaken ? (
+                                <li key={index}>
+                                  {formatDate2(entry.date)}: {entry.dosesTaken}{" "}
+                                  doze luate
+                                  {entry.timeTaken &&
+                                    entry.timeTaken.length > 0 && (
+                                      <ul>
+                                        {entry.timeTaken.map(
+                                          (time, timeIndex) => (
+                                            <li key={timeIndex}>
+                                              La ora: {time}
+                                            </li>
+                                          )
+                                        )}
+                                      </ul>
+                                    )}
+                                </li>
+                              ) : null
+                            )}
+                        </ul>
+                      </div>
+                    )}
+                    <div className="medication-progress">
                       <p>
-                        <b>Doză:</b> {med.doza} pe zi
-                        <p></p>
-                        <b>Durată:</b> {med.durata} zile
+                        Dată începere:{" "}
+                        {med.progressHistory && med.progressHistory.length > 0
+                          ? formatDate2(med.progressHistory[0].date)
+                          : "Tratamentul nu a fost inceput"}{" "}
                       </p>
-                      <p>Progres:</p>
-                      <ul>
-                        {med.progressHistory &&
-                          med.progressHistory.map((entry, index) =>
-                            entry.date && entry.dosesTaken ? (
-                              <li key={index}>
-                                {formatDate2(entry.date)}: {entry.dosesTaken}{" "}
-                                doze luate
-                                {entry.timeTaken &&
-                                  entry.timeTaken.length > 0 && (
-                                    <ul>
-                                      {entry.timeTaken.map(
-                                        (time, timeIndex) => (
-                                          <li key={timeIndex}>
-                                            La ora: {time}
-                                          </li>
-                                        )
-                                      )}
-                                    </ul>
-                                  )}
-                              </li>
-                            ) : null
-                          )}
-                      </ul>
+                      <div className="progress-bar-container">
+                        <div
+                          className="progress-bar"
+                          style={{ width: `${progress}%` }}
+                        ></div>
+                      </div>
+                      <p>{progress}% completed</p>
                     </div>
                   </div>
-                  <div className="medication-progress">
-                    <p>
-                      Dată începere:{" "}
-                      {med.progressHistory && med.progressHistory.length > 0
-                        ? formatDate2(med.progressHistory[0].date)
-                        : "Tratamentul nu a fost inceput"}{" "}
-                    </p>
-                    <div className="progress-bar-container">
-                      <div
-                        className="progress-bar"
-                        style={{ width: `${progress}%` }}
-                      ></div>
-                    </div>
-                    <p>{progress}% completed</p>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <p>Nu există medicamente disponibile pentru nicio rețetă activă.</p>
-          )}
-              
+                );
+              })
+            ) : (
+              <p>
+                Nu există medicamente disponibile pentru nicio rețetă activă.
+              </p>
+            )}
           </div>
         );
       case "medications":
         return (
-          <><ul className="prescriptions-list">
-            {currentItems.map((prescription, index) => (
-              <li key={prescription._id || index}>
-                <div className="prescription-header">
-                  <h3>Rețeta medicală nr: {prescription.prescriptionNumber}</h3>
-                  <button onClick={() => toggleDetails(index)} className="view-button">
-                    {visibleId === index ? 'Hide Details' : 'View Details'}
-                  </button>
-                </div>
-                {visibleId === index && (
-                  <div className="prescription-details">
-                    {prescription.products.map((product, idx) => (
-                      <div key={idx} className="product-details">
-                        <img src={product.medication.photo} alt={product.medication.title} className="product-image2" />
-                        <div>
-                          <p><strong>{product.medication.title}</strong></p>
-                          <p>Brand: {product.medication.brand}</p>
-                          <p>Preț: {product.medication.price} Lei</p>
-                          <p>Doza: {product.doza || 'N/A'}, Durata: {product.durata || 'N/A'}</p>
-                        </div>
-                      </div>
-                    ))}
+          <>
+            <ul className="prescriptions-list">
+              {currentItems.map((prescription, index) => (
+                <li key={prescription._id || index}>
+                  <div className="prescription-header">
+                    <h3>
+                      Rețeta medicală nr: {prescription.prescriptionNumber}
+                    </h3>
+                    <button
+                      onClick={() => toggleDetails(index)}
+                      className="view-button"
+                    >
+                      {visibleId === index ? "Ascunde" : "Vezi"}
+                    </button>
                   </div>
-                )}
-              </li>
-            ))}
-          </ul><div className="pagination">
-              <button
-                disabled={currentPage <= 1}
-                onClick={() => handlePageChange(currentPage - 1)}>
-                <FontAwesomeIcon icon={faArrowAltCircleLeft} />
-              </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button key={index + 1}
-                  disabled={currentPage === index + 1}
-                  onClick={() => handlePageChange(index + 1)}>
-                  {index + 1}
-                </button>
+                  {visibleId === index && (
+                    <div className="prescription-details">
+                      <div key={index} className="product-details2">
+                      {prescription.products.map((product, index) => (
+                        <div key={index} className="product-details-pres">
+                          <div className="name-photo">
+                            <img
+                              src={product.medication.photo}
+                              alt={product.medication.title}
+                              className="product-image-4"
+                            />
+                            <div>
+                              <p className="product-title">
+                                <strong>{product.medication.title}</strong> -{" "}
+                                {product.medication.brand}
+                              </p>
+                              <p className="product-price">
+                                Preț: {product.medication.price.toFixed(2)} Lei
+                              </p>
+                            </div>
+                          </div>
+                          <div className="dosage">
+                            <p>
+                              <strong>Doză:</strong> {product.doza}
+                            </p>
+                            <p>
+                              <strong>Durată:</strong> {product.durata}
+                            </p>
+                            <p>
+                              <strong>Cantitate:</strong> {product.cantitate}
+                            </p>
+                            <p>
+                              <strong>Alte detalii:</strong> {product.detalii}
+                            </p>
+                          </div>
+                        </div>
+
+                      ))}
+                      </div>
+
+                      <div className="diagnosis-invest">
+                        <p>
+                          <strong>Diagnostic:</strong> {prescription.diagnosis}
+                        </p>
+                        <p>
+                          <strong>Investigații:</strong>{" "}
+                          {prescription.investigations}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </li>
               ))}
-              <button
+            </ul>
+            <div className="pagination">
+              <span
+                className="transparent-button"
+                disabled={currentPage <= 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                <FontAwesomeIcon icon={faArrowLeftLong} />
+              </span>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <span
+                  key={index + 1}
+                  disabled={currentPage === index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={currentPage === index + 1 ? "active-page" : ""}
+                >
+                  {index + 1}
+                </span>
+              ))}
+              <span
+              className="transparent-button"
                 disabled={currentPage >= totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}>
-                <FontAwesomeIcon icon={faArrowAltCircleRight} />
-              </button>
-            </div></>
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                <FontAwesomeIcon icon={faArrowRightLong} />
+              </span>
+            </div>
+          </>
         );
       default:
         return null;
@@ -266,7 +333,10 @@ const PatientProfile = ({ onBack }) => {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
     return age;
@@ -279,58 +349,76 @@ const PatientProfile = ({ onBack }) => {
       </button>
 
       <div className="header-info">
-      <div className="header-details">
-            <img
-              src={patient?.photo}
-              alt="Patient Avatar"
-              className="profile-avatar"
-            />
-            <h3>{patient?.firstName} {patient?.lastName}</h3>
-            <p>CNP: {patient?.identifier}</p>
-            <p>Vârsta: {age}</p>
-            <button className="btn view-profile">Vezi Profil</button>
-          </div>
+        <div className="header-details">
+          <img
+            src={patient?.photo}
+            alt="Patient Avatar"
+            className="profile-avatar"
+          />
+          <h3>
+            {patient?.firstName} {patient?.lastName}
+          </h3>
+          <p>
+            <strong>Email:</strong> {patient.email}
+          </p>
+          <p>
+            <strong> CNP:</strong> {patient?.identifier}
+          </p>
+          <p>
+            {" "}
+            <strong>Vârsta: </strong> {age}
+          </p>
+        </div>
         <div className="user-profile2">
-              <div className="user-stats">
-                <p>
-                  <strong>Gen:</strong> {patient.gender}
-                </p>
-                <p>
-                  <strong>Zi de naștere:</strong> {patient.birth_date}
-                </p>
-                <p>
-                  <strong>Oraș:</strong> {patient.city}
-                </p>
-                <p>
-                  <strong>Numar mobil:</strong> {patient.phone}
-                </p>
-                <p>
-                  <strong>Cod Postal:</strong> {patient.postal_code}
-                </p>
-                <p>
-                  <strong>Adresă:</strong> {patient.address}
-                </p>
-                <p>
-                  <strong>Data nașterii:</strong> {patient.birth_date}
-                </p>
-              </div>
+          <div className="user-info">
+            <p>
+              <strong>Gen:</strong> {patient.gender}
+            </p>
+            <p>
+              <strong>Zi de naștere:</strong> {patient.birth_date}
+            </p>
+            <p>
+              <strong>Oraș:</strong> {patient.city}
+            </p>
+            <p>
+              <strong>Număr de telefon :</strong> {patient.phone}
+            </p>
+            <p>
+              <strong>Cod Poștal:</strong> {patient.postal_code}
+            </p>
+            <p>
+              <strong>Adresă:</strong> {patient.address}
+            </p>
+            <p>
+              <strong>Data nașterii:</strong> {patient.birth_date}
+            </p>
+            <p>
+              <strong>Alergii:</strong> {patient.allergies}
+            </p>
+            <p>
+              <strong>Înălțime:</strong> {patient.height} m
+            </p>
+            <p>
+              <strong>Greutate:</strong> {patient.weight} kg
+            </p>
           </div>
+        </div>
       </div>
-      <div className="tabs">
+      <div className="tabs2">
         <button
-          className={`tab ${activeTab === "current-pres" ? "active" : ""}`}
+          className={`tabs2 ${activeTab === "current-pres" ? "active" : ""}`}
           onClick={() => setActiveTab("current-pres")}
         >
           Reteta curenta
         </button>
         <button
-          className={`tab ${activeTab === "medications" ? "active" : ""}`}
+          className={`tabs2 ${activeTab === "medications" ? "active" : ""}`}
           onClick={() => setActiveTab("medications")}
         >
           Toate retetele
         </button>
       </div>
-      <div className="tab-content">{tabContent()}</div>
+      <div className="tab-content2">{tabContent()}</div>
     </div>
   );
 };

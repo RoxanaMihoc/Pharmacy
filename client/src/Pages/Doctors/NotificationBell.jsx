@@ -11,7 +11,7 @@ const socket = io("http://localhost:3000");
 const NotificationBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [visibleNotifications, setVisibleNotifications] = useState(6); // Track visible notifications
+  const [visibleNotifications, setVisibleNotifications] = useState(4); // Track visible notifications
   const { currentUser, role } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();

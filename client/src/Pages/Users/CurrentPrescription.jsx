@@ -10,6 +10,7 @@ const CurrentPrescription = () => {
   );
   const [limitExceeded, setLimitExceeded] = useState({}); // Track dosage limit exceeded messages
   const { currentUser } = useAuth();
+    const [showHistory, setShowHistory] = useState(false);
 
   useEffect(() => {
     const fetchCurrentPrescriptions = async () => {
@@ -262,32 +263,43 @@ const CurrentPrescription = () => {
                         <p></p>
                         <b>Durată:</b> {med.durata} zile
                       </p>
-                      <p>Progres:</p>
-                      <ul>
-                        {med.progressHistory &&
-                          med.progressHistory.map((entry, index) =>
-                            entry.date && entry.dosesTaken ? (
-                              <li key={index}>
-                                {formatDate(entry.date)}: {entry.dosesTaken}{" "}
-                                doze luate
-                                {entry.timeTaken &&
-                                  entry.timeTaken.length > 0 && (
-                                    <ul>
-                                      {entry.timeTaken.map(
-                                        (time, timeIndex) => (
-                                          <li key={timeIndex}>
-                                            La ora: {time}
-                                          </li>
-                                        )
-                                      )}
-                                    </ul>
-                                  )}
-                              </li>
-                            ) : null
-                          )}
-                      </ul>
+                      <button
+                          className="history-button"
+                          onClick={() => setShowHistory(!showHistory)}
+                        >
+                          {showHistory ? "Ascunde Istoric" : "Afișează Istoric"}
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                    {showHistory && ( 
+                      <div className="history-details">
+                        <h4>Istoric:</h4>
+                        <p>Progres:</p>
+                        <ul>
+                          {med.progressHistory &&
+                            med.progressHistory.map((entry, index) =>
+                              entry.date && entry.dosesTaken ? (
+                                <li key={index}>
+                                  {formatDate(entry.date)}: {entry.dosesTaken}{" "}
+                                  doze luate
+                                  {entry.timeTaken &&
+                                    entry.timeTaken.length > 0 && (
+                                      <ul>
+                                        {entry.timeTaken.map(
+                                          (time, timeIndex) => (
+                                            <li key={timeIndex}>
+                                              La ora: {time}
+                                            </li>
+                                          )
+                                        )}
+                                      </ul>
+                                    )}
+                                </li>
+                              ) : null
+                            )}
+                        </ul>
+                      </div>
+                    )}
                   <div className="medication-progress">
                     <p>
                       Dată începere:{" "}
