@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { useHistory } from "react-router-dom";
+import { fetchDoctorName } from "../Pages/Services/userServices";
+import { submitOrderApi} from "../Pages/Services/orderServices";
+import { deleteCart } from "../Pages/Services/cartServices";
 import "./summary.css";
 
 const Summary = ({
@@ -53,91 +56,83 @@ const Summary = ({
     }
   };
 
-  const getPharmacist = async (pharmacy) => {
-    try {
-      // Replace '/api/pharmacy' with your actual endpoint that handles the request
-      const response = await fetch(
-        `http://localhost:3000/home/pharmacists/${pharmacy}`
-      );
+  // const getPharmacist = async (pharmacy) => {
+  //   try {
+  //     // Replace '/api/pharmacy' with your actual endpoint that handles the request
+  //     const response = await fetch(
+  //       `http://localhost:3000/home/pharmacists/${pharmacy}`
+  //     );
 
-      if (!response.ok) {
-        // If the server response is not ok, throw an error with the status
-        throw new Error(`HTTP error! status: ${response.status}`);
+  //     if (!response.ok) {
+  //       // If the server response is not ok, throw an error with the status
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+
+  //     const data = await response.json(); // Assuming the response is JSON formatted
+  //     console.log("Pharmacist details:", data);
+  //     setPharmacist(data); // Returning the fetched pharmacist details
+  //   } catch (error) {
+  //     console.error("Failed to fetch pharmacist:", error.message);
+  //     // Handle errors, such as showing an error message to the user
+  //   }
+  // };
+
+
+useEffect(() => {
+  const getDoctorForPatient = async () => {
+    if (currentUser) {
+      const { success, data, error } = await  fetchDoctorName(currentUser);
+
+      if (success) {
+        setDoctor(data); // Set the doctor data in state
+      } else {
+        console.error("Error fetching doctor data:", error);
       }
-
-      const data = await response.json(); // Assuming the response is JSON formatted
-      console.log("Pharmacist details:", data);
-      setPharmacist(data); // Returning the fetched pharmacist details
-    } catch (error) {
-      console.error("Failed to fetch pharmacist:", error.message);
-      // Handle errors, such as showing an error message to the user
     }
   };
 
-  useEffect(() => {
-    const getDoctor = async () => {
-        if (currentUser) {
-          try {
-            const response = await fetch(
-              `http://localhost:3000/home/details/${currentUser}`
-            );
-            if (!response.ok) {
-              throw new Error("Failed to fetch patient data");
-            }
-            const data = await response.json();
-            setDoctor(data.doctor);
-          } catch (error) {
-            console.error("Error fetching patient data:", error);
-          }
-        }
-      };
+  getDoctorForPatient();
+}, [currentUser]);
 
-    getDoctor();
-  }, [currentUser]);
-  const submitOrder = async () => {
-    try {
-      console.log(cartItems);
-      const response = await fetch(`http://localhost:3000/home/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cartItems,
-          addressDetails,
-          user,
-          totalPrice,
-          pharmacist,
-          doctor,
-        }),
-      });
-      const data = await response.json();
-      console.log("Order submitted:", data);
+const submitOrder = async () => {
+  try {
+    console.log(cartItems);
 
-      // Proceed to delete the cart if the order was successfully submitted
-      if (data.success) {
-        // Assuming the API returns a 'success' attribute
-        const deleteResponse = await fetch(
-          `http://localhost:3000/home/cart/${currentUser}`,
-          {
-            method: "DELETE",
-          }
-        );
+    // Submit the order
+    const orderDetails = {
+      cartItems,
+      addressDetails,
+      user,
+      totalPrice,
+      pharmacist,
+      doctor,
+    };
 
-        if (!deleteResponse.ok) {
-          throw new Error("Failed to delete cart");
-        }
+    const { success: orderSuccess, data: orderData } = await submitOrderApi(orderDetails);
 
+    if (orderSuccess) {
+      console.log("Order submitted:", orderData);
+
+      // Delete the cart if the order was successfully submitted
+      const { success: deleteSuccess, error } = await deleteCart(currentUser);
+
+      if (deleteSuccess) {
         console.log("Cart deleted successfully");
         onOrderSubmitted(true);
       } else {
+        console.error("Failed to delete cart:", error);
         onOrderSubmitted(false);
       }
-    } catch (error) {
-      console.error("Error during the order process:", error);
+    } else {
+      console.error("Order submission failed");
       onOrderSubmitted(false);
     }
-  };
+  } catch (error) {
+    console.error("Error during the order process:", error);
+    onOrderSubmitted(false);
+  }
+};
+
 
   return (
     <div>

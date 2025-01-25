@@ -5,6 +5,7 @@ import "./styles/overview.css"; // Updated CSS
 import io from "socket.io-client";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { sendPrescription } from "../../Services/prescriptionServices";
 
 const socket = io("http://localhost:3000");
 
@@ -35,51 +36,50 @@ const PrescriptionOverview = () => {
     return age;
   }
 
-  const sendPrescription = async () => {
-    try {
-      const prescriptionData = {
-        doctorId: currentUser,
-        patient: patient,
-        diagnosis: diagnosis,
-        products: prescribedMedicine.map((item) => ({
-          medication: item.med,
-          cantitate: item.cantitate,
-          detalii: item.detalii,
-          doza: item.doza,
-          durata: item.durata,
-        })),
-        investigations: investigations,
-      };
+const sendPrescription = async () => {
+  try {
+    const prescriptionData = {
+      doctorId: currentUser,
+      patient: patient,
+      diagnosis: diagnosis,
+      products: prescribedMedicine.map((item) => ({
+        medication: item.med,
+        cantitate: item.cantitate,
+        detalii: item.detalii,
+        doza: item.doza,
+        durata: item.durata,
+      })),
+      investigations: investigations,
+    };
 
-      const response = await fetch("http://localhost:3000/home/add-prescription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(prescriptionData),
-      });
+    // Call the service function
+    const { success, data, error } = await sendPrescription(prescriptionData);
 
-      if (!response.ok) {
-        throw new Error("Failed to send prescription");
-      }
-      const result = await response.json();
-
+    if (success) {
       // Set success message
       setStatusMessage("Rețetă trimisă cu success!");
       setStatusType("success");
-
-      console.log(result);
-    } catch (error) {
-      console.error("Error sending prescription:", error);
+      console.log(data);
+    } else {
       // Set error message
       setStatusMessage("Rețeta nu a fost trimisa! Încearcă mai târziu!");
       setStatusType("error");
+      console.error("Error:", error);
     }
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    // Set error message
+    setStatusMessage("Rețeta nu a fost trimisa! Încearcă mai târziu!");
+    setStatusType("error");
+  }
 
-    // Clear message after 5 seconds
-    setTimeout(() => {
-      setStatusMessage("");
-      setStatusType("");
-    }, 5000);
-  };
+  // Clear message after 5 seconds
+  setTimeout(() => {
+    setStatusMessage("");
+    setStatusType("");
+  }, 5000);
+};
+
 
   const generatePDF = () => {
     setTimeout(() => {

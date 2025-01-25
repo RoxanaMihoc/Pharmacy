@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import "./styles/current-prescription.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRightLong
+} from "@fortawesome/free-solid-svg-icons";
+import { fetchCurrentPrescriptions, updateMedicationProgress, deleteLastProgressEntry  } from "../Services/prescriptionServices";
 
 const CurrentPrescription = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -10,27 +15,23 @@ const CurrentPrescription = () => {
   );
   const [limitExceeded, setLimitExceeded] = useState({}); // Track dosage limit exceeded messages
   const { currentUser } = useAuth();
-    const [showHistory, setShowHistory] = useState(false);
+  const [historyVisibility, setHistoryVisibility] = useState({}); // State for tracking individual medication history visibility
+
 
   useEffect(() => {
-    const fetchCurrentPrescriptions = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/home/current-prescription/${currentUser}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
+    const fetchCurrentPrescriptionsData = async () => {
+      const { success, data, error } = await fetchCurrentPrescriptions(currentUser);
+  
+      if (success) {
         setPrescriptions(data);
         setLoading(false);
-      } catch (error) {
+      } else {
         console.error("Error fetching prescriptions:", error);
         setLoading(false);
       }
     };
-
-    fetchCurrentPrescriptions();
+  
+    fetchCurrentPrescriptionsData();
   }, [currentUser]);
 
   const formatDate = (date) => {
@@ -48,30 +49,31 @@ const CurrentPrescription = () => {
     return date; // Return the original value if it doesn't match expected formats
   };
 
+
   const handleMarkAsTaken = async (medicationId) => {
     const updatedPrescriptions = [...prescriptions];
     const prescription = updatedPrescriptions[0];
-
+  
     // Find the medication by its ID
     const medication = prescription.products.find(
       (product) => product._id === medicationId
     );
-
+  
     if (!medication) {
       console.error(`Medication with ID ${medicationId} not found.`);
       return;
     }
-
+  
     // Ensure progressHistory is initialized
     if (!Array.isArray(medication.progressHistory)) {
       medication.progressHistory = [];
     }
-
+  
     // Add a new entry for the current date or increment doses for the same day
     const now = new Date();
     const today = now.toLocaleDateString("en-GB"); // Format as DD/MM/YYYY
     const currentTime = now.toLocaleTimeString(); // Current time in local format
-
+  
     const existingEntry = medication.progressHistory.find(
       (entry) => entry.date === today
     );
@@ -79,7 +81,7 @@ const CurrentPrescription = () => {
       typeof medication.doza === "string"
         ? parseFloat(medication.doza)
         : medication.doza;
-
+  
     if (existingEntry) {
       // Check if the daily dosage limit is exceeded
       if (existingEntry.dosesTaken >= dailyDose) {
@@ -99,51 +101,43 @@ const CurrentPrescription = () => {
         timeTaken: [currentTime],
       });
     }
-
+  
     // Clear any previous limit exceeded message
     setLimitExceeded((prev) => ({
       ...prev,
       [medicationId]: null,
     }));
-
-    try {
-      // Send updated progress to the backend
-      const response = await fetch(
-        `http://localhost:3000/home/update-progress/${prescription._id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            medicationId,
-            progressHistory: medication.progressHistory,
-            currentUser,
-          }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to update progress");
-
-      // Update state
-      setPrescriptions(updatedPrescriptions);
-    } catch (error) {
-      console.error("Error updating progress:", error);
+  
+    // Call the service to update progress in the backend
+    const { success } = await updateMedicationProgress(
+      prescription._id,
+      medicationId,
+      medication.progressHistory,
+      currentUser
+    );
+  
+    if (success) {
+      setPrescriptions(updatedPrescriptions); // Update state only if API call is successful
+    } else {
+      alert("Failed to update medication progress.");
     }
   };
+  
 
   const handleDeleteLastProgress = async (medicationId) => {
     const updatedPrescriptions = [...prescriptions];
     const prescription = updatedPrescriptions[0];
-
+  
     // Find the medication by its ID
     const medication = prescription.products.find(
       (product) => product._id === medicationId
     );
-
+  
     if (!medication) {
       console.error(`Medication with ID ${medicationId} not found.`);
       return;
     }
-
+  
     // Ensure progressHistory is initialized and has entries
     if (
       !Array.isArray(medication.progressHistory) ||
@@ -154,34 +148,25 @@ const CurrentPrescription = () => {
       );
       return;
     }
-
+  
     // Remove the last entry
     medication.progressHistory.pop();
-
-    try {
-      // Send updated progress to the backend
-      const response = await fetch(
-        `http://localhost:3000/home/delete-progress/${prescription._id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            medicationId,
-            progressHistory: medication.progressHistory,
-            currentUser,
-          }),
-        }
-      );
-
-      if (!response.ok)
-        throw new Error("Failed to delete the last progress entry.");
-
-      // Update state
-      setPrescriptions(updatedPrescriptions);
-    } catch (error) {
-      console.error("Error deleting the last progress entry:", error);
+  
+    // Call the service to delete the last progress entry in the backend
+    const { success } = await deleteLastProgressEntry(
+      prescription._id,
+      medicationId,
+      medication.progressHistory,
+      currentUser
+    );
+  
+    if (success) {
+      setPrescriptions(updatedPrescriptions); // Update state only if API call is successful
+    } else {
+      alert("Failed to delete the last progress entry.");
     }
   };
+  
 
   if (loading) return <p>Loading...</p>;
 
@@ -189,6 +174,13 @@ const CurrentPrescription = () => {
   const currentPrescription = prescriptions.find(
     (prescription) => prescription.currentPrescription === true
   );
+
+  const toggleHistoryVisibility = (medicationId) => {
+    setHistoryVisibility((prev) => ({
+      ...prev,
+      [medicationId]: !prev[medicationId], // Toggle the visibility for the specific medication
+    }));
+  };
 
   return (
     <div className="current-prescription-container">
@@ -264,14 +256,16 @@ const CurrentPrescription = () => {
                         <b>Durată:</b> {med.durata} zile
                       </p>
                       <button
-                          className="history-button"
-                          onClick={() => setShowHistory(!showHistory)}
-                        >
-                          {showHistory ? "Ascunde Istoric" : "Afișează Istoric"}
-                        </button>
+                        className="history-button"
+                        onClick={() => toggleHistoryVisibility(med._id)}
+                      >
+                        {historyVisibility[med._id]
+                          ? "Ascunde Istoric"
+                          : "Afișează Istoric"}
+                      </button>
                       </div>
                     </div>
-                    {showHistory && ( 
+                    {historyVisibility[med._id] && (
                       <div className="history-details">
                         <h4>Istoric:</h4>
                         <p>Progres:</p>
@@ -280,7 +274,7 @@ const CurrentPrescription = () => {
                             med.progressHistory.map((entry, index) =>
                               entry.date && entry.dosesTaken ? (
                                 <li key={index}>
-                                  {formatDate(entry.date)}: {entry.dosesTaken}{" "}
+                                  <FontAwesomeIcon icon={faArrowRightLong} /> {formatDate(entry.date)}: {entry.dosesTaken}{" "}
                                   doze luate
                                   {entry.timeTaken &&
                                     entry.timeTaken.length > 0 && (
@@ -288,7 +282,7 @@ const CurrentPrescription = () => {
                                         {entry.timeTaken.map(
                                           (time, timeIndex) => (
                                             <li key={timeIndex}>
-                                              La ora: {time}
+                                              • La ora: {time}
                                             </li>
                                           )
                                         )}

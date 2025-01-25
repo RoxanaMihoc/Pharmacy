@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import { registerUser } from "../Services/authServices.js";
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -12,7 +13,8 @@ const SignUp = () => {
   const [identifier, setIdentifier] = useState("");
   const role = location.state?.role;
   console.log(role);
-  const placeholderText = role === "Doctor" ? "CND" : role === "Pharmacist" ? "CNF" : "CNP";
+  const placeholderText =
+    role === "Doctor" ? "CND" : role === "Pharmacist" ? "CNF" : "CNP";
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -25,39 +27,13 @@ const SignUp = () => {
         identifier,
         role,
       });
-    }
-    else
-    {
+    } else {
       register();
     }
   };
 
   const register = async (e) => {
-    try {
-      console.log(identifier, role);
-      const response = await fetch("http://localhost:3000/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "applicatio/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        crossDomain: true,
-        body: JSON.stringify({ firstName, lastName, email, password, identifier, role}),
-      });
-
-      if (!response.ok) {
-        setErrorMessage("User already registered. Please use another email.");
-        throw new Error("Registration failed");
-      }
-
-      const data = await response.json();
-      console.log(data);
-      history.push("/role");
-    } catch (error) {
-      console.error("Registration failed:", error.message);
-      debugger;
-    }
+    history.push("/role");
   };
 
   return (
@@ -96,14 +72,14 @@ const SignUp = () => {
       </label>
       <br />
       <label>
-      <div className="input-container">
-        <input
-          type="text"
-          placeholder={placeholderText}
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
-        />
-      </div>
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder={placeholderText}
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+          />
+        </div>
       </label>
       <br />
       <label>
@@ -126,7 +102,7 @@ const SignUp = () => {
           </p>
         )}
         <button type="submit" onClick={handleRegister}>
-         Înregistrare
+          Înregistrare
         </button>
       </div>
     </form>

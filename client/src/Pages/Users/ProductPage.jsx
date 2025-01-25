@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import SecondaryMenu from "../../Components/SecondMenu";
 import { useAuth } from '../../Context/AuthContext';
-import { addToFav, addToFavF } from '../../Components/FavButton';
-import addToFavorites from '../../Components/FavoritesButton';
 import "./styles/product-page.css"; // Import your CSS file
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightLong, faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
+import { fetchBrands, fetchProductsByCategory } from "../Services/productServices";
+import {addToFavorites} from '../Services/favoritesServices';
+import { addToCart, addToCartF } from '../Services/cartServices';
 
 const ProductPage = () => {
   const [brands, setBrands] = useState([]);
@@ -28,31 +29,49 @@ const ProductPage = () => {
   console.log(category + " " + subcategory);
 
   useEffect(() => {
-    const fetchBrands = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/home/brands');
-        const data = await response.json();
-        setBrands(data);
+        const fetchedBrands = await fetchBrands(); // Fetch brands
+        setBrands(fetchedBrands);
+
+        const fetchedProducts = await fetchProductsByCategory(category, subcategory); // Fetch products
+        setProducts(fetchedProducts);
       } catch (error) {
-        console.error('Failed to fetch brands:', error);
-      }
-    };
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/home/product/${category}/${subcategory}`
-        );
-        const data = await response.json();
-        console.log(data);
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchProducts();
-    fetchBrands();
+    fetchData(); // Call the combined fetch function
   }, [category, subcategory]);
+
+  const handleAddToCart = async (productId) => {
+    try {
+      const result = await addToCart(currentUser, productId, prescriptionId);
+      console.log('Product added to cart:', result);
+      if (result.success) {
+        const result2 = addToCartF(productId);
+        console.log(result2);
+      }
+    } catch (error) {
+      console.error('Failed to add product to cart:', error.message);
+      // Handle error, show an error message to the user
+    }
+  };
+
+  const handleAddToFavorites = async (productId) => {
+    try {
+      const result = await addToFavorites(currentUser, productId, category, subcategory);
+      console.log('Product added to cart:', result);
+      if (result.success) {
+        const result2 = addToCartF(productId);
+        console.log(result2);
+      }
+      // Handle success, update UI or show a message
+    } catch (error) {
+      console.error('Failed to add product to cart:', error.message);
+      // Handle error, show an error message to the user
+    }
+  };
 
   const handleBrandChange = (brand) => {
     const updatedBrands = selectedBrands.includes(brand)
@@ -60,11 +79,6 @@ const ProductPage = () => {
       : [...selectedBrands, brand];
 
     setSelectedBrands(updatedBrands);
-  };
-
-  const handleFilter = () => {
-    // Implementați filtrarea după brand și preț (dacă doriți un buton dedicat)
-    // Deocamdată, folosim direct filteredProducts mai jos
   };
 
   const handlePriceChange = (newRange) => {
@@ -111,36 +125,6 @@ const ProductPage = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top
-  };
-  // PAGINATION - END
-
-  const handleAddToFav = async (productId) => {
-    try {
-      const result = await addToFav(currentUser, productId, prescriptionId);
-      console.log('Product added to cart:', result);
-      if (result.success) {
-        const result2 = addToFavF(productId);
-        console.log(result2);
-      }
-    } catch (error) {
-      console.error('Failed to add product to cart:', error.message);
-      // Handle error, show an error message to the user
-    }
-  };
-
-  const handleAddToFavorites = async (productId) => {
-    try {
-      const result = await addToFavorites(currentUser, productId, category, subcategory);
-      console.log('Product added to cart:', result);
-      if (result.success) {
-        const result2 = addToFavF(productId);
-        console.log(result2);
-      }
-      // Handle success, update UI or show a message
-    } catch (error) {
-      console.error('Failed to add product to cart:', error.message);
-      // Handle error, show an error message to the user
-    }
   };
 
   // Simplu map pentru a afișa subcategoriile cu denumiri mai citite
@@ -231,7 +215,7 @@ const ProductPage = () => {
 
                       <button
                         className="add-fav-card"
-                        onClick={() => handleAddToFav(product._id)}
+                        onClick={() => handleAddToCart(product._id)}
                       >
                         Adaugă produs
                       </button>

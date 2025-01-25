@@ -3,7 +3,6 @@ import Sidebar from "./Sidebar";
 import CartPreview from "../../Components/CartPreview";
 import CartPage from "./CartPage";
 import FavoritesPage from "./FavoritesPage";
-import PatientProfile from "./PatientProfile";
 import ProductPage from "./ProductPage";
 import ProductDetails from "./ProductDetails";
 import NotificationBell from "./NotificationBell";
@@ -31,11 +30,8 @@ import {
 
 const HomeUser = () => {
   const [activeTab, setActiveTab] = useState("product");
-  const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false); // Manage sidebar visibility
   const [showCartPreview, setShowCartPreview] = useState(false);
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
   const location = useLocation();
   const history = useHistory();
    const { currentUser, name } = useAuth();
@@ -93,13 +89,10 @@ const HomeUser = () => {
   };
 
   useEffect(() => {
-    // Add event listener on mount
     window.addEventListener("resize", handleResize);
 
-    // Trigger resize logic on initial load
     handleResize();
 
-    // Cleanup event listener on unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -145,7 +138,6 @@ const HomeUser = () => {
             <Route path="/home/favorites" component={FavoritesPage} />
             <Route path="/home/orders" component={OrderPage} />
             <Route path="/home/current-prescription" component={CurrentPrescription} />
-            <Route path="/home/profile" component={PatientProfile} />
             <Route
               path="/home/prescription/:patientId"
               component={PrescriptionDetails}

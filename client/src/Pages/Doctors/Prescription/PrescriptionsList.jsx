@@ -7,6 +7,7 @@ import {
   faArrowRightLong,
   faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
+import { fetchAllPrescriptions } from "../../Services/prescriptionServices";
 
 const PrescriptionsList = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -24,27 +25,23 @@ const PrescriptionsList = () => {
   });
 
   useEffect(() => {
-    fetchPrescriptions();
-    // fetchSummaryStats();
-  }, [currentUser, role]);
-
-  const fetchPrescriptions = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/home/all-prescriptions/${currentUser}`,
-        {
-          method: "GET",
+    const fetchPrescriptions = async () => {
+      try {
+        const { success, data, error } = await fetchAllPrescriptions(currentUser);
+  
+        if (success) {
+          setPrescriptions(data);
+        } else {
+          console.error("Error fetching prescriptions:", error);
         }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status}`);
+      } catch (error) {
+        console.error("Unexpected error:", error);
       }
-      const data = await response.json();
-      setPrescriptions(data);
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
+    };
+  
+    fetchPrescriptions();
+  }, [currentUser, role]);
+  
 
   // const fetchSummaryStats = async () => {
   //   try {

@@ -6,6 +6,7 @@ import {
   faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/pres-details.css";
+import { fetchPrescriptions, removeCurrentPrescription } from "../Services/prescriptionServices";
 
 const PrescriptionsList = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -17,85 +18,61 @@ const PrescriptionsList = () => {
   const itemsPerPage = 8; // Prescriptions per page
 
   useEffect(() => {
-    fetchPrescriptions();
-  }, [currentUser]);
+    const fetchPrescriptionsData = async () => {
+      try {
+        const data = await fetchPrescriptions(currentUser);
+        setPrescriptions(data);
 
-  const fetchPrescriptions = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/home/all-prescriptions/${currentUser}`,
-        {
-          method: "GET",
+        // Find and set the active prescription
+        const activePrescription = data.find(
+          (p) => p.currentPrescription === true
+        );
+        if (activePrescription) {
+          setCurrentPrescriptionId(activePrescription._id);
         }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status}`);
+      } catch (error) {
+        console.error("Error fetching prescription data:", error.message);
       }
-      const data = await response.json();
-      setPrescriptions(data);
+    };
 
-      // Find and set the active prescription
-      const activePrescription = data.find(
-        (p) => p.currentPrescription === true
-      );
-      if (activePrescription) {
-        setCurrentPrescriptionId(activePrescription._id);
-      }
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
+    fetchPrescriptionsData();
+  }, [currentUser]);
 
   const handleMarkAsCurrent = async (prescriptionId) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/home/prescription/${prescriptionId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ currentPrescription: true, currentUser }),
-        }
-      );
+      const { success } = await fetchPrescriptions(currentUser);
 
-      if (!response.ok) {
-        throw new Error("Failed to mark the prescription as current.");
+      if (success) {
+        setCurrentPrescriptionId(prescriptionId); // Update the current active prescription ID
+        fetchPrescriptions(); // Refresh the prescription list
       }
-
-      setCurrentPrescriptionId(prescriptionId); // Update the current active prescription ID
-      fetchPrescriptions(); // Refresh the prescription list
     } catch (error) {
       console.error("Error marking prescription as current:", error);
       alert("An error occurred while marking the prescription as current.");
     }
   };
 
-  const handleRemoveCurrent = async () => {
-    try {
-      if (!currentPrescriptionId) return;
-      const response = await fetch(
-        `http://localhost:3000/home/prescription/remove-current/${currentPrescriptionId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ currentPrescription: false, currentUser }),
-        }
-      );
+const handleRemoveCurrent = async () => {
+  try {
+    if (!currentPrescriptionId) return;
 
-      if (!response.ok) {
-        throw new Error("Failed to remove the current prescription.");
-      }
+    const { success, error } = await removeCurrentPrescription(
+      currentPrescriptionId,
+      currentUser
+    );
 
+    if (success) {
       setCurrentPrescriptionId(null); // Clear the active prescription
       fetchPrescriptions(); // Refresh the prescription list
-    } catch (error) {
+    } else {
       console.error("Error removing current prescription:", error);
       alert("An error occurred while removing the current prescription.");
     }
-  };
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    alert("An unexpected error occurred.");
+  }
+};
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value.toLowerCase());
@@ -252,7 +229,7 @@ const PrescriptionsList = () => {
         {/* Pagination */}
         <div className="pagination">
           <span
-          className="transparent-button"
+            className="transparent-button"
             disabled={currentPage <= 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
@@ -269,7 +246,7 @@ const PrescriptionsList = () => {
             </span>
           ))}
           <span
-          className="transparent-button"
+            className="transparent-button"
             disabled={currentPage >= totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >

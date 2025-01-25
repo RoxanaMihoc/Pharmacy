@@ -1,99 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext";
-import {addToFav} from '../../Components/FavButton';
-import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
-import { useParams, Link } from "react-router-dom";
+import {fetchFavorites, populateFavoriteItems, removeFavoriteItem} from '../Services/favoritesServices';
+import { addToCart } from '../Services/cartServices';
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import "./styles/favorites-page.css";
 
 const FavoritesPage = () => {
   const [favoritesItems, setFavoritesItems] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const { currentUser} = useAuth();
+
   useEffect(() => {
-    const fetchFavoritesData = async () => {
+    const fetchData = async () => {
       try {
-        // Fetch favorites data from backend API
-        const response = await fetch(
-          `http://localhost:3000/home/favorites/${currentUser}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch favorites data");
-        }
-        const data = await response.json();
-        console.log(data);
-        setFavoritesItems(data);
+        const data = await fetchFavorites(currentUser); // Fetch favorites data
+        setFavoritesItems(data); // Update state with the fetched data
       } catch (error) {
-        console.error("Error fetching favorites data:", error);
+        console.error("Error fetching favorites:", error);
       }
     };
 
-    fetchFavoritesData();
+    if (currentUser) {
+      fetchData(); // Fetch data only if currentUser exists
+    }
   }, [currentUser]);
 
   useEffect(() => {
-    const populateFavoritesItems = async () => {
-      const promises = favoritesItems.map(async (id) => {
-        const { success, data } = await fetchFavoritesItems(id);
-        if (success) {
-          return data;
-        }
-        return null;
-      });
-
-      const resolvedData = await Promise.all(promises);
-      console.log(resolvedData);
-      setFavorites(resolvedData);
-      console.log("favorites" + favorites);
-    };
-
-    const fetchFavoritesItems = async (productId) => {
-      console.log("Product Id " + productId);
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/home/product/${productId}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to add product to favorites");
-        }
-
-        const data = await response.json();
-        return { success: true, data };
-        // Handle successful response (e.g., display a success message)
+        const resolvedFavorites = await populateFavoriteItems(favoritesItems); // Fetch favorite item details
+        setFavorites(resolvedFavorites); // Update state with resolved data
+        console.log("Fetched Favorites:", resolvedFavorites);
       } catch (error) {
-        console.error("Error adding product to favorites:", error);
-        // Handle error (e.g., display an error message)
+        console.error("Error fetching favorites:", error);
       }
     };
 
-    populateFavoritesItems();
+    if (favoritesItems.length > 0) {
+      fetchData(); // Fetch data only if there are favorite items
+    }
   }, [favoritesItems]);
 
   const handleRemoveItem = async (e, productId) => {
     e.preventDefault();
     try {
-      // Send request to remove item from favorites
-      const response = await fetch(
-        `http://localhost:3000/home/favorites/${currentUser}/${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to remove item from favorites");
+      const { success } = await removeFavoriteItem(currentUser, productId);
+      if (success) {
+        // Update favorites and favoritesItems state
+        const updatedfavorites = favorites.map((itemArray) =>
+          itemArray.filter((product) => product._id !== productId)
+        );
+        setFavoritesItems(favoritesItems.filter((item) => item !== productId));
+        setFavorites(updatedfavorites);
       }
-
-      const updatedfavorites = favorites.map((itemArray) =>
-        itemArray.filter((product) => {
-          if (product._id === productId) {
-            return false; // Don't include the product in the updated favorites
-          }
-          return true; // Include other products in the updated favorites
-        })
-      );
-      setFavoritesItems(favoritesItems.filter((item) => item !== productId));
-      setFavorites(updatedfavorites);
-      document.location.reload();
     } catch (error) {
       console.error("Error removing item from favorites:", error);
     }

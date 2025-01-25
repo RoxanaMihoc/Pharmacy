@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./styles/patient-profile-doctor.css";
 import { useParams, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { fetchPrescriptionsForDoctors } from "../Services/prescriptionServices"
+import { fetchPatientDetailsForDoctorPage } from "../Services/userServices"
 import {
   faArrowRightLong,
   faArrowLeftLong,
@@ -21,7 +23,8 @@ const PatientProfile = ({ onBack }) => {
   const itemsPerPage = 5; // Number of prescriptions per page
   const totalPages = Math.ceil(prescriptions.length / itemsPerPage);
   const [currentPrescription, setCurrentPrescription] = useState(null);
-  const [showHistory, setShowHistory] = useState(false);
+  const [historyVisibility, setHistoryVisibility] = useState({}); // State for tracking individual medication history visibility
+  
   console.log(patient);
   const [age, setAge] = useState(0);
 
@@ -44,28 +47,31 @@ const PatientProfile = ({ onBack }) => {
   const toggleDetails = (id) => {
     setVisibleId(visibleId === id ? null : id);
   };
-
   useEffect(() => {
     const fetchPatient = async () => {
       console.log(patientId);
       try {
-        const response = await fetch(
-          `http://localhost:3000/doctors/patient/${patientId.patientId}`
+        const { success, data, error } = await fetchPatientDetailsForDoctorPage(
+          patientId.patientId
         );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+  
+        if (success) {
+          console.log(data);
+          setPatient(data[0]);
+          setAge(calculateAge(data[0]?.birth_date));
+          setLoading(false);
+        } else {
+          console.error("Error fetching patient:", error);
+          setError(error);
+          setLoading(false);
         }
-        const data = await response.json();
-        console.log(data);
-        setPatient(data[0]);
-        setAge(calculateAge(data[0]?.birth_date));
-        setLoading(false);
       } catch (err) {
+        console.error("Unexpected error:", err);
         setError(err.message);
         setLoading(false);
       }
     };
-
+  
     fetchPatient();
   }, [patientId]);
 
@@ -75,22 +81,23 @@ const PatientProfile = ({ onBack }) => {
 
   const fetchPrescriptions = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/home/prescription/${user}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
+      const { success, data, error } = await fetchPrescriptionsForDoctors(user);
+  
+      if (success) {
+        console.log(data);
+        setPrescriptions(data);
+  
+        const current = data.find(
+          (prescription) => prescription.currentPrescription === true
+        );
+        setCurrentPrescription(current || null);
+        console.log(currentPrescription);
+      } else {
+        console.error("Error fetching prescriptions:", error);
+        setError(error);
       }
-      const data = await response.json();
-      console.log(data);
-      setPrescriptions(data);
-      console.log(data);
-      const current = data.find(
-        (prescription) => prescription.currentPrescription === true
-      );
-      setCurrentPrescription(current || null);
-      console.log(currentPrescription);
     } catch (error) {
+      console.error("Unexpected error:", error);
       setError(error.message);
     }
   };
@@ -124,6 +131,13 @@ const PatientProfile = ({ onBack }) => {
     }
 
     return date; // Return the original value if it doesn't match expected formats
+  };
+
+  const toggleHistoryVisibility = (medicationId) => {
+    setHistoryVisibility((prev) => ({
+      ...prev,
+      [medicationId]: !prev[medicationId], // Toggle the visibility for the specific medication
+    }));
   };
 
   const tabContent = () => {
@@ -162,14 +176,16 @@ const PatientProfile = ({ onBack }) => {
                           <b>Durată:</b> {med.durata} zile
                         </p>
                         <button
-                          className="history-button"
-                          onClick={() => setShowHistory(!showHistory)}
-                        >
-                          {showHistory ? "Ascunde Istoric" : "Afișează Istoric"}
-                        </button>
+                        className="history-button"
+                        onClick={() => toggleHistoryVisibility(med._id)}
+                      >
+                        {historyVisibility[med._id]
+                          ? "Ascunde Istoric"
+                          : "Afișează Istoric"}
+                      </button>
                       </div>
                     </div>
-                    {showHistory && ( 
+                    {historyVisibility[med._id] && (
                       <div className="history-details">
                         <h4>Istoric:</h4>
                         <p>Progres:</p>
@@ -178,7 +194,7 @@ const PatientProfile = ({ onBack }) => {
                             med.progressHistory.map((entry, index) =>
                               entry.date && entry.dosesTaken ? (
                                 <li key={index}>
-                                  {formatDate2(entry.date)}: {entry.dosesTaken}{" "}
+                                <FontAwesomeIcon icon={faArrowRightLong} /> {formatDate2(entry.date)}: {entry.dosesTaken}{" "}
                                   doze luate
                                   {entry.timeTaken &&
                                     entry.timeTaken.length > 0 && (
@@ -186,7 +202,7 @@ const PatientProfile = ({ onBack }) => {
                                         {entry.timeTaken.map(
                                           (time, timeIndex) => (
                                             <li key={timeIndex}>
-                                              La ora: {time}
+                                              • La ora: {time}
                                             </li>
                                           )
                                         )}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentMedical } from "@fortawesome/free-solid-svg-icons";
+
+import { fetchAllDoctors } from "../Services/authServices";
 import "./styles/doctor-selection.css"; // Updated CSS
 // import doc from "../../Utils/doc.png";
 
@@ -15,25 +17,21 @@ const DoctorSelection = () => {
   const { firstName, lastName, email, password, identifier, role } =
     location.state || {};
 
-  useEffect(() => {
-    const getAllDoctors = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/doctors/all-doctors"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to get all doctors");
+    useEffect(() => {
+      const getAllDoctors = async () => {
+        const { success, data, error } = await fetchAllDoctors();
+    
+        if (success) {
+          console.log(data);
+          setDoctors(data);
+        } else {
+          console.error("Error fetching doctor data:", error);
         }
-        const data = await response.json();
-        console.log(data);
-        setDoctors(data);
-      } catch (error) {
-        console.error("Error fetching doctor data:", error);
-      }
-    };
-
-    getAllDoctors();
-  }, []);
+      };
+    
+      getAllDoctors();
+    }, []);
+    
 
   const handleRadioChange = (doctorId) => {
     setSelectedDoctor(doctorId);

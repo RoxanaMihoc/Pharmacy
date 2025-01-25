@@ -4,6 +4,7 @@ import AddressPage from "../../Components/AddressPage";
 import Summary from "../../Components/Summary";
 import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
+import { fetchCart, fetchCartItems, removeItemFromCart } from '../Services/cartServices';
 import "./styles/fav-page.css";
 
 const CartPage = () => {
@@ -18,26 +19,18 @@ const CartPage = () => {
   const [pharmacies, setPharmacies] = useState([]);
   const [selectedPharmacy, setSelectedPharmacy] = useState("");
   const history = useHistory();
+
   useEffect(() => {
     const fetchCartData = async () => {
-      if (currentUser) {
-        try {
-          // Fetch cart data from backend API
-          const response = await fetch(
-            `http://localhost:3000/home/cart/${currentUser}`
-          );
-          if (!response.ok) {
-            throw new Error("Failed to fetch cart data");
-          }
-          const data = await response.json();
-          setCartItems(data);
-        } catch (error) {
-          console.error("Error fetching cart data:", error);
-        }
+      try {
+        const data = await fetchCart(currentUser); // Use the service function
+        setCartItems(data); // Set the fetched cart data in state
+      } catch (error) {
+        console.error("Error fetching cart data:", error.message);
       }
     };
 
-    fetchCartData();
+    fetchCartData(); // Call the async function
   }, [currentUser]);
 
   useEffect(() => {
@@ -59,25 +52,6 @@ const CartPage = () => {
       console.log("Cart with presId", filteredData);
     };
 
-    const fetchCartItems = async (productId) => {
-      console.log("Product Id " + productId);
-      try {
-        const response = await fetch(
-          `http://localhost:3000/home/product/${productId}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to add product to cart");
-        }
-
-        const data = await response.json();
-        return { success: true, data };
-        // Handle successful response (e.g., display a success message)
-      } catch (error) {
-        console.error("Error adding product to cart:", error);
-        // Handle error (e.g., display an error message)
-      }
-    };
     if (cartItems) {
       populateCartItems();
     }
@@ -95,40 +69,29 @@ const CartPage = () => {
 
   const handleRemoveItem = async (e, productId) => {
     e.preventDefault();
-
-    try {
-      // Send request to remove item from cart
-      // cand se da delete la un produs nu ai product id
-      const response = await fetch(
-        `http://localhost:3000/home/cart/${currentUser}/${productId}`,
-        {
-          method: "DELETE",
+  
+    const { success } = await removeItemFromCart(currentUser, productId); // Use the service function
+  
+    if (success) {
+      // Filter the cart directly
+      const updatedCart = cart.filter((product) => {
+        if (product._id === productId) {
+          // Save the price before filtering out the product
+          setTotalPrice(
+            (Number(totalPrice) - Number(product.price)).toFixed(20)
+          );
+          return false; // Don't include the product in the updated cart
         }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to remove item from cart");
-      }
-
-      const updatedCart = cart.map((itemArray) =>
-        itemArray.filter((product) => {
-          if (product._id === productId) {
-            // Save the price before filtering out the product
-            setTotalPrice(
-              (Number(totalPrice) - Number(product.price)).toFixed(20)
-            );
-            return false; // Don't include the product in the updated cart
-          }
-          return true; // Include other products in the updated cart
-        })
-      );
-      setCartItems(cartItems.filter((item) => item !== productId));
-      setCart(updatedCart);
-      document.location.reload();
-    } catch (error) {
-      console.error("Error removing item from cart:", error);
+        return true; // Include other products in the updated cart
+      });
+  
+      setCart(updatedCart); // Update the cart state
+      setCartItems(cartItems.filter((item) => item !== productId)); // Update cart items
+    } else {
+      console.error("Failed to remove item from cart");
     }
   };
-
+  
   const updateTotalPrice = async (productId) => {
     let total = 0;
     cart.forEach((itemArray) => {

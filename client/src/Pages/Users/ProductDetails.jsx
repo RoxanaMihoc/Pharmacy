@@ -10,8 +10,9 @@ import {
 import { useParams, Link } from "react-router-dom";
 import SecondaryMenu from "../../Components/SecondMenu";
 import { useAuth } from "../../Context/AuthContext";
-import addToFavorites from "../../Components/FavoritesButton";
+import {addToFavorites} from '../Services/favoritesServices';
 import "./styles/product-details.css"; // Import your CSS file
+import { fetchProductDetails, fetchProductsByBrand } from "../Services/productServices";
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -21,63 +22,47 @@ const ProductDetails = () => {
   const { currentUser } = useAuth();
   const [activeTab, setActiveTab] = useState("description");
   const productsGridRef = useRef(null);
-
-  // Stare pentru afișare text complet/restricționat
   const [showFullText, setShowFullText] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to the top of the page
-    const fetchProduct = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/home/product/details/${productId}`
-        );
-        const data = await response.json();
-        console.log(data);
-        setProduct(data[0]);
-        setBrand(product.brand);
+        const data = await fetchProductDetails(productId);
+        setProduct(data);
+        setBrand(data.brand);
       } catch (error) {
-        console.error("Failed to fetch product details:", error);
+        console.error("Error fetching product data:", error);
       }
     };
 
-    fetchProduct();
+    fetchData();
   }, [productId]);
 
   useEffect(() => {
-    const fetchProductsByBrand = async () => {
-      console.log(brand);
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/home/products?brand=${encodeURIComponent(
-            product.brand
-          )}`
-        );
-        const data = await response.json();
-        console.log(data);
+        const data = await fetchProductsByBrand(brand);
         setRelatedProducts(data);
-        console.log("p" + relatedProducts);
       } catch (error) {
-        console.error("Failed to fetch product details:", error);
+        console.error("Error fetching related products:", error);
       }
     };
 
-    fetchProductsByBrand();
+    if (brand) fetchData();
   }, [brand]);
 
-  const handleAddToCart = async (productId) => {
-    try {
-      const result = await addToCart(currentUser, productId);
-      console.log("Product added to cart:", result);
-      if (result.success) {
-        const result = addToCartF(productId);
-        console.log(result);
-      }
-    } catch (error) {
-      console.error("Failed to add product to cart:", error.message);
-      // Handle error, show an error message to the user
-    }
-  };
+  // const handleAddToCart = async (productId) => {
+  //   try {
+  //     const result = await addToCart(currentUser, productId);
+  //     console.log("Product added to cart:", result);
+  //     if (result.success) {
+  //       const result = addToCartF(productId);
+  //       console.log(result);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to add product to cart:", error.message);
+  //   }
+  // };
 
   const scrollLeft = () => {
     productsGridRef.current.scrollBy({ left: -200, behavior: "smooth" });

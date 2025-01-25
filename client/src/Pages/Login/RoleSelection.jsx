@@ -7,7 +7,7 @@ import vitamins from "../../Utils/vitamins.png";
 import flu from "../../Utils/flu.png";
 import pres from "../../Utils/pres.png";
 import skin from "../../Utils/skin.png";
-import lala from "../../Utils/lala2.png";
+import ceva from "../../Utils/ceva.png";
 
 const PharmacyPage = () => {
   const history = useHistory();
@@ -53,7 +53,7 @@ const PharmacyPage = () => {
   {/* Right side images */}
   <div className="hero-image">
     <img
-      src={lala}
+      src={ceva}
       alt="Additional pharmacy-related illustration"
     />
   </div>

@@ -9,6 +9,7 @@ import {
   faArrowRightLong,
   faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
+import {fetchOrders} from '../Services/orderServices';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -16,27 +17,21 @@ const OrdersPage = () => {
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleOrderId, setVisibleOrderId] = useState(null);
-  const itemsPerPage = 5;
+  const itemsPerPage = 8;
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/home/orders/${currentUser}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch orders");
+    const fetchOrdersData = async () => {
+      try {
+        const data = await fetchOrders(currentUser); // Use the service function
+        setOrders(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching orders:", error.message);
       }
-      const data = await response.json();
-      console.log(data[0].cart);
-      setOrders(data);
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
-  };
+    };
+
+    fetchOrdersData(); // Call the async function
+  }, [currentUser]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -81,11 +76,12 @@ const OrdersPage = () => {
               <th>Telefon</th>
               <th>Adresă</th>
               <th>Status</th>
+              <th>Data</th>
               <th>Acțiuni</th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {currentOrders.map((order) => (
               <React.Fragment key={order._id}>
                 <tr>
                   <td>#{order.orderNumber}</td>
@@ -96,6 +92,7 @@ const OrdersPage = () => {
                   <td>{order.phone}</td>
                   <td>{`${order.address}, ${order.city}, ${order.county}`}</td>
                   <td>{order.status}</td>
+                  <td>{formatDate(order.date)}</td>
                   <td>
                     <button
                       variant="primary" // Use the "primary" variant to make it look like a proper button

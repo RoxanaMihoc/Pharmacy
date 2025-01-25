@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useHistory, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentMedical } from "@fortawesome/free-solid-svg-icons";
+import { registerUser } from "../Services/authServices";
 import "./styles/user-form.css"; // Make sure you have a CSS file for styling
 
 const UserForm = () => {
@@ -48,53 +49,42 @@ const UserForm = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // Submit all these fields plus the ones from location.state to your API
-      const response = await fetch("http://localhost:3000/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        crossDomain: true,
-        body: JSON.stringify({
-          // Fields from previous step or sign-up
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password,
-          identifier,
-          role,
-          selectedDoctor,
-          // The new form data
-          birthDate: formData.birthDate,
-          gender: formData.gender,
-          height: formData.height,
-          weight: formData.weight,
-          maritalStatus: formData.maritalStatus,
-          phoneNumber: formData.contactNumber,
-          address: formData.address,
-          postalCode: formData.postalCode,
-          medicationList: formData.medicationList,
-          city: formData.city,
-        }),
-      });
-
-      if (!response.ok) {
-        setErrorMessage("User already registered. Please use another email.");
-        throw new Error("Registration failed");
+      const userData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password,
+        identifier,
+        role,
+        selectedDoctor,
+        birthDate: formData.birthDate,
+        gender: formData.gender,
+        height: formData.height,
+        weight: formData.weight,
+        maritalStatus: formData.maritalStatus,
+        phoneNumber: formData.contactNumber,
+        address: formData.address,
+        postalCode: formData.postalCode,
+        medicationList: formData.medicationList,
+        city: formData.city,
+      };
+  
+      const { success, data, error } = await registerUser(userData);
+  
+      if (success) {
+        console.log("Registration successful:", data);
+  
+        // Redirect user, for example, to /login
+        history.push("/login", { role });
+      } else {
+        setErrorMessage(error || "Registration failed");
       }
-
-      const data = await response.json();
-      console.log("Registration successful:", data);
-
-      // Redirect user, for example to /login
-      history.push("/login", { role });
     } catch (error) {
       console.error("Registration failed:", error.message);
-      // Keep console open or handle error accordingly
+      setErrorMessage(error.message);
     }
   };
+  
 
   return (
     <div>

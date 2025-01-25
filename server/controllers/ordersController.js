@@ -84,7 +84,7 @@ exports.addToOrders = async (req, res, io, userSockets) => {
     if ( userSockets[doctor] && userSockets[doctor].socketId) {
       io.to(userSockets[doctor].socketId).emit("new-order", {
         id: newOrder._id,
-        message: `${firstName} ${lastName} a achiziționat o prescripție.`,
+        message: `${firstName} ${lastName} a achiziționat o reteta.`,
         orderDetails: {
           firstName,
           lastName,

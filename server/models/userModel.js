@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema({
   height: { type: Number, required: true },
   weight: { type: Number, required: true },
   maritalStatus: { type: String, required: true },
-  medicationList: { type: String, required: true },
-  allergies: { type: String, required: true },
+  medicationList: { type: String},
+  allergies: { type: String },
 
 });
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
+import { loginUser } from "../Services/authServices.js";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,34 +12,34 @@ const Login = () => {
   const location = useLocation();
   const [identifier, setIdentifier] = useState("");
   const role = location.state?.role;
-  const placeholderText = role === "Doctor" ? "CND" : role === "Pharmacist" ? "CNF" : "CNP";
+  const placeholderText =
+    role === "Doctor" ? "CND" : role === "Pharmacist" ? "CNF" : "CNP";
 
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log(
       `Login with email: ${email}, password: ${password}, ${role} ID: ${identifier}`
     );
-    try {
-      const response = await fetch("http://localhost:3000/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password, identifier, role }),
-      });
 
-      if (!response.ok) {
-        setErrorMessage("Invalid email or password. Please try again.");
-        throw new Error("Login failed");
+    try {
+      const { success, data, error } = await loginUser(
+        email,
+        password,
+        identifier,
+        role
+      );
+
+      if (!success) {
+        setErrorMessage(error);
+        throw new Error(error);
       }
 
-      const data = await response.json();
       login(data.token); // Assuming login function handles setting auth state
       console.log("Login successful:", data);
 
-      if (!isAuthenticated && role == "Patient") {
+      if (!isAuthenticated && role === "Patient") {
         history.push("/home/medicamente-otc");
-      } else if (role == "Doctor") {
+      } else if (role === "Doctor") {
         history.push("/doctor/profile");
       } else {
         history.push("/home/medicamente-otc");
@@ -76,17 +77,21 @@ const Login = () => {
         />
       </div>
       <div className="buttons-container">
-        {errorMessage && <p className="text-error" style={{ color: 'red'}}>Conectare nereușită. Încearcă din nou.</p>}
-          <button type="button" onClick={handleLogin}>
+        {errorMessage && (
+          <p className="text-error" style={{ color: "red" }}>
+            Conectare nereușită. Încearcă din nou.
+          </p>
+        )}
+        <button type="button" onClick={handleLogin}>
           Conectare
-          </button>
-          <button
-            type="button"
-            onClick={() => console.log("Forgot Password clicked")}
-          >
-            Ai uitat parola?
-          </button>
-        </div>
+        </button>
+        <button
+          type="button"
+          onClick={() => console.log("Forgot Password clicked")}
+        >
+          Ai uitat parola?
+        </button>
+      </div>
     </form>
   );
 };

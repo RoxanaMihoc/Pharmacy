@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import "./styles/patient-general-list.css";
+import { fetchPatientsFromAPI } from "../Services/userServices";
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);
@@ -13,25 +14,24 @@ const PatientList = () => {
 
   useEffect(() => {
     const fetchPatients = async () => {
-      const response = await fetch(
-        `http://localhost:3000/doctors/patients-list/${currentUser}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setPatients(data);
-        console.log(patients);
-        setLoading(false);
-      } else {
-        throw new Error("Failed to fetch patients");
+      try {
+        const { success, data, error } = await fetchPatientsFromAPI(currentUser);
+  
+        if (success) {
+          setPatients(data);
+          console.log(data);
+        } else {
+          console.error("Error fetching patients:", error);
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+      } finally {
+        setLoading(false); // Ensure loading state is set to false regardless of success or failure
       }
     };
-
-    fetchPatients().catch((err) => {
-      console.error("Error fetching patients:", err);
-      setLoading(false);
-    });
+  
+    fetchPatients();
   }, [currentUser]);
-
   if (loading) return <div>Loading...</div>;
 
   const onPatientSelect = (patientId) => {

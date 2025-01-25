@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./styles/doctor-statistics.css";
 import { useAuth } from "../../Context/AuthContext";
 import { useLocation, useHistory } from "react-router-dom";
+import { fetchAllPrescriptions } from "../Services/prescriptionServices";
+import {fetchNotifications} from "../Notifications/Services/notificationServices"
 
 const DoctorStatistics = () => {
   const [stats, setStats] = useState({
@@ -18,20 +20,17 @@ const DoctorStatistics = () => {
     history.push(path);
   }
 
-  useEffect(() => {
-    const fetchPrescriptions = async () => {
-      try {
-        // Fetch prescriptions
-        const prescriptionsResponse = await fetch(
-          `http://localhost:3000/home/all-prescriptions/${currentUser}`
-        );
-        const prescriptionsData = await prescriptionsResponse.json();
+useEffect(() => {
+  const fetchPrescriptions = async () => {
+    try {
+      const { success, data, error } = await fetchAllPrescriptions(currentUser);
 
+      if (success) {
         // Calculate statistics
         const lastThreeMonths = new Date();
         lastThreeMonths.setMonth(lastThreeMonths.getMonth() - 3);
 
-        const prescriptionsLastThreeMonths = prescriptionsData.filter(
+        const prescriptionsLastThreeMonths = data.filter(
           (prescription) => new Date(prescription.date) >= lastThreeMonths
         );
 
@@ -40,18 +39,22 @@ const DoctorStatistics = () => {
 
         // Update state
         setStats({
-          totalPrescriptions: prescriptionsData.length,
+          totalPrescriptions: data.length,
           prescriptionsLastThreeMonths: prescriptionsLastThreeMonths.length,
           avgPrescriptionsPerMonth,
         });
-      } catch (error) {
+      } else {
         console.error("Error fetching prescriptions:", error);
       }
-    };
+    } catch (error) {
+      console.error("Unexpected error:", error);
+    }
+  };
 
-    fetchPrescriptions();
-    fetchNotifications();
-  }, [currentUser]);
+  fetchPrescriptions();
+  fetchNotificationsData(); // Keep this call as is, assuming it's already refactored
+}, [currentUser]);
+
 
   const sortNotifications = (notificationsArray) => {
     return notificationsArray.sort((a, b) => {
@@ -74,27 +77,22 @@ const DoctorStatistics = () => {
     return notification;
   };
 
-  const fetchNotifications = async () => {
+  const fetchNotificationsData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/home/notifications/${currentUser}/${role}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const { success, data, error } = await fetchNotifications(
+        currentUser,
+        role
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch notifications");
+  
+      if (success) {
+        const normalized = data.map(normalizeNotification);
+        setNotifications(sortNotifications(normalized)); // Sort before setting state
+        console.log(normalized);
+      } else {
+        console.error("Error fetching notifications:", error);
       }
-
-      const fetchedNotifications = await response.json();
-      const normalized = fetchedNotifications.map(normalizeNotification);
-      setNotifications(sortNotifications(normalized)); // Sort before setting state
-      console.log(notifications)
     } catch (error) {
-      console.error("Error fetching notifications:", error);
+      console.error("Unexpected error:", error);
     }
   };
 
@@ -141,7 +139,7 @@ const DoctorStatistics = () => {
                     {notification.orderDetails.firstName}{" "}
                     {notification.orderDetails.lastName}
                   </strong>{" "}
-                  a achiziționat o prescripție în data de: {" "}
+                  a achiziționat o rețeta în data de: {" "}
                   <span>
                     {new Date(notification.orderDetails.date).toLocaleDateString()}
                   </span>

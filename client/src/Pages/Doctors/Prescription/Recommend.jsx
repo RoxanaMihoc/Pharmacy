@@ -1,5 +1,4 @@
 import Diagnosis from "./Diagnosis";
-import PatientsList from "./PatientsList";
 import PrescriptionsOverview from "./PrescriptionOverview";
 import React, { useState, useEffect } from "react";
 import {
@@ -22,7 +21,6 @@ function Recommend() {
           path="/doctor/prescription/medicine"
           component={Diagnosis}
         />
-        <Route path="/doctor/prescription/users" component={PatientsList} />
         <Route path="/doctor/prescription" component={PrescriptionsList} />
         <Redirect from="/home" exact to="/doctor/dashboard" />
         <Route component={() => <div>Page not found</div>} />

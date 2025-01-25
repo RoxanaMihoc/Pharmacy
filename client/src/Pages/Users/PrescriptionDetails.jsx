@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-import { addToFav } from "../../Components/FavButton";
+import { addToCart } from '../Services/cartServices';
 import "./styles/prescription-details.css";
 
 const PrescriptionDetails = () => {
@@ -13,7 +13,7 @@ const PrescriptionDetails = () => {
   const addAllToCart = () => {
     notification.prescriptionDetails.products.forEach(async (product) => {
       try {
-        const result = await addToFav(
+        const result = await addToCart(
           currentUser,
           product.medication._id,
           notification.prescriptionNumber

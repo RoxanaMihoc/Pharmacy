@@ -5,6 +5,7 @@ import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import "./styles/notification.css";
 import io from "socket.io-client";
+import {fetchNotifications, saveNotificationToDatabase} from "../Notifications/Services/notificationServices";
 
 const socket = io("http://localhost:3000");
 
@@ -40,49 +41,6 @@ const NotificationBell = () => {
     });
   };
 
-  // Fetch notifications from the database
-  const fetchNotifications = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/home/notifications/${currentUser}/${role}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch notifications");
-      }
-
-      const fetchedNotifications = await response.json();
-      const normalized = fetchedNotifications.map(normalizeNotification);
-      setNotifications(sortNotifications(normalized)); // Sort before setting state
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
-  };
-
-  // Save new notification to the database
-  const saveNotificationToDatabase = async (notification) => {
-    try {
-      await fetch(`http://localhost:3000/home/add-notification`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: currentUser,
-          role: role,
-          notification: notification,
-        }),
-      });
-    } catch (error) {
-      console.error("Error saving notification to the database:", error);
-    }
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -103,7 +61,7 @@ const NotificationBell = () => {
     console.log("Setting up socket listeners", currentUser, role);
     socket.emit("register", currentUser, role);
 
-    const handleNewNotification = (notification) => {
+    const handleNewNotification = async (notification) => {
       console.log("Notification received:", notification);
       const normalizedNotification = normalizeNotification(notification);
 
@@ -117,8 +75,12 @@ const NotificationBell = () => {
         setNotifications(updatedNotifications);
         setUnreadCount((prev) => prev + 1);
 
-        // Save notification to the database
-        saveNotificationToDatabase(normalizedNotification);
+        try {
+          // Save notification to the database
+          await saveNotificationToDatabase(currentUser, role, normalizedNotification);
+        } catch (error) {
+          console.error("Error saving notification:", error);
+        }
       } else {
         console.log(
           "Duplicate notification received, ignoring:",
@@ -137,9 +99,19 @@ const NotificationBell = () => {
 
   const toggleNotifications = async () => {
     if (!showNotifications) {
-      await fetchNotifications(); // Fetch notifications only when opening
+      try {
+        const fetchedNotifications = await fetchNotifications(
+          currentUser,
+          role
+        );
+        const normalized = fetchedNotifications.map(normalizeNotification);
+        setNotifications(sortNotifications(normalized));
+      } catch (error) {
+        console.error("Failed to toggle notifications:", error);
+      }
     }
     setShowNotifications(!showNotifications);
+
     if (showNotifications) {
       setUnreadCount(0); // Reset unread count
     }

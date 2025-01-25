@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import "./styles/diagnosis.css"; // Updated CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
+import { fetchAllProducts } from "../../Services/productServices";
 
 const Diagnosis = () => {
   const [filter, setFilter] = useState("");
@@ -31,22 +32,24 @@ const Diagnosis = () => {
   const patient = location.state?.patient;
   const history = useHistory();
 
-  // Fetch the prescription list
-  useEffect(() => {
-    const fetchPrescriptions = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/home/all-products");
-        if (!response.ok) {
-          throw new Error("Something went wrong!");
-        }
-        const data = await response.json();
-        setPrescriptions(data);
-      } catch (error) {
-        console.error("Fetch error:", error);
+
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const { success, data, error } = await fetchAllProducts();
+
+      if (success) {
+        setPrescriptions(data); // Update state with fetched products
+      } else {
+        console.error("Error fetching prescriptions:", error);
       }
-    };
-    fetchPrescriptions();
-  }, []);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
+  };
+
+  fetchProducts();
+}, []);
 
   // Filter logic for the search bar
   const filteredPrescriptions = prescriptions.filter((med) =>
