@@ -1,92 +1,87 @@
-/* General styling for the HomeUser layout */
+/* General Styling */
 .page-content {
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
-    align-items: stretch; /* Stretch children to fill the width */
-    flex: 1; /* Take up all available space */
-    overflow-y: auto;
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: stretch; /* Stretch children to fill the width */
+  flex-grow: 1; /* Takes up remaining space */
+  overflow-y: auto; /* Allows scrolling within the content area */
+  background-color: rgb(224, 233, 235);
 }
 
 .home-doctor {
-    display: flex;
-    min-height: 100vh; /* Full viewport height */
+  display: flex;
+  min-height: 100vh; /* Full viewport height */
 }
 
-.sidebar {
-    flex: 0 0 200px; /* Sidebar fixed width */
-    background-color: #343a40; /* Dark background */
-    color: #ffffff; /* White text color */
-    height: 100vh; /* Full height */
-    overflow-y: auto; /* Scrollable if content overflows */
-}
-
+/* Top Navigation Bar */
 .top-nav {
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    border-bottom: 1px solid #dee2e6;
-    font-size: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background-color: #f8f9fa;
+  padding: 10px 20px;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
 .nav-icons {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: #343a40;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #343a40;
 }
 
 .icon-button:hover {
-    color: #343a40;
-    background-color: #aacdf5; ;
+  background-color: #aacdf5;
 }
 
-.page-content {
-    flex-grow: 1; /* Takes up remaining space */
-    overflow-y: auto; /* Allows scrolling within the content area */
-  }
-  
-  .sidebar {
-    flex: 0 0 250px; /* Fixed width for larger screens */
-    background-color: #2C3E50; /* Dark background */
-    color: #fff; /* White text */
-    display: flex;
-    flex-direction: column; /* Stack vertically */
-    padding: 20px;
-    height: 200vh; /* Full viewport height */
-    transition: transform 0.3s ease; /* Smooth transform transition */
+.nav-title {
+  flex: 1; /* Allow title to grow and take space */
+  text-align: center; /* Center-align title */
+}
+
+/* Sidebar Styling */
+.sidebar {
+  flex: 0 0 300px; /* Fixed width for larger screens */
+  background-color: #2C3E50; /* Dark background */
+  color: #fff; /* White text */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  padding: 20px;
+  height: 100vh; /* Full viewport height */
+  transition: transform 0.8s ease; /* Smooth transition for show/hide */
 }
 
 .sidebar-header {
-    font-size: 1.5em; /* Larger text size */
-    font-weight: bold; /* Bold font weight */
-    margin-bottom: 20px; /* Space below the header */
-    text-align: center; /* Center align text */
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .sidebar ul {
-    list-style-type: none; /* No bullets */
-    padding: 0; /* No padding */
+  list-style-type: none;
+  padding: 0;
 }
 
 .sidebar ul li {
-    padding: 10px 0; /* Padding top and bottom for each item */
-    cursor: pointer; /* Pointer cursor on hover */
+  padding: 10px 0;
+  cursor: pointer;
 }
 
 .sidebar ul li:hover {
-    background-color: #34495E; /* Lighter background on hover */
+  background-color: #34495E; /* Highlight on hover */
 }
 
 .sidebar.hidden {
-  display: none;
   transform: translateX(-100%);
 }
 
@@ -94,92 +89,29 @@
   transform: translateX(0);
 }
 
-.top-nav {
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    border-bottom: 1px solid #dee2e6;
-    font-size: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-  }
-  
-  .nav-icons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: #343a40;
-  }
-  
-  .icon-button:hover {
-    color: #343a40;
-    background-color: #aacdf5;
-  }
-  
-  .nav-icons > * {
-    display: flex;
-    align-items: center;
-  }
-  
-  .nav-title {
-    flex: 1; /* Allow the title to grow */
-    text-align: center; /* Center the title */
-  }
-
-  /* Menu button */
-.menu-button {
-  display: none;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background-color: #2C3E50;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 20px;
-  border-radius: 5px;
-  z-index: 1000;
-  cursor: pointer;
+.menu-open-button {
+  position: fixed  !important;
+  background-color: transparent;
+  left: 20px !important; /* Distance from the left of the viewport */
+  color: black; /* Button text color */
+  border: none; /* Remove border */
+  padding: 10px 15px; /* Padding inside the button */
+  font-size: 20px; /* Button text size */
+  border-radius: 5px; /* Rounded corners */
+  z-index: 1000; /* Ensure it's on top of other elements */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
-.menu-button:hover {
-  background-color: #1a242f;
+.menu-open-button:hover {
+  background-color: #1a242f; /* Slightly darker background on hover */
+  color: #f1f1f1; /* Slightly lighter text on hover */
 }
 
-  
-  /* Responsive Styling */
-  @media (max-width: 768px) {
-    .top-nav {
-      flex-direction: column; /* Stack children vertically */
-      align-items: stretch; /* Align items to the full width */
-    }
-  
-    .nav-icons {
-      justify-content: center; /* Center the icons on smaller screens */
-      margin-top: 10px; /* Add some spacing */
-    }
-  
-    .icon-button {
-      font-size: 20px; /* Slightly smaller icons for smaller screens */
-    }
-  
-    .nav-title {
-      margin-bottom: 10px; /* Add spacing below the title */
-      font-size: 18px; /* Adjust the title size */
-    }
-  }
 
-/* Responsive Styles */
+/* Responsive Styling */
 @media (max-width: 768px) {
   .menu-button {
-    display: block;
+    display: block; /* Show the menu button on small screens */
   }
 
   .sidebar {
@@ -191,7 +123,36 @@
     z-index: 999;
   }
 
+  .sidebar.hidden {
+    display: block;
+    transform: translateX(-100%); /* Keep hidden initially */
+  }
+
+  .sidebar ul li:hover {
+    background-color: #34495E; /* Highlight on hover */
+  }
+
   .page-content {
-    margin-left: 0;
+    margin-left: 0; /* Remove left margin for smaller screens */
+  }
+
+  .top-nav {
+    flex-direction: column; /* Stack children vertically */
+  }
+
+  .nav-icons {
+    justify-content: center;
+    margin-top: 10px; /* Add spacing for better visuals */
+  }
+
+  .icon-button {
+    font-size: 20px; /* Adjust icon size for smaller screens */
+  }
+
+  .nav-title {
+    margin-bottom: 10px;
+    font-size: 18px; /* Adjust title size */
   }
 }
+
+

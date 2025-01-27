@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./address.css";
+import "./styles/address.css";
 
 const AddressPage = ({ onSubmit }) => {
   const [formData, setFormData] = useState({

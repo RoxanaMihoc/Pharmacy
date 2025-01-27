@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { fetchDoctorName } from "../Pages/Services/userServices";
 import { submitOrderApi} from "../Pages/Services/orderServices";
 import { deleteCart } from "../Pages/Services/cartServices";
-import "./summary.css";
+import "./styles/summary.css";
 
 const Summary = ({
   cartItems,
@@ -19,6 +19,7 @@ const Summary = ({
   const user = currentUser;
   const [price, setTotalPrice] = useState(0);
   const [doctor, setDoctor] = useState("");
+  const [doctorId, setDoctorId] = useState("");
   const pharmacist = "66760074556be02d8a3594e6";
   const history = useHistory();
   console.log(cartItems);
@@ -81,12 +82,13 @@ const Summary = ({
 useEffect(() => {
   const getDoctorForPatient = async () => {
     if (currentUser) {
-      const { success, data, error } = await  fetchDoctorName(currentUser);
+      const { success, firstNameD, lastNameD, doctorId } = await  fetchDoctorName(currentUser);
 
       if (success) {
-        setDoctor(data); // Set the doctor data in state
+        setDoctor(firstNameD + " " + lastNameD); // Set the doctor data in state
+        setDoctorId(doctorId);
       } else {
-        console.error("Error fetching doctor data:", error);
+        console.error("Error fetching doctor data");
       }
     }
   };
@@ -97,6 +99,7 @@ useEffect(() => {
 const submitOrder = async () => {
   try {
     console.log(cartItems);
+    console.log("dOCTOR", doctor)
 
     // Submit the order
     const orderDetails = {
@@ -106,6 +109,7 @@ const submitOrder = async () => {
       totalPrice,
       pharmacist,
       doctor,
+      doctorId,
     };
 
     const { success: orderSuccess, data: orderData } = await submitOrderApi(orderDetails);
@@ -217,6 +221,12 @@ const submitOrder = async () => {
               </div>
             </div>
             <div className="price-submit">
+            <p>
+                  <strong>Plată:</strong> {addressDetails.paymentMethod}
+                </p>
+                <p>
+                  <strong>Livrare:</strong> {addressDetails.deliveryMethod}
+                </p>
               <h3> Preț total: {price} Lei </h3>
               <button
                 className="submit-order-button"

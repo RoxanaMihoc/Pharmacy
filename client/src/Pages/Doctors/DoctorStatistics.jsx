@@ -3,7 +3,7 @@ import "./styles/doctor-statistics.css";
 import { useAuth } from "../../Context/AuthContext";
 import { useLocation, useHistory } from "react-router-dom";
 import { fetchAllPrescriptions } from "../Services/prescriptionServices";
-import {fetchNotifications} from "../Notifications/Services/notificationServices"
+import { fetchNotifications } from "../Notifications/Services/notificationServices";
 
 const DoctorStatistics = () => {
   const [stats, setStats] = useState({
@@ -14,53 +14,54 @@ const DoctorStatistics = () => {
 
   const { currentUser, name, role } = useAuth();
   const [notifications, setNotifications] = useState([]);
-  const history= useHistory();
+  const history = useHistory();
 
   const handleNavigate = (path) => {
     history.push(path);
-  }
-
-useEffect(() => {
-  const fetchPrescriptions = async () => {
-    try {
-      const { success, data, error } = await fetchAllPrescriptions(currentUser);
-
-      if (success) {
-        // Calculate statistics
-        const lastThreeMonths = new Date();
-        lastThreeMonths.setMonth(lastThreeMonths.getMonth() - 3);
-
-        const prescriptionsLastThreeMonths = data.filter(
-          (prescription) => new Date(prescription.date) >= lastThreeMonths
-        );
-
-        const avgPrescriptionsPerMonth =
-          prescriptionsLastThreeMonths.length / 3;
-
-        // Update state
-        setStats({
-          totalPrescriptions: data.length,
-          prescriptionsLastThreeMonths: prescriptionsLastThreeMonths.length,
-          avgPrescriptionsPerMonth,
-        });
-      } else {
-        console.error("Error fetching prescriptions:", error);
-      }
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
   };
 
-  fetchPrescriptions();
-  fetchNotificationsData(); // Keep this call as is, assuming it's already refactored
-}, [currentUser]);
+  useEffect(() => {
+    const fetchPrescriptions = async () => {
+      try {
+        const { success, data, error } = await fetchAllPrescriptions(
+          currentUser
+        );
 
+        if (success) {
+          // Calculate statistics
+          const lastThreeMonths = new Date();
+          lastThreeMonths.setMonth(lastThreeMonths.getMonth() - 3);
+
+          const prescriptionsLastThreeMonths = data.filter(
+            (prescription) => new Date(prescription.date) >= lastThreeMonths
+          );
+
+          const avgPrescriptionsPerMonth =
+            prescriptionsLastThreeMonths.length / 3;
+
+          // Update state
+          setStats({
+            totalPrescriptions: data.length,
+            prescriptionsLastThreeMonths: prescriptionsLastThreeMonths.length,
+            avgPrescriptionsPerMonth,
+          });
+        } else {
+          console.error("Error fetching prescriptions:", error);
+        }
+      } catch (error) {
+        console.error("Unexpected error:", error);
+      }
+    };
+
+    fetchPrescriptions();
+    fetchNotificationsData(); // Keep this call as is, assuming it's already refactored
+  }, [currentUser]);
 
   const sortNotifications = (notificationsArray) => {
     return notificationsArray.sort((a, b) => {
-      console.log(a)
-      const dateA = new Date(a.orderDetails.date);
-      const dateB = new Date(b.orderDetails.date);
+      console.log(a);
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
       return dateB - dateA; // Newest first
     });
   };
@@ -79,17 +80,17 @@ useEffect(() => {
 
   const fetchNotificationsData = async () => {
     try {
-      const { success, data, error } = await fetchNotifications(
+      const { success, fetchedNotifications } = await fetchNotifications(
         currentUser,
         role
       );
-  
+
       if (success) {
-        const normalized = data.map(normalizeNotification);
+        const normalized = fetchedNotifications.map(normalizeNotification);
         setNotifications(sortNotifications(normalized)); // Sort before setting state
         console.log(normalized);
       } else {
-        console.error("Error fetching notifications:", error);
+        console.error("Error fetching notifications");
       }
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -102,7 +103,8 @@ useEffect(() => {
       <div className="welcome-message">
         <h1>Bună ziua Dr. {name}!</h1>
         <p>
-        Iată o privire rapidă asupra activității tale recente. Rămâi la curent cu pacienții și rețetele tale.
+          Iată o privire rapidă asupra activității tale recente. Rămâi la curent
+          cu pacienții și rețetele tale.
         </p>
       </div>
 
@@ -133,30 +135,48 @@ useEffect(() => {
           <h3>Notificări recente</h3>
           <ul>
             {notifications.length > 0 ? (
-              notifications.map((notification, index) => (
-                <li key={index}>
-                  <strong>
-                    {notification.orderDetails.firstName}{" "}
-                    {notification.orderDetails.lastName}
-                  </strong>{" "}
-                  a achiziționat o rețeta în data de: {" "}
-                  <span>
-                    {new Date(notification.orderDetails.date).toLocaleDateString()}
-                  </span>
-                </li>
-              ))
+              notifications.slice(0, 3).map(
+                (
+                  notification,
+                  index // Only take the first 3 notifications
+                ) => (
+                  <li key={index}>
+                    <div className="notification-message">
+                    • {notification.message}
+                    </div>
+                    <div className="notification-date">
+                      {new Date(notification.date).toLocaleDateString()}
+                    </div>
+                  </li>
+                )
+              )
             ) : (
-              <li>No notifications available</li>
+              <li>Nicio notificare disponibila.</li>
             )}
           </ul>
         </div>
 
         <div className="actions-card">
           <h3>Acțiuni Rapide</h3>
-          <button className="quick-action-btn" onClick={() => handleNavigate('/doctor/prescription')}>Vezi rețete</button>
-          <button className="quick-action-btn"onClick={() => handleNavigate('/doctor/profile')}>Gestionați Pacienții</button>
-          
-          <button className="quick-action-btn"onClick={() => handleNavigate('/doctor/prescription/users')}>Adaugă Rețetă</button>
+          <button
+            className="quick-action-btn"
+            onClick={() => handleNavigate("/doctor/prescription")}
+          >
+            Vezi rețete
+          </button>
+          <button
+            className="quick-action-btn"
+            onClick={() => handleNavigate("/doctor/profile")}
+          >
+            Gestionați Pacienții
+          </button>
+
+          <button
+            className="quick-action-btn"
+            onClick={() => handleNavigate("/doctor/prescription/users")}
+          >
+            Adaugă Rețetă
+          </button>
         </div>
       </div>
     </div>
@@ -164,4 +184,3 @@ useEffect(() => {
 };
 
 export default DoctorStatistics;
-

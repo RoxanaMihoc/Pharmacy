@@ -5,7 +5,7 @@ import "./styles/overview.css"; // Updated CSS
 import io from "socket.io-client";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import { sendPrescription } from "../../Services/prescriptionServices";
+import { sendPrescriptionData } from "../../Services/prescriptionServices";
 
 const socket = io("http://localhost:3000");
 
@@ -53,7 +53,7 @@ const sendPrescription = async () => {
     };
 
     // Call the service function
-    const { success, data, error } = await sendPrescription(prescriptionData);
+    const { success, data, error } = await sendPrescriptionData(prescriptionData);
 
     if (success) {
       // Set success message
@@ -105,7 +105,7 @@ const sendPrescription = async () => {
   };
 
   const handleBack=() =>{
-    history.push("/doctor/profile");
+    history.push("/doctor/stats");
   }
 
   return (
@@ -113,7 +113,7 @@ const sendPrescription = async () => {
       <h1>Sumar Rețetă</h1>
 
       {/* Two-column layout */}
-      <div className="diagnosis-content">
+      <div className="left-row">
         <div className="overview-left">
           <div className="profile-card">
             <img
@@ -124,7 +124,6 @@ const sendPrescription = async () => {
             <h3>{patient?.firstName} {patient?.lastName}</h3>
             <p>CNP: {patient?.identifier}</p>
             <p>Vârsta: {age}</p>
-            <button className="btn view-profile">Vezi Profil</button>
           </div>
           <div className="patient-info">
             <h2>Informații Pacient</h2>
@@ -135,6 +134,7 @@ const sendPrescription = async () => {
             <p>Gen: {patient?.gender}</p>
             <p>Data nașterii: {patient?.birth_date}</p>
           </div>
+        </div>
         </div>
         <div className="overview-right">
           <div className="diagnosis-info">
@@ -174,7 +174,6 @@ const sendPrescription = async () => {
             </ul>
           </div>
         </div>
-      </div>
       <div className="send-reteta">
       {statusMessage && (
         <div className={`status-message ${statusType}`}>
@@ -182,7 +181,7 @@ const sendPrescription = async () => {
         </div>
       )}
       <div className="button-reteta">
-      <button onClick={sendPrescription} className="send-button">
+      <button onClick={sendPrescription} className="send-button2">
         Trimite Prescripție
       </button>
       <button onClick={generatePDF} className="generate-pdf-button">

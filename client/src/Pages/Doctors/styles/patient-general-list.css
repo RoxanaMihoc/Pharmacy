@@ -24,36 +24,6 @@
   padding: 20px;
 }
 
-.search-bar2 {
-  display: flex;
-  flex-direction: row;
-  align-items: center; /* Aligns children vertically in the middle */
-  justify-content: center;
-  gap: 10px; /* Adds space between the input and the button */
-  margin-bottom: 20px;
-}
-
-.search-input-bar2,
-.search-bar2 button {
-  height: 50px; /* Sets a specific height for both */
-  padding: 0 12px; /* Adds padding inside the input and button for better text alignment */
-  border: 1px solid #ccc; /* Adds a subtle border to both */
-  font-size: 16px; /* Ensures text size is consistent */
-}
-
-.search-bar2 input {
-  flex-grow: 1; /* Allows the input to fill the space */
-  margin-right: 10px; /* Adds some space between the input and the button */
-}
-
-.search-bar2 button {
-  color: white; /* Text color for the button */
-  cursor: pointer; /* Shows a pointer cursor on hover */
-  border: none; /* No border for the button to make it look cleaner */
-  border-radius: 15px;
-  margin-top: 5px;
-}
-
 .patient-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

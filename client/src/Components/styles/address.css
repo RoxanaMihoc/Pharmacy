@@ -138,3 +138,56 @@ textarea {
   margin-top: 5px;
   margin-left: 20px;
 }
+
+/* Tablet (768px and below) */
+@media (max-width: 768px) {
+  .section-all {
+    flex-direction: column; /* Stack sections vertically */
+    gap: 20px; /* Reduce the gap */
+  }
+
+  .section-details,
+  .section-payment-delivery {
+    max-width: 100%; /* Full width for smaller screens */
+  }
+
+  .personal-info {
+    grid-template-columns: 1fr; /* Single column for personal info */
+    gap: 10px;
+  }
+
+  textarea {
+    width: 100%; /* Full width for textareas */
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .section-all {
+    gap: 15px; /* Reduce gap further */
+  }
+
+  .section-details,
+  .section-payment-delivery {
+    padding: 20px; /* Reduce padding for small screens */
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  select,
+  textarea {
+    font-size: 0.9rem;
+    padding: 8px; /* Adjust padding for smaller inputs */
+  }
+
+  .next-step {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .delivery-info {
+    font-size: 0.8rem;
+    margin-top: 5px;
+  }
+}

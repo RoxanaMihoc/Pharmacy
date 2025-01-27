@@ -116,3 +116,46 @@
     color: #0056b3; /* Slightly darker color on hover */
   }
   
+  /* Responsive Design */
+@media (max-width: 768px) {
+  .notification-panel {
+    width: 90%; /* Adjust width to fit smaller screens */
+    right: 5%; /* Center horizontally */
+    top: 50px; /* Adjust position from top */
+    max-height: 300px; /* Reduce height for smaller screens */
+  }
+
+  .notification-message {
+    font-size: 12px; /* Reduce font size */
+  }
+
+  .notification-date {
+    font-size: 10px; /* Reduce font size */
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-panel {
+    left: 0; /* Align to the right edge */
+    top: 50px;
+    max-width: 500px;
+    max-height: 250px; /* Reduce height further */
+    border-radius: 0; /* Remove border radius for a cleaner look */
+  }
+
+  .notification-panel h4 {
+    font-size: 14px; /* Smaller font for heading */
+  }
+
+  .notification-message {
+    font-size: 10px; /* Further reduce font size */
+  }
+
+  .notification-date {
+    font-size: 8px; /* Smaller date text */
+  }
+
+  .load-more-button {
+    font-size: 12px; /* Adjust button font size */
+  }
+}

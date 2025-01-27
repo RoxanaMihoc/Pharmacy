@@ -4,9 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightLong,
   faArrowLeftLong,
+  faSearch,
+  faSort,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/pres-details.css";
-import { fetchPrescriptions, removeCurrentPrescription } from "../Services/prescriptionServices";
+import {
+  fetchPrescriptions,
+  removeCurrentPrescription,
+} from "../Services/prescriptionServices";
+import { fetchDoctorName } from "../Services/userServices";
+import {markPresAsCurrent} from "../Services/prescriptionServices"
 
 const PrescriptionsList = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -15,7 +22,40 @@ const PrescriptionsList = () => {
   const [visibleId, setVisibleId] = useState(null);
   const { currentUser } = useAuth();
   const [currentPrescriptionId, setCurrentPrescriptionId] = useState(null);
+  const [doctor, setDoctor] = useState("");
   const itemsPerPage = 8; // Prescriptions per page
+  const [sortOption, setSortOption] = useState(null); // Tracks current sort option
+  
+    const sortPrescriptions = (option) => {
+      const sortedPrescriptions = [...prescriptions]; // Create a copy to avoid mutating the state directly
+  
+      if (option === "date-newest") {
+        sortedPrescriptions.sort((a, b) => new Date(b.date) - new Date(a.date));
+      } else if (option === "date-oldest") {
+        sortedPrescriptions.sort((a, b) => new Date(a.date) - new Date(b.date));
+      }
+  
+      setPrescriptions(sortedPrescriptions);
+      setSortOption(option); // Update the state with the selected option
+    };
+
+  useEffect(() => {
+    const getDoctorForPatient = async () => {
+      if (currentUser) {
+        const { success, firstNameD, lastNameD } = await fetchDoctorName(
+          currentUser
+        );
+
+        if (success) {
+          setDoctor(firstNameD + " " + lastNameD); // Set the doctor data in state
+        } else {
+          console.error("Error fetching doctor data");
+        }
+      }
+    };
+
+    getDoctorForPatient();
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchPrescriptionsData = async () => {
@@ -40,11 +80,11 @@ const PrescriptionsList = () => {
 
   const handleMarkAsCurrent = async (prescriptionId) => {
     try {
-      const { success } = await fetchPrescriptions(currentUser);
+      console.log("lalalaaaa")
+      const { success } = await markPresAsCurrent(prescriptionId, currentUser);
 
       if (success) {
         setCurrentPrescriptionId(prescriptionId); // Update the current active prescription ID
-        fetchPrescriptions(); // Refresh the prescription list
       }
     } catch (error) {
       console.error("Error marking prescription as current:", error);
@@ -52,27 +92,27 @@ const PrescriptionsList = () => {
     }
   };
 
-const handleRemoveCurrent = async () => {
-  try {
-    if (!currentPrescriptionId) return;
+  const handleRemoveCurrent = async () => {
+    try {
+      if (!currentPrescriptionId) return;
 
-    const { success, error } = await removeCurrentPrescription(
-      currentPrescriptionId,
-      currentUser
-    );
+      const { success, error } = await removeCurrentPrescription(
+        currentPrescriptionId,
+        currentUser
+      );
 
-    if (success) {
-      setCurrentPrescriptionId(null); // Clear the active prescription
-      fetchPrescriptions(); // Refresh the prescription list
-    } else {
-      console.error("Error removing current prescription:", error);
-      alert("An error occurred while removing the current prescription.");
+      if (success) {
+        setCurrentPrescriptionId(null); // Clear the active prescription
+        fetchPrescriptions(); // Refresh the prescription list
+      } else {
+        console.error("Error removing current prescription:", error);
+        alert("An error occurred while removing the current prescription.");
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      alert("An unexpected error occurred.");
     }
-  } catch (error) {
-    console.error("Unexpected error:", error);
-    alert("An unexpected error occurred.");
-  }
-};
+  };
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value.toLowerCase());
@@ -106,14 +146,39 @@ const handleRemoveCurrent = async () => {
     <div className="prescription-page-container">
       <h2>Rețete</h2>
       <div className="prescriptions-list-page">
-        {/* Search Bar */}
         <div className="search-add-bar">
-          <input
-            type="text"
-            placeholder="Caută rețetă..."
-            value={filter}
-            onChange={handleFilterChange}
-          />
+          <div className="search-input-wrapper">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Caută comanda"
+              className="search-bar"
+            />
+          </div>
+          <div className="action-buttons">
+            <div className="dropdown">
+              <button className="sort-button">
+                <span>
+                  <FontAwesomeIcon icon={faSort} className="search-icon" />
+                  Sort
+                </span>
+              </button>
+              <div className="dropdown-menu">
+                <span onClick={() => sortPrescriptions("date-newest")}>
+                  Data (Cea mai recenta)
+                </span>
+                <span onClick={() => sortPrescriptions("date-oldest")}>
+                  Data (Cea mai veche)
+                </span>
+              </div>
+            </div>
+            <button
+              className="refresh-button"
+              onClick={() => fetchPrescriptions(currentUser)}
+            >
+              <span>↻</span>
+            </button>
+          </div>
         </div>
 
         {/* Prescriptions Table */}
@@ -121,7 +186,7 @@ const handleRemoveCurrent = async () => {
           <thead>
             <tr>
               <th>Număr rețetă</th>
-              <th>Nume Pacient</th>
+              <th>Nume Doctor</th>
               <th>Data</th>
               <th>Status</th>
               <th>Acțiuni</th>
@@ -132,10 +197,7 @@ const handleRemoveCurrent = async () => {
               <React.Fragment key={prescription._id}>
                 <tr>
                   <td>{prescription.prescriptionNumber}</td>
-                  <td>
-                    {prescription.patient.firstName}{" "}
-                    {prescription.patient.lastName}
-                  </td>
+                  <td>{doctor}</td>
                   <td>{new Date(prescription.date).toLocaleDateString()}</td>
                   <td>{prescription.status}</td>
                   <td>

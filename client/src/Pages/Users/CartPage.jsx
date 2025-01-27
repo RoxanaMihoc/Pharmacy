@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, FormControl } from "react-bootstrap";
 import AddressPage from "../../Components/AddressPage";
 import Summary from "../../Components/Summary";
+import PlacedOrder from "../../Components/PlacedOrder";
 import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
-import { fetchCart, fetchCartItems, removeItemFromCart } from '../Services/cartServices';
+import {
+  fetchCart,
+  fetchCartItems,
+  removeItemFromCart,
+} from "../Services/cartServices";
 import "./styles/fav-page.css";
 
 const CartPage = () => {
@@ -69,29 +74,32 @@ const CartPage = () => {
 
   const handleRemoveItem = async (e, productId) => {
     e.preventDefault();
-  
-    const { success } = await removeItemFromCart(currentUser, productId); // Use the service function
-  
+    const { success } = await removeItemFromCart(currentUser, productId);
+
     if (success) {
-      // Filter the cart directly
-      const updatedCart = cart.filter((product) => {
-        if (product._id === productId) {
-          // Save the price before filtering out the product
-          setTotalPrice(
-            (Number(totalPrice) - Number(product.price)).toFixed(20)
-          );
-          return false; // Don't include the product in the updated cart
-        }
-        return true; // Include other products in the updated cart
-      });
-  
-      setCart(updatedCart); // Update the cart state
-      setCartItems(cartItems.filter((item) => item !== productId)); // Update cart items
+      // Update the cart state immediately
+      const updatedCart = cart.filter(
+        (product) => product[0]._id !== productId
+      );
+      setCart(updatedCart);
+
+      // Update total price
+      const updatedTotalPrice = updatedCart.reduce(
+        (sum, product) => sum + Number(product[0].price),
+        0
+      );
+      setTotalPrice(updatedTotalPrice);
+
+      // Update cart items state
+      const updatedCartItems = cartItems.filter(
+        (item) => item.productId !== productId
+      );
+      setCartItems(updatedCartItems);
     } else {
       console.error("Failed to remove item from cart");
     }
   };
-  
+
   const updateTotalPrice = async (productId) => {
     let total = 0;
     cart.forEach((itemArray) => {
@@ -145,7 +153,7 @@ const CartPage = () => {
   };
 
   const handleAddressSubmit = (details) => {
-    console.log(details.firstName);
+    console.log("details comanda", details);
     if (
       !details.firstName ||
       !details.phone ||
@@ -157,6 +165,10 @@ const CartPage = () => {
     }
     setAddressDetails(details);
     setActiveStep("Sumar comanda");
+  };
+
+  const handleAddressPage = (details) => {
+    setActiveStep("Adresa si contact");
   };
 
   const handleOrderSubmission = (success) => {
@@ -239,7 +251,7 @@ const CartPage = () => {
                   <Col xs={2} className="delete-col">
                     <Button
                       variant="danger"
-                      onClick={(e) => handleRemoveItem(e, item[0]?.id)}
+                      onClick={(e) => handleRemoveItem(e, item[0]?._id)}
                     >
                       X
                     </Button>
@@ -254,11 +266,13 @@ const CartPage = () => {
               ))
             ) : (
               <div className="empty-cart">
-                <h2>Niciun produs in coș.</h2>
-                <h3>Continuă cumpăraturile și adaugă produse în coș.</h3>
-                <button className="go-to-button" onClick={handlePharmacy}>
-                  Caută produse în farmacie.
-                </button>
+                <div className="empty-cart2">
+                  <h2>Niciun produs in coș.</h2>
+                  <h3>Continuă cumpăraturile și adaugă produse în coș.</h3>
+                  <button className="go-to-button" onClick={handlePharmacy}>
+                    Caută produse în farmacie.
+                  </button>
+                </div>
               </div>
             )}
 
@@ -294,6 +308,17 @@ const CartPage = () => {
                   </div>
                 </div>
               )}
+              <div className="section">
+                {cart.length > 0 && (
+                  <button
+                    type="submit"
+                    className="next-step"
+                    onClick={handleAddressPage}
+                  >
+                    Mai departe <span className="arrow">→</span>
+                  </button>
+                )}
+              </div>
             </div>
           </>
         );
@@ -314,13 +339,7 @@ const CartPage = () => {
         );
 
       case "Comanda plasata":
-        return (
-          <div>
-            {/* Add your order submission content here */}
-            <h5>Submit Your Order</h5>
-            <p>Details about submitting the order...</p>
-          </div>
-        );
+        return <PlacedOrder />;
       default:
         return null;
     }

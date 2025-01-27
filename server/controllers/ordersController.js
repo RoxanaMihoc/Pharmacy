@@ -3,10 +3,10 @@ const express = require("express");
 const router = express.Router();
 
 exports.addToOrders = async (req, res, io, userSockets) => {
-  const { cartItems, addressDetails, totalPrice, user, pharmacist, doctor } = req.body;
+  const { cartItems, addressDetails, totalPrice, user, pharmacist, doctor, doctorId } = req.body;
   console.log("In add to orders:", pharmacist);
   console.log("In add to orders:", cartItems);
-  console.log("In add to orders:", doctor);
+  console.log("In add to orders:", doctorId);
 
   const generateRandomNumber = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -47,53 +47,54 @@ exports.addToOrders = async (req, res, io, userSockets) => {
     });
     console.log("Attempting to save:", newOrder);
     await newOrder.save();
-    console.log("Sockets: ", userSockets[doctor]);
+    console.log("Sockets: ", userSockets[doctorId]);
 
     let date = newOrder.date;
     console.log(date);
 
     // Notify the pharmacist
-    if (userSockets[pharmacist] && userSockets[pharmacist].socketId) {
-      io.to(userSockets[pharmacist].socketId).emit("new-order", {
-        id: newOrder._id,
-        message: "A fost plasată o noua comanda.",
-        orderDetails: {
-          firstName,
-          lastName,
-          phone,
-          email,
-          identifier,
-          address,
-          county,
-          city,
-          paymentMethod,
-          additionalInfo,
-          cart: cartItems,
-          totalPrice: totalPrice,
-          user: user,
-          status: "Comandă trimisă",
-          pharmacist: pharmacist,
-          orderNumber,
-          date,
-        },
-      });
-    }
+    // if (userSockets[pharmacist] && userSockets[pharmacist].socketId) {
+    //   io.to(userSockets[pharmacist].socketId).emit("new-order", {
+    //     id: newOrder._id,
+    //     message: "A fost plasată o noua comanda.",
+    //     orderDetails: {
+    //       firstName,
+    //       lastName,
+    //       phone,
+    //       email,
+    //       identifier,
+    //       address,
+    //       county,
+    //       city,
+    //       paymentMethod,
+    //       additionalInfo,
+    //       cart: cartItems,
+    //       totalPrice: totalPrice,
+    //       user: user,
+    //       status: "Comandă trimisă",
+    //       pharmacist: pharmacist,
+    //       orderNumber,
+    //       date,
+    //     },
+    //   });
+    // }
 
     // Notify the doctor if the prescription ID exists in cart items
     // const presIdExists = cartItems.some((item) => item.presId !== null);
-    if ( userSockets[doctor] && userSockets[doctor].socketId) {
-      io.to(userSockets[doctor].socketId).emit("new-order", {
+    if ( userSockets[doctorId] && userSockets[doctorId].socketId) {
+      let name = firstName +" "+ lastName;
+      io.to(userSockets[doctorId].socketId).emit("new-order", {
         id: newOrder._id,
+        date: date,
+        name: name,
+        patientId: user,
         message: `${firstName} ${lastName} a achiziționat o reteta.`,
         orderDetails: {
-          firstName,
-          lastName,
           phone,
           email,
           cart: cartItems,
           presId: cartItems.find((item) => item.presId !== null)?.presId || null,
           totalPrice: totalPrice,
-          date,
         },
       });
     }

@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     // Remove the JWT token from both state and localStorage
     setToken(null);
     localStorage.removeItem("token");
-    history.push("/login");
+    history.push("/role");
     setUser(null);
   };
 

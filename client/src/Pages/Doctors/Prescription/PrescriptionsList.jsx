@@ -6,6 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightLong,
   faArrowLeftLong,
+  faSearch,
+  faSort,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllPrescriptions } from "../../Services/prescriptionServices";
 
@@ -17,20 +20,31 @@ const PrescriptionsList = () => {
   const { currentUser, role } = useAuth();
   const itemsPerPage = 8; // Define how many prescriptions per page
   const history = useHistory();
+  const [sortOption, setSortOption] = useState(null); // Tracks current sort option
 
-  const [summaryStats, setSummaryStats] = useState({
-    prescriptionsThisMonth: 0,
-    patientsRequestingRefill: 0,
-    newPatientRequests: 0,
-  });
+  const sortPrescriptions = (option) => {
+    const sortedPrescriptions = [...prescriptions]; // Create a copy to avoid mutating the state directly
+
+    if (option === "date-newest") {
+      sortedPrescriptions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (option === "date-oldest") {
+      sortedPrescriptions.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    setPrescriptions(sortedPrescriptions);
+    setSortOption(option); // Update the state with the selected option
+  };
 
   useEffect(() => {
     const fetchPrescriptions = async () => {
       try {
-        const { success, data, error } = await fetchAllPrescriptions(currentUser);
-  
+        const { success, data, error } = await fetchAllPrescriptions(
+          currentUser
+        );
+
         if (success) {
           setPrescriptions(data);
+          console.log(prescriptions);
         } else {
           console.error("Error fetching prescriptions:", error);
         }
@@ -38,10 +52,9 @@ const PrescriptionsList = () => {
         console.error("Unexpected error:", error);
       }
     };
-  
+
     fetchPrescriptions();
   }, [currentUser, role]);
-  
 
   // const fetchSummaryStats = async () => {
   //   try {
@@ -101,13 +114,42 @@ const PrescriptionsList = () => {
     <div className="prescriptions-list-page">
       {/* Search Bar and Add Button */}
       <div className="search-add-bar">
-        <input
-          type="text"
-          placeholder="Caută rețetă..."
-          value={filter}
-          onChange={handleFilterChange}
-        />
-        <button onClick={handleAddNewPrescription}>Adaugă o noua rețetă</button>
+        <div className="search-input-wrapper">
+          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          <input
+            type="text"
+            placeholder="Caută comanda"
+            className="search-bar"
+          />
+        </div>
+        <div className="action-buttons">
+          <button className="add-pres" onClick={handleAddNewPrescription}>
+            <FontAwesomeIcon icon={faPlus} className="search-icon" />
+            Adaugă o noua rețetă
+          </button>
+          <div className="dropdown">
+            <button className="sort-button">
+              <span>
+                <FontAwesomeIcon icon={faSort} className="search-icon" />
+                Sort
+              </span>
+            </button>
+            <div className="dropdown-menu">
+              <span onClick={() => sortPrescriptions("date-newest")}>
+                Data (Cea mai recenta)
+              </span>
+              <span onClick={() => sortPrescriptions("date-oldest")}>
+                Data (Cea mai veche)
+              </span>
+            </div>
+          </div>
+          <button
+            className="refresh-button"
+            onClick={() => fetchAllPrescriptions(currentUser)}
+          >
+            <span>↻</span>
+          </button>
+        </div>
       </div>
 
       {/* Prescriptions Table */}
@@ -139,58 +181,62 @@ const PrescriptionsList = () => {
                 </td>
               </tr>
               {visibleId === prescription._id && (
-  <tr>
-    <td colSpan="5">
-      <div className="med-diag">
-        {/* Product Details Section */}
-        <div className="product-details-prescription">
-          {prescription.products.map((product, index) => (
-            <div key={index} className="product-details-pres">
-              <div className="name-photo">
-                <img
-                  src={product.medication.photo}
-                  alt={product.medication.title}
-                  className="product-image-4"
-                />
-                <div>
-                  <p className="product-title">
-                    <strong>{product.medication.title}</strong> - {product.medication.brand}
-                  </p>
-                  <p className="product-price">Preț: {product.medication.price.toFixed(2)} Lei</p>
-                </div>
-              </div>
-              <div className="dosage">
-                <p>
-                  <strong>Doză:</strong> {product.doza}
-                </p>
-                <p>
-                  <strong>Durată:</strong> {product.durata}
-                </p>
-                <p>
-                  <strong>Cantitate:</strong> {product.cantitate}
-                </p>
-                <p>
-                  <strong>Alte detalii:</strong> {product.detalii}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+                <tr>
+                  <td colSpan="5">
+                    <div className="med-diag">
+                      {/* Product Details Section */}
+                      <div className="product-details-prescription">
+                        {prescription.products.map((product, index) => (
+                          <div key={index} className="product-details-pres">
+                            <div className="name-photo">
+                              <img
+                                src={product.medication.photo}
+                                alt={product.medication.title}
+                                className="product-image-4"
+                              />
+                              <div>
+                                <p className="product-title">
+                                  <strong>{product.medication.title}</strong> -{" "}
+                                  {product.medication.brand}
+                                </p>
+                                <p className="product-price">
+                                  Preț: {product.medication.price.toFixed(2)}{" "}
+                                  Lei
+                                </p>
+                              </div>
+                            </div>
+                            <div className="dosage">
+                              <p>
+                                <strong>Doză:</strong> {product.doza}
+                              </p>
+                              <p>
+                                <strong>Durată:</strong> {product.durata}
+                              </p>
+                              <p>
+                                <strong>Cantitate:</strong> {product.cantitate}
+                              </p>
+                              <p>
+                                <strong>Alte detalii:</strong> {product.detalii}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
 
-        {/* Diagnosis and Investigation Section */}
-        <div className="diagnosis-invest">
-          <p>
-            <strong>Diagnostic:</strong> {prescription.diagnosis}
-          </p>
-          <p>
-            <strong>Investigații:</strong> {prescription.investigations}
-          </p>
-        </div>
-      </div>
-    </td>
-  </tr>
-)}
-
+                      {/* Diagnosis and Investigation Section */}
+                      <div className="diagnosis-invest">
+                        <p>
+                          <strong>Diagnostic:</strong> {prescription.diagnosis}
+                        </p>
+                        <p>
+                          <strong>Investigații:</strong>{" "}
+                          {prescription.investigations}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
             </React.Fragment>
           ))}
         </tbody>
@@ -199,7 +245,7 @@ const PrescriptionsList = () => {
       {/* Pagination */}
       <div className="pagination">
         <span
-        className="transparent-button"
+          className="transparent-button"
           disabled={currentPage <= 1}
           onClick={() => handlePageChange(currentPage - 1)}
         >
@@ -216,7 +262,7 @@ const PrescriptionsList = () => {
           </span>
         ))}
         <span
-        className="transparent-button"
+          className="transparent-button"
           disabled={currentPage >= totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
         >

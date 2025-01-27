@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import "./styles/current-prescription.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import {
-  faArrowRightLong
-} from "@fortawesome/free-solid-svg-icons";
-import { fetchCurrentPrescriptions, updateMedicationProgress, deleteLastProgressEntry  } from "../Services/prescriptionServices";
+  fetchCurrentPrescriptions,
+  updateMedicationProgress,
+  deleteLastProgressEntry,
+  notifyDoctorAboutCompletion,
+} from "../Services/prescriptionServices";
 
 const CurrentPrescription = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -13,15 +16,17 @@ const CurrentPrescription = () => {
   const [notes, setNotes] = useState(
     "Patient is allergic to walnuts and ivy syrup."
   );
+  const [completed, setCompleted] = useState(false);
   const [limitExceeded, setLimitExceeded] = useState({}); // Track dosage limit exceeded messages
-  const { currentUser } = useAuth();
+  const { currentUser, name } = useAuth();
   const [historyVisibility, setHistoryVisibility] = useState({}); // State for tracking individual medication history visibility
-
 
   useEffect(() => {
     const fetchCurrentPrescriptionsData = async () => {
-      const { success, data, error } = await fetchCurrentPrescriptions(currentUser);
-  
+      const { success, data, error } = await fetchCurrentPrescriptions(
+        currentUser
+      );
+
       if (success) {
         setPrescriptions(data);
         setLoading(false);
@@ -30,7 +35,7 @@ const CurrentPrescription = () => {
         setLoading(false);
       }
     };
-  
+
     fetchCurrentPrescriptionsData();
   }, [currentUser]);
 
@@ -49,31 +54,30 @@ const CurrentPrescription = () => {
     return date; // Return the original value if it doesn't match expected formats
   };
 
-
   const handleMarkAsTaken = async (medicationId) => {
     const updatedPrescriptions = [...prescriptions];
     const prescription = updatedPrescriptions[0];
-  
+
     // Find the medication by its ID
     const medication = prescription.products.find(
       (product) => product._id === medicationId
     );
-  
+
     if (!medication) {
       console.error(`Medication with ID ${medicationId} not found.`);
       return;
     }
-  
+
     // Ensure progressHistory is initialized
     if (!Array.isArray(medication.progressHistory)) {
       medication.progressHistory = [];
     }
-  
+
     // Add a new entry for the current date or increment doses for the same day
     const now = new Date();
     const today = now.toLocaleDateString("en-GB"); // Format as DD/MM/YYYY
     const currentTime = now.toLocaleTimeString(); // Current time in local format
-  
+
     const existingEntry = medication.progressHistory.find(
       (entry) => entry.date === today
     );
@@ -81,7 +85,7 @@ const CurrentPrescription = () => {
       typeof medication.doza === "string"
         ? parseFloat(medication.doza)
         : medication.doza;
-  
+
     if (existingEntry) {
       // Check if the daily dosage limit is exceeded
       if (existingEntry.dosesTaken >= dailyDose) {
@@ -101,43 +105,71 @@ const CurrentPrescription = () => {
         timeTaken: [currentTime],
       });
     }
-  
+
     // Clear any previous limit exceeded message
     setLimitExceeded((prev) => ({
       ...prev,
       [medicationId]: null,
     }));
-  
+
+    const totalExpectedDoses = medication.durata * medication.doza;
+
+    const totalDaysWithProgress = medication.progressHistory.length; // Days with progress
+    const totalDosesTaken = medication.progressHistory.reduce(
+      (acc, entry) => acc + entry.dosesTaken,
+      0
+    );
+    console.log("notif",totalDaysWithProgress," ", totalDosesTaken, Number(medication.doza), medication.durata )
+    if (
+      totalDaysWithProgress === Number(medication.durata) &&
+      totalDosesTaken === Number(medication.doza)
+    ) {
+      setCompleted(true);
+
+      await notifyDoctorAboutCompletion(prescription._id,
+        medicationId,
+        medication.progressHistory,
+        currentUser,
+        prescription.doctorId,
+        name,
+        completed);
+    }
+    else
+    {
     // Call the service to update progress in the backend
     const { success } = await updateMedicationProgress(
       prescription._id,
       medicationId,
       medication.progressHistory,
-      currentUser
+      currentUser,
+      prescription.doctorId,
+      name,
+      completed
     );
   
+
     if (success) {
-      setPrescriptions(updatedPrescriptions); // Update state only if API call is successful
+      setPrescriptions(updatedPrescriptions);
     } else {
       alert("Failed to update medication progress.");
     }
+  }
   };
-  
 
   const handleDeleteLastProgress = async (medicationId) => {
     const updatedPrescriptions = [...prescriptions];
     const prescription = updatedPrescriptions[0];
-  
+
     // Find the medication by its ID
     const medication = prescription.products.find(
       (product) => product._id === medicationId
     );
-  
+
     if (!medication) {
       console.error(`Medication with ID ${medicationId} not found.`);
       return;
     }
-  
+
     // Ensure progressHistory is initialized and has entries
     if (
       !Array.isArray(medication.progressHistory) ||
@@ -148,10 +180,10 @@ const CurrentPrescription = () => {
       );
       return;
     }
-  
+
     // Remove the last entry
     medication.progressHistory.pop();
-  
+
     // Call the service to delete the last progress entry in the backend
     const { success } = await deleteLastProgressEntry(
       prescription._id,
@@ -159,14 +191,13 @@ const CurrentPrescription = () => {
       medication.progressHistory,
       currentUser
     );
-  
+
     if (success) {
       setPrescriptions(updatedPrescriptions); // Update state only if API call is successful
     } else {
       alert("Failed to delete the last progress entry.");
     }
   };
-  
 
   if (loading) return <p>Loading...</p>;
 
@@ -263,37 +294,38 @@ const CurrentPrescription = () => {
                           ? "Ascunde Istoric"
                           : "Afișează Istoric"}
                       </button>
-                      </div>
                     </div>
-                    {historyVisibility[med._id] && (
-                      <div className="history-details">
-                        <h4>Istoric:</h4>
-                        <p>Progres:</p>
-                        <ul>
-                          {med.progressHistory &&
-                            med.progressHistory.map((entry, index) =>
-                              entry.date && entry.dosesTaken ? (
-                                <li key={index}>
-                                  <FontAwesomeIcon icon={faArrowRightLong} /> {formatDate(entry.date)}: {entry.dosesTaken}{" "}
-                                  doze luate
-                                  {entry.timeTaken &&
-                                    entry.timeTaken.length > 0 && (
-                                      <ul>
-                                        {entry.timeTaken.map(
-                                          (time, timeIndex) => (
-                                            <li key={timeIndex}>
-                                              • La ora: {time}
-                                            </li>
-                                          )
-                                        )}
-                                      </ul>
-                                    )}
-                                </li>
-                              ) : null
-                            )}
-                        </ul>
-                      </div>
-                    )}
+                  </div>
+                  {historyVisibility[med._id] && (
+                    <div className="history-details">
+                      <h4>Istoric:</h4>
+                      <p>Progres:</p>
+                      <ul>
+                        {med.progressHistory &&
+                          med.progressHistory.map((entry, index) =>
+                            entry.date && entry.dosesTaken ? (
+                              <li key={index}>
+                                <FontAwesomeIcon icon={faArrowRightLong} />{" "}
+                                {formatDate(entry.date)}: {entry.dosesTaken}{" "}
+                                doze luate
+                                {entry.timeTaken &&
+                                  entry.timeTaken.length > 0 && (
+                                    <ul>
+                                      {entry.timeTaken.map(
+                                        (time, timeIndex) => (
+                                          <li key={timeIndex}>
+                                            • La ora: {time}
+                                          </li>
+                                        )
+                                      )}
+                                    </ul>
+                                  )}
+                              </li>
+                            ) : null
+                          )}
+                      </ul>
+                    </div>
+                  )}
                   <div className="medication-progress">
                     <p>
                       Dată începere:{" "}

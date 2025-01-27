@@ -10,6 +10,7 @@ import { faArrowRightLong, faArrowLeftLong } from '@fortawesome/free-solid-svg-i
 import { fetchBrands, fetchProductsByCategory } from "../Services/productServices";
 import {addToFavorites} from '../Services/favoritesServices';
 import { addToCart, addToCartF } from '../Services/cartServices';
+import { useCart } from "../../Context/CartContext";
 
 const ProductPage = () => {
   const [brands, setBrands] = useState([]);
@@ -20,6 +21,7 @@ const ProductPage = () => {
   const { category, subcategory } = useParams();
   const [products, setProducts] = useState([]);
   const prescriptionId = null;
+   const { cartItems, setCartItems, totalPrice, setTotalPrice } = useCart();
 
   // PAGINATION - START
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,6 +52,7 @@ const ProductPage = () => {
       console.log('Product added to cart:', result);
       if (result.success) {
         const result2 = addToCartF(productId);
+        setCartItems((prev) => [...prev, { productId, prescriptionId }]);
         console.log(result2);
       }
     } catch (error) {

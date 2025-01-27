@@ -1,61 +1,38 @@
-
+/* General styling */
 .prescription-page-container {
-  width: 100%; /* Make it take full width for responsiveness */
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
-  font-size: 18px; /* Base font size */
+  font-size: 18px;
 }
+
 .prescriptions-list-page {
   width: 90%;
   padding: 20px;
   background-color: transparent;
-  /* border: 1px solid #8b8989; */ 
-   border-radius: 15px;
+  border-radius: 15px;
   margin: 0 auto;
-}
-
-.search-add-bar {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.search-add-bar input {
-  width: 75%;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.search-add-bar button {
-  padding: 10px 20px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-left: 20px;
 }
 
 .prescriptions-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-top: 20px;
+  border-radius: 12px; /* Rounded corners */
+  overflow: hidden; /* Enforce border-radius on all content */
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
 }
 
 .prescriptions-table table thead th {
   background-color: #6c757d;
   color: #fff;
-  font-size: 14px; /* Adjust font size */
+  font-size: 14px;
 }
 
 .prescriptions-table table tbody tr {
   border-bottom: 1px solid #eaeaea;
-}
-
-.prescriptions-table table tbody tr:last-child {
-  border-bottom: none;
 }
 
 .prescriptions-table td,
@@ -64,34 +41,11 @@
   text-align: center;
   border: 1px solid #dee2e6;
   vertical-align: middle;
-  font-size: 14px; /* Adjust font size for better readability on smaller screens */
+  font-size: 14px;
 }
 
-.prescriptions-table tbody tr {
-  transition: background-color 0.2s ease;
-}
 .prescriptions-table tbody tr:hover {
   background-color: #f1f1f1;
-}
-
-.product-detail-prescription {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.product-detail-pres {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.product-details-pres div {
-  flex-grow: 1;
-}
-
-.product-details-pres p {
-  margin: 5px 0;
 }
 
 .prescription-details {
@@ -119,72 +73,24 @@
   background-color: #ccc;
 }
 
-.summary-section {
-  margin-bottom: 20px;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  text-align: left;
-}
-
-.summary-section h2 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.summary-section p {
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
-.summary-stats {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.summary-stats .stat {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
-  flex: 1;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.summary-stats .stat h3 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #007bff;
-}
-
-.summary-stats .stat p {
-  margin: 5px 0 0;
-  font-size: 1rem;
-  color: #666;
-}
-
-
 .med-diag {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  background-color: #fff;
   padding: 15px;
-  border-radius: 8px;
   margin-top: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Product Details Section */
 .product-details-prescription {
-  flex: 2;
+  flex: 1 1 48%;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  border-radius: 8px;
+  padding: 15px;
 }
 
 /* Individual product details */
@@ -238,11 +144,12 @@
 
 /* Diagnosis and Investigations Section */
 .diagnosis-invest {
-  flex: 1;
-  padding: 10px;
+  flex: 1 1 48%;
   background-color: #ffffff;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .diagnosis-invest p {
@@ -256,11 +163,100 @@
   color: #333;
 }
 
-/* Additional styling for table rows */
-.prescriptions-table tr:nth-child(even) {
-  background-color: #f8f8f8;
+/* Responsive styles for screens under 768px */
+@media (max-width: 768px) {
+  .med-diag {
+    flex-direction: column; /* Stack the sections vertically */
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .product-details-prescription,
+  .diagnosis-invest {
+    flex: 1 1 100%; /* Full width for both sections */
+  }
+
+  .product-details-pres {
+    flex-direction: column; /* Stack product image and info vertically */
+    gap: 10px;
+  }
+
+  .name-photo {
+    flex-direction: column; /* Stack the name and photo vertically */
+    align-items: center;
+  }
+
+  .product-image-4 {
+    width: 100px;
+    height: 100px;
+  }
+
+  .pagination {
+    flex-wrap: wrap; /* Allow pagination buttons to wrap */
+    justify-content: center;
+    gap: 5px;
+  }
 }
 
-.prescriptions-table tr:hover {
-  background-color: #f1f1f1;
+/* Responsive styles for screens under 480px */
+@media (max-width: 480px) {
+  .med-diag {
+    flex-direction: column; /* Stack sections vertically */
+    gap: 10px;
+    padding: 5px;
+  }
+
+  .product-details-prescription,
+  .diagnosis-invest {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+
+  .product-details-pres {
+    gap: 8px;
+  }
+
+  .name-photo {
+    gap: 10px; /* Smaller gap */
+  }
+
+  .product-image-4 {
+    width: 80px; /* Reduce image size */
+    height: 80px;
+  }
+
+  .product-title,
+  .product-price {
+    font-size: 0.8rem; /* Smaller font size for product info */
+  }
+
+  .dosage p {
+    font-size: 0.8rem;
+  }
+
+  .pagination button {
+    font-size: 0.8rem; /* Smaller pagination button text */
+    padding: 5px;
+  }
+
+  .prescriptions-table {
+    font-size: 12px;
+    display: block;
+    /* Stack rows vertically for better readability */
+    overflow-x: auto;
+    /* Allow horizontal scrolling for overflow */
+  }
+
+  .prescriptions-table td,
+  .prescriptions-table th {
+    padding: 5px;
+    font-size: 10px;
+    word-break: break-word;
+    /* Prevent text from overflowing */
+  }
+
+  .prescriptions-table table {
+    width: 100%;
+    /* Ensure the table doesn't exceed the container width */
+    margin-top: 8px;
+  }
 }

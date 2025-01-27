@@ -361,6 +361,7 @@ const PatientProfile = ({ onBack }) => {
   return (
     <div className="patient-profile-container-doctor">
       <button className="button-back" onClick={handleBack}>
+      <FontAwesomeIcon icon={faArrowLeftLong} /> {" "}
         Înapoi la lista pacienților
       </button>
 

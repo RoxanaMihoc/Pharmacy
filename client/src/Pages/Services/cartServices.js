@@ -69,7 +69,7 @@ export const fetchCart = async (currentUser) => {
   }
 };
 
-//GET ITEMS FROM CART
+//GET details about items FROM CART
 export const fetchCartItems = async (productId) => {
   console.log("Product Id: " + productId);
   try {
@@ -87,9 +87,9 @@ export const fetchCartItems = async (productId) => {
 
 // cartServices.js
 
-export const removeItemFromCart = async (userId, productId) => {
+export const removeItemFromCart = async (currentUser, productId) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/cart/${userId}/${productId}`, {
+    const response = await fetch(`${BASE_URL}/home/cart/${currentUser}/${productId}`, {
       method: "DELETE",
     });
     if (!response.ok) {
@@ -104,7 +104,7 @@ export const removeItemFromCart = async (userId, productId) => {
 
 export const deleteCart = async (currentUser) => {
   try {
-    const response = await fetch(`${BASE_URL}home/cart/${currentUser}`, {
+    const response = await fetch(`${BASE_URL}/home/cart/${currentUser}`, {
       method: "DELETE",
     });
 

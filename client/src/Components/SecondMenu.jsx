@@ -2,8 +2,8 @@
 
 import React from "react";
 import HoverButton from "./HoverButton";
-import "./second-menu.css";
-import "./hoover-button.css";
+import "./styles/second-menu.css";
+import "./styles/hoover-button.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList } from "@fortawesome/free-solid-svg-icons";
 

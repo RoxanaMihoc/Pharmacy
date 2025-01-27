@@ -17,7 +17,7 @@ export const fetchOrders = async (currentUser) => {
 
   export const submitOrderApi = async (orderDetails) => {
     try {
-      const response = await fetch(`${BASE_URL}home/orders`, {
+      const response = await fetch(`${BASE_URL}/home/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

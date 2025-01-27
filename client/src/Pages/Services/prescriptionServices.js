@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:3000";
 
 // Services/prescriptionServices.js
-export const sendPrescription = async (prescriptionData) => {
+export const sendPrescriptionData = async (prescriptionData) => {
   try {
     const response = await fetch(`${BASE_URL}/home/add-prescription`, {
       method: "POST",
@@ -33,13 +33,14 @@ export const fetchPrescriptions = async (currentUser) => {
       throw new Error(`Failed to fetch data: ${response.status}`);
     }
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Error:", error.message);
   }
 };
 
-export const markPresAsCurrent = async (prescriptionId) => {
+export const markPresAsCurrent = async (prescriptionId, currentUser) => {
   try {
     const response = await fetch(
       `${BASE_URL}/home/prescription/${prescriptionId}`,
@@ -48,7 +49,7 @@ export const markPresAsCurrent = async (prescriptionId) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ currentPrescription: true, currentUser }),
+        body: JSON.stringify({currentUser: currentUser}),
       }
     );
 
@@ -64,36 +65,37 @@ export const markPresAsCurrent = async (prescriptionId) => {
 };
 
 // prescriptionServices.js
-export const removeCurrentPrescription = async (prescriptionId, currentUser) => {
-    try {
-      const response = await fetch(
-        `${BASE_URL}home/prescription/remove-current/${prescriptionId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ currentPrescription: false, currentUser }),
-        }
-      );
-  
-      if (!response.ok) {
-        throw new Error("Failed to remove the current prescription.");
+export const removeCurrentPrescription = async (
+  prescriptionId,
+  currentUser
+) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/home/prescription/remove-current/${prescriptionId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ currentPrescription: false, currentUser }),
       }
-  
-      return { success: true };
-    } catch (error) {
-      console.error("Error in removeCurrentPrescription:", error);
-      return { success: false, error };
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to remove the current prescription.");
     }
-  };
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error in removeCurrentPrescription:", error);
+    return { success: false, error };
+  }
+};
 
 //For Doctors
 export const fetchPrescriptionsForDoctors = async (user) => {
   try {
-    const response = await fetch(
-      `${BASE_URL}home/prescription/${user}`
-    );
+    const response = await fetch(`${BASE_URL}/home/prescription/${user}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -111,7 +113,7 @@ export const fetchPrescriptionsForDoctors = async (user) => {
 export const fetchAllPrescriptions = async (currentUser) => {
   try {
     const response = await fetch(
-      `${BASE_URL}home/all-prescriptions/${currentUser}`
+      `${BASE_URL}/home/all-prescriptions/${currentUser}`
     );
 
     if (!response.ok) {
@@ -129,7 +131,7 @@ export const fetchAllPrescriptions = async (currentUser) => {
 export const fetchCurrentPrescriptions = async (currentUser) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/home/current-prescription/${currentUser}`
+      `${BASE_URL}/home/current-prescription/${currentUser}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch prescriptions");
@@ -142,37 +144,58 @@ export const fetchCurrentPrescriptions = async (currentUser) => {
   }
 };
 
-export const updateMedicationProgress = async (prescriptionId, medicationId, progressHistory, currentUser) => {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/home/update-progress/${prescriptionId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          medicationId,
-          progressHistory,
-          currentUser,
-        }),
+export const updateMedicationProgress = async (
+  prescriptionId,
+  medicationId,
+  progressHistory,
+  currentUser,
+  doctorId,
+  name,
+  completed
+) => {
+  console.log("dnaodn", completed);
+  if (completed == false) {
+    try {
+      console.log("Med", medicationId);
+      const response = await fetch(
+        `${BASE_URL}/home/update-progress/${prescriptionId}/${medicationId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            progressHistory,
+            currentUser,
+            doctorId,
+            name,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update medication progress.");
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Failed to update medication progress.");
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      console.error("Error updating medication progress:", error);
+      return { success: false, error: error.message };
     }
-
-    const data = await response.json();
-    return { success: true, data };
-  } catch (error) {
-    console.error("Error updating medication progress:", error);
-    return { success: false, error: error.message };
+  }
+  else{
+    return { success: false, error: "Pres completed" };
   }
 };
 
-export const deleteLastProgressEntry = async (prescriptionId, medicationId, progressHistory, currentUser) => {
+export const deleteLastProgressEntry = async (
+  prescriptionId,
+  medicationId,
+  progressHistory,
+  currentUser
+) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/home/delete-progress/${prescriptionId}`,
+      `${BASE_URL}/home/delete-progress/${prescriptionId}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -196,6 +219,39 @@ export const deleteLastProgressEntry = async (prescriptionId, medicationId, prog
   }
 };
 
+export const notifyDoctorAboutCompletion = async (
+  prescriptionId,
+  medicationId,
+  progressHistory,
+  currentUser,
+  doctorId,
+  name,
+  completed
+) => {
+  try {
+    console.log("Med", medicationId);
+    const response = await fetch(
+      `${BASE_URL}/home/progress-completed/${prescriptionId}/${medicationId}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          progressHistory,
+          currentUser,
+          doctorId,
+          name,
+        }),
+      }
+    );
 
+    if (!response.ok) {
+      throw new Error("Failed to update medication progress.");
+    }
 
-  
+    const data = await response.json();
+    return { success: true, data };
+  } catch (error) {
+    console.error("Error updating medication progress:", error);
+    return { success: false, error: error.message };
+  }
+};

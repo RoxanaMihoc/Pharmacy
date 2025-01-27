@@ -19,6 +19,7 @@ import {
   faBagShopping,
   faUserCircle,
   faBars,
+  faTimes, // New icon for closing
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/home.css";
 import {
@@ -30,20 +31,16 @@ import {
 
 const HomeUser = () => {
   const [activeTab, setActiveTab] = useState("product");
-  const [showSidebar, setShowSidebar] = useState(false); // Manage sidebar visibility
+  const [showSidebar, setShowSidebar] = useState(window.innerWidth > 768);
   const [showCartPreview, setShowCartPreview] = useState(false);
   const location = useLocation();
   const history = useHistory();
-   const { currentUser, name } = useAuth();
+  const { currentUser, name } = useAuth();
 
   const handleShowCartPreview = async () => {
     if (location.pathname !== "/home/cart") {
       setShowCartPreview(true);
     }
-  };
-
-  const toggleSidebar = () => {
-    setShowSidebar((prev) => !prev); // Toggle sidebar visibility
   };
 
   const handleCloseCartPreview = () => setShowCartPreview(false);
@@ -67,10 +64,10 @@ const HomeUser = () => {
   const getTabName = (activeTab) => {
     const tabNames = {
       product: "Farmacie",
-      favorites:"Favorite",
-      prescriptions:"Rețete",
-      orders:"Comenzi",
-      cart:"Coș",
+      favorites: "Favorite",
+      prescriptions: "Rețete",
+      orders: "Comenzi",
+      cart: "Coș",
       profile: "Profile",
       current_prescription: "Rețetă curentă",
     };
@@ -83,9 +80,7 @@ const HomeUser = () => {
   };
 
   const handleResize = () => {
-    if (window.innerWidth <= 768) {
-      setShowSidebar(true); // Automatically hide sidebar on smaller screens
-    }
+    setShowSidebar(window.innerWidth > 768); // Automatically hide sidebar on smaller screens
   };
 
   useEffect(() => {
@@ -98,14 +93,33 @@ const HomeUser = () => {
     };
   }, []);
 
+  const showSidebarHandler = () => {
+    setShowSidebar(true);
+  };
+
+  const hideSidebarHandler = () => {
+    setShowSidebar(false);
+  };
+
   return (
     <div>
       <div className="home-doctor">
-      <button className="menu-button" onClick={toggleSidebar}>
-          <FontAwesomeIcon icon={faBars} />
-        </button>
-        <Sidebar onNavigate={handleNavigate} setActiveTab={setActiveTab} className={`sidebar ${showSidebar ? "active" : "hidden"}`} />
-        <div className="page-content">
+      {!showSidebar && ( // Show the "menu open" button only when the sidebar is hidden
+              <button className="menu-open-button" onClick={showSidebarHandler}>
+                <FontAwesomeIcon icon={faBars} />
+              </button>
+            )}
+        {showSidebar && (
+          <>
+            <Sidebar
+              onNavigate={handleNavigate}
+              setActiveTab={setActiveTab}
+              hideSidebarHandler={hideSidebarHandler}
+              className="sidebar active"
+            />
+          </>
+        )} 
+        <div className={`page-content ${showSidebar ? "with-sidebar" : ""}`}>
           <div className="top-nav">
             {getTabName(activeTab)}
             <div className="nav-icons">
@@ -121,23 +135,28 @@ const HomeUser = () => {
                 <FontAwesomeIcon icon={faBagShopping} />
               </button>
               <button className="icon-button" onClick={handleUserButton}>
-                            <FontAwesomeIcon icon={faUserCircle} style={{ marginRight: "8px" }} />
-                            <strong> {name}</strong>
-                          </button>
+                <FontAwesomeIcon
+                  icon={faUserCircle}
+                  style={{ marginRight: "8px" }}
+                />
+                <strong> {name}</strong>
+              </button>
             </div>
             <CartPreview
               show={showCartPreview}
               handleClose={handleCloseCartPreview}
               switchToCartPage={switchToCartPage}
             />
-
           </div>
           <Switch className="page">
             <Route path="/home/prescriptions" component={Prescriptions} />
             <Route path="/home/cart" component={CartPage} />
             <Route path="/home/favorites" component={FavoritesPage} />
             <Route path="/home/orders" component={OrderPage} />
-            <Route path="/home/current-prescription" component={CurrentPrescription} />
+            <Route
+              path="/home/current-prescription"
+              component={CurrentPrescription}
+            />
             <Route
               path="/home/prescription/:patientId"
               component={PrescriptionDetails}

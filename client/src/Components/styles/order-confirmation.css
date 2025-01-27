@@ -1,0 +1,76 @@
+.order-confirmation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh; /* Full viewport height */
+  background-color: transparent;
+}
+
+.order-card {
+  text-align: center;
+  padding: 30px;
+  max-width: 950px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.order-card h1 {
+  font-size: 3rem;
+  color: black;
+  margin-bottom: 15px;
+}
+
+.order-card p {
+  font-size: 1.3rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.home-button {
+  margin-top: 30px;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Responsive Design for Smaller Devices */
+@media (max-width: 768px) {
+  .order-card {
+    padding: 20px; /* Reduce padding for smaller screens */
+    max-width: 100%; /* Full width on tablets and below */
+  }
+
+  .order-card h1 {
+    font-size: 1.8rem; /* Reduce font size for smaller screens */
+  }
+
+  .order-card p {
+    font-size: 0.9rem; /* Slightly smaller text for readability */
+  }
+
+  .home-button {
+    font-size: 0.9rem; /* Smaller button text */
+    padding: 8px 16px; /* Adjust padding for a smaller button */
+  }
+}
+
+@media (max-width: 480px) {
+  .order-card h1 {
+    font-size: 1.5rem; /* Further reduce for mobile devices */
+  }
+
+  .order-card p {
+    font-size: 0.8rem; /* Smaller text for very small screens */
+  }
+
+  .home-button {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}

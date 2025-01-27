@@ -206,3 +206,40 @@
   color: #2F4858;
 }
 
+.header-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 20px; /* Spacing between the columns */
+  padding: 20px;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+  .header-info {
+    grid-template-columns: 1fr; /* Single column layout */
+    gap: 15px; /* Reduced gap for smaller screens */
+  }
+
+  .header-details,
+  .user-profile2 {
+    text-align: center; /* Center align the content */
+  }
+
+  .user-info {
+    grid-template-columns: 1fr; /* Single column for smaller screens */
+  }
+
+  .prescription-details {
+    flex-direction: column; /* Switch to column layout */
+    align-items: stretch; /* Ensure full width for both divs */
+  }
+
+  .product-details2,
+  .diagnosis-invest {
+    flex: 1 1 100%; /* Full width for each section */
+  }
+}
+
+
+
+

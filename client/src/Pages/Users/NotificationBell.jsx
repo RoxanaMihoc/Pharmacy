@@ -5,7 +5,10 @@ import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import "./styles/notification.css";
 import io from "socket.io-client";
-import {fetchNotifications, saveNotificationToDatabase} from "../Notifications/Services/notificationServices";
+import {
+  fetchNotifications,
+  saveNotificationToDatabase,
+} from "../Notifications/Services/notificationServices";
 
 const socket = io("http://localhost:3000");
 
@@ -38,7 +41,11 @@ const NotificationBell = () => {
 
         // Save notification to the database using the service
         try {
-          await saveNotificationToDatabase(currentUser, role, normalizedNotification);
+          await saveNotificationToDatabase(
+            currentUser,
+            role,
+            normalizedNotification
+          );
         } catch (error) {
           console.error("Error saving notification to the database:", error);
         }
@@ -80,7 +87,6 @@ const NotificationBell = () => {
     });
   };
 
-  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -100,12 +106,15 @@ const NotificationBell = () => {
   const toggleNotifications = async () => {
     if (!showNotifications) {
       try {
-        const fetchedNotifications = await fetchNotifications(
+        const { success, fetchedNotifications } = await fetchNotifications(
           currentUser,
           role
-        ); // Fetch notifications using the service
-        const normalized = fetchedNotifications.map(normalizeNotification);
-        setNotifications(sortNotifications(normalized)); // Process the notifications
+        );
+        if (success) {
+          console.log(fetchedNotifications)
+          const normalized = fetchedNotifications.map(normalizeNotification);
+          setNotifications(sortNotifications(normalized));
+        }
       } catch (error) {
         console.error("Error while fetching notifications:", error);
       }

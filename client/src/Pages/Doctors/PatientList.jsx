@@ -3,6 +3,8 @@ import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import "./styles/patient-general-list.css";
 import { fetchPatientsFromAPI } from "../Services/userServices";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const PatientList = () => {
   const [patients, setPatients] = useState([]);
@@ -62,20 +64,16 @@ const PatientList = () => {
         </select>
       </div>
       <div className="patient">
-        <div className="search-bar2">
+        <div className="search-input-wrapper">
+          <FontAwesomeIcon icon={faSearch} className="search-icon" />
           <input
             type="text"
             placeholder="Caută pacienți.."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="search-input-bar2"
+            className="search-bar"
           />
-          <button
-            className="button-add-patient"
-            onClick={() => console.log("Add New Patient")}
-          >
-            Adaugă un nou pacient
-          </button>
+
         </div>
 
         <div className="patient-grid">

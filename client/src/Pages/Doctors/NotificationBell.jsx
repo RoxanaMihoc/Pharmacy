@@ -33,10 +33,11 @@ const NotificationBell = () => {
 
   // Sort notifications by date
   const sortNotifications = (notificationsArray) => {
+    console.log(notificationsArray);
     return notificationsArray.sort((a, b) => {
       console.log(a)
-      const dateA = new Date(a.orderDetails.date);
-      const dateB = new Date(b.orderDetails.date);
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
       return dateB - dateA; // Newest first
     });
   };
@@ -58,54 +59,71 @@ const NotificationBell = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Setting up socket listeners", currentUser, role);
-    socket.emit("register", currentUser, role);
+    socket.on("prescription-update", (notification) => {
+      console.log("New Notification:", notification);
+      handleNewNotification(notification);
+    });
 
-    const handleNewNotification = async (notification) => {
-      console.log("Notification received:", notification);
-      const normalizedNotification = normalizeNotification(notification);
-
-      if (
-        !notifications.some((notif) => notif.id === normalizedNotification.id)
-      ) {
-        const updatedNotifications = sortNotifications([
-          normalizedNotification,
-          ...notifications,
-        ]);
-        setNotifications(updatedNotifications);
-        setUnreadCount((prev) => prev + 1);
-
-        try {
-          // Save notification to the database
-          await saveNotificationToDatabase(currentUser, role, normalizedNotification);
-        } catch (error) {
-          console.error("Error saving notification:", error);
-        }
-      } else {
-        console.log(
-          "Duplicate notification received, ignoring:",
-          normalizedNotification.id
-        );
-      }
-    };
-
-    socket.on("new-order", handleNewNotification);
-
+    socket.on("new-order", (notification) => {
+      console.log("New Notification:", notification);
+      handleNewNotification(notification);
+    });
+    socket.on("prescription-complete", (notification) => {
+      console.log("New Notification:", notification);
+      handleNewNotification(notification);
+    });
     return () => {
-      console.log("Cleaning up socket listeners");
-      socket.off("new-order", handleNewNotification);
+      socket.off("prescription-update");
+      socket.off("new-order");
+      socket.off("prescription-complete");
     };
-  }, [notifications, currentUser]);
+  }, [currentUser]);
+
+  useEffect(() => {
+    socket.emit("register", currentUser, role);
+  }, [currentUser, role]);
+
+  const handleNewNotification = async (notification) => {
+    const normalizedNotification = normalizeNotification(notification);
+
+    if (
+      !notifications.some((notif) => notif.id === normalizedNotification.id)
+    ) {
+      const updatedNotifications = sortNotifications([
+        normalizedNotification,
+        ...notifications,
+      ]);
+      setNotifications(updatedNotifications);
+      setUnreadCount((prev) => prev + 1);
+
+      try {
+        // Save notification to the database
+        console.log("try to save notif")
+        await saveNotificationToDatabase(currentUser, role, normalizedNotification);
+        setShowNotifications(true);
+      } catch (error) {
+        console.error("Error saving notification:", error);
+      }
+    } else {
+      console.log(
+        "Duplicate notification received, ignoring:",
+        normalizedNotification.id
+      );
+    }
+  };
 
   const toggleNotifications = async () => {
     if (!showNotifications) {
       try {
-        const fetchedNotifications = await fetchNotifications(
+        const {success, fetchedNotifications} = await fetchNotifications(
           currentUser,
           role
         );
-        const normalized = fetchedNotifications.map(normalizeNotification);
-        setNotifications(sortNotifications(normalized));
+        if(success)
+        {
+          const normalized = fetchedNotifications.map(normalizeNotification);
+          setNotifications(sortNotifications(normalized));
+        }
       } catch (error) {
         console.error("Failed to toggle notifications:", error);
       }
@@ -122,7 +140,7 @@ const NotificationBell = () => {
     setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
 
     history.push({
-      pathname: `/home/prescription/${notification.id}`,
+      pathname: `/doctor/profile/${notification.patientId}`,
       state: { notification },
     });
   };
@@ -171,7 +189,7 @@ const NotificationBell = () => {
                       {notification.message}
                     </span>
                     <span className="notification-date">
-                      {formatHour(notification.orderDetails.date)}
+                      {formatHour(notification.date)}
                     </span>
                   </div>
                 </li>

@@ -191,10 +191,11 @@ exports.getCurentPrescription = async (req, res) => {
   }
 };
 
-exports.updateProgress = async (req, res) => {
+exports.updateProgress = async (req, res, io, userSockets) => {
   try {
-    const { medicationId, progressHistory, currentUser } = req.body;
-    const { prescriptionId } = req.params;
+    console.log(req.body);
+    const { progressHistory, currentUser, doctorId, name } = req.body;
+    const { prescriptionId, medicationId } = req.params;
 
     console.log(
       "Updating progress",
@@ -281,6 +282,31 @@ exports.updateProgress = async (req, res) => {
     if (updateResult.modifiedCount === 0) {
       return res.status(400).send({ message: "Progress update failed" });
     }
+    
+    const collectionDoctor = prescriptionDB.collection(`doctor_${currentUser}`);
+    await collectionDoctor.updateOne(
+      { _id: new ObjectId(prescriptionId) },
+      {
+        $set: {
+          [`products.${productIndex}.progressHistory`]: product.progressHistory, // Update the progressHistory
+          status: "finalizat",
+        },
+        
+      }
+    );
+
+      console.log("Notification sent to doctor:", doctorId);
+    if ( userSockets[doctorId] && userSockets[doctorId].socketId) {
+      io.to(userSockets[doctorId].socketId).emit("prescription-update", {
+        title: "Prescription Updated",
+        message: `Pacientul ${name} a modificat progresul rețetei.`,
+        date: new Date(),
+        medicationId,
+        prescriptionId,
+        name,
+        patientId:currentUser,
+      });
+    }
 
     res.status(200).send({ message: "Progress history updated successfully" });
   } catch (error) {
@@ -344,4 +370,128 @@ exports.deleteLastProgress = async (req, res) => {
   }
 };
 
+exports.progressCompleted = async (req, res, io, userSockets) => {
+  try {
+    console.log("IN PROGRESS COMPLETED");
+    const { progressHistory, currentUser, doctorId, name } = req.body;
+    const { prescriptionId, medicationId } = req.params;
+
+    console.log(
+      "progress completed",
+      medicationId,
+      progressHistory,
+      currentUser,
+      prescriptionId
+    );
+
+    const collectionName = `patient_${currentUser}`;
+    const collection = prescriptionDB.collection(collectionName);
+
+    // Find the prescription by ID
+    const prescription = await collection.findOne({
+      _id: new ObjectId(prescriptionId),
+    });
+
+    if (!prescription) {
+      return res.status(404).send({ message: "Prescription not found" });
+    }
+
+    // Find the medication in the products array by its _id
+    const productIndex = prescription.products.findIndex(
+      (product) => product._id.toString() === medicationId
+    );
+
+    if (productIndex === -1) {
+      return res
+        .status(404)
+        .send({ message: "Medication not found in prescription" });
+    }
+
+    const product = prescription.products[productIndex];
+    console.log("Prod ",  product);
+
+    // Ensure progressHistory exists
+    if (!Array.isArray(product.progressHistory)) {
+      product.progressHistory = [];
+    }
+
+    // Current date in DD-MM-YYYY format
+    const today = new Date().toLocaleDateString("en-GB"); // Format date as DD-MM-YYYY
+    const currentTime = new Date().toLocaleTimeString(); // Current time in local format
+
+    // Find existing entry for today's date
+    const existingEntryIndex = product.progressHistory.findIndex(
+      (entry) => entry.date === today
+    );
+
+    if (existingEntryIndex !== -1) {
+      // If entry exists, update the dosesTaken and add the current time to timeTaken
+      product.progressHistory[existingEntryIndex].dosesTaken =
+        progressHistory[0].dosesTaken;
+      if (
+        !Array.isArray(product.progressHistory[existingEntryIndex].timeTaken)
+      ) {
+        product.progressHistory[existingEntryIndex].timeTaken = [];
+      }
+      product.progressHistory[existingEntryIndex].timeTaken.push(currentTime);
+    } else {
+      // If entry does not exist, add a new one with the time
+      console.log(product.progressHistory)
+      product.progressHistory.push({
+        date: today,
+        dosesTaken: progressHistory[0].dosesTaken,
+        timeTaken: [currentTime],
+      });
+    }
+
+    // Update the database
+    const updateResult = await collection.updateOne(
+      { _id: new ObjectId(prescriptionId) },
+      {
+        $set: {
+          [`products.${productIndex}.progressHistory`]: product.progressHistory, // Update the progressHistory
+          status: "finalizat",
+        },
+        
+      }
+    );
+
+    if (updateResult.matchedCount === 0) {
+      return res.status(404).send({ message: "Prescription not found" });
+    }
+
+    if (updateResult.modifiedCount === 0) {
+      return res.status(400).send({ message: "Progress update failed" });
+    }
+
+    const collectionDoctor = prescriptionDB.collection(`doctor_${currentUser}`);
+    await collectionDoctor.updateOne(
+      { _id: new ObjectId(prescriptionId) },
+      {
+        $set: {
+          [`products.${productIndex}.progressHistory`]: product.progressHistory, // Update the progressHistory
+          status: "finalizat",
+        },
+        
+      }
+    );
+
+    console.log("Notification sent to doctor:", doctorId);
+    if ( userSockets[doctorId] && userSockets[doctorId].socketId) {
+      io.to(userSockets[doctorId].socketId).emit("prescription-complete", {
+        message: `Pacientul ${name} a finalizat o reteta.`,
+        date: new Date(),
+        medicationId,
+        prescriptionId,
+        name,
+        patientId: currentUser,
+      });
+    }
+
+    res.status(200).send({ message: "Progress history updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 

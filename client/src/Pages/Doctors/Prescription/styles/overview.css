@@ -1,199 +1,261 @@
 .overview-container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Two-column area */
-  .overview-content {
-    display: flex;
-    width: 100%;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .overview-left {
-    flex: 0 0 40%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .overview-right {
-    flex: 0 0 60%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  /* Profile card styling */
-  .profile-card {
-    padding: 16px;
-    text-align: center; 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-     border-radius: 15px;
-   /* border: 1px solid #8b8989; */
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
   background-color: transparent;
+}
+
+.overview-container h1 {
+  text-align: center; 
+  font-size: 2rem; 
+  margin-bottom: 20px; 
+}
+
+
+.overview-left {
+  flex: 1 1 40%; 
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  background-color: transparent;
+  padding: 20px;
+}
+
+.overview-right {
+  flex: 1 1 60%; 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: transparent;
+  padding: 20px;
+}
+
+/* Wrapper for the profile and patient info */
+.left-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* Enable wrapping for smaller screens */
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+/* Ensure profile card and patient info share the same size */
+.profile-card,
+.patient-info {
+  flex: 1 1 calc(50% - 10px); /* Take 50% of the row with space for the gap */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Maintain equal heights */
+.profile-card {
+  text-align: center;
+}
+
+.patient-info {
+  padding-top: 10px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.profile-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.profile-card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 4px 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+/* Shared styling for patient info, diagnosis, and prescription sections */
+.patient-info,
+.diagnosis-info,
+.investigation-info,
+.prescription-details-2 {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.patient-info h2,
+.diagnosis-info h2,
+.investigation-info h2,
+.prescription-details-2 h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.patient-info p,
+.diagnosis-info p,
+.investigation-info p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 6px 0;
+}
+
+/* Prescription Details */
+.prescription-details-2 ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.prescription-details-2 li {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: #f9f9fb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.prescription-details-2 li span.medicine-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.prescription-details-2 li .medicine-detail-row {
+  font-size: 0.9rem;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.prescription-details-2 li .medicine-detail-row .label {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Buttons Section */
+.send-reteta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+  width: 100%;
+}
+
+.button-reteta {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+
+.send-button2,
+.generate-pdf-button,
+.menu-back {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: center;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* Status Message */
+.status-message {
+  width: 100%;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.status-message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive Adjustments */
+
+/* Tablet (768px and below) */
+@media (max-width: 768px) {
+  .diagnosis-content {
+    flex-direction: column;
   }
-  
+
+  .overview-left,
+  .overview-right {
+    flex: 1 1 100%;
+  }
+
+  .button-reteta {
+    flex-direction: column;
+  }
+
+  .left-row {
+    flex-direction: column;
+  }
+
+  .profile-card,
+  .patient-info {
+    flex: 1 1 100%; /* Full width on smaller screens */
+    margin-bottom: 10px;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .overview-container {
+    padding: 15px;
+  }
+
   .profile-avatar {
     width: 80px;
     height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 10px;
   }
-  
-  .profile-card h3 {
-    margin: 8px 0 4px;
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .profile-card p {
-    margin: 4px 0;
-    font-size: 0.9rem;
-    color: #666;
-  }
-  
+
   .btn {
-    display: block;
-    width: 100%;
-    margin: 8px 0 0;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
+    padding: 6px 10px;
+    font-size: 0.8rem;
   }
-  
-  .view-profile {
-    background-color: #007bff;
-    color: #fff;
-  }
-  .view-profile:hover {
-    background-color: #0069d9;
-  }
-  
-  .edit-profile {
-    background-color: #17a2b8;
-    color: #fff;
-  }
-  .edit-profile:hover {
-    background-color: #138496;
-  }
-  
-  .patient-info,
-  .prescription-details-2,
-  .diagnosis-info,
-  .investigation-info {
-     border-radius: 15px;
-     /* border: 1px solid #8b8989; */
-    background-color: transparent;
-    padding: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    width: 100%;
-    margin-bottom: 10px;
-  }
-  
-  .patient-info h2, 
-  .prescription-details-2 h2, 
-  .diagnosis-info h2, 
-  .investigation-info h2 {
-    color: #333;
-    margin-top: 0;
-  }
-  
-  /* Buttons at bottom */
+
   .send-button,
-  .generate-pdf-button {
-    display: block;
-    width: 100%;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .send-button,  .generate-pdf-button, .menu-back {
-    color: #fff;
-    opacity: 0.9;
-    height: 80px;
-  }
-  
-  /* ---- Styling for each medicine item ---- */
-  
-  /* Remove bullet styling; use your own layout */
-  .prescription-details-2 ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .prescription-details-2 li {
-    padding: 12px;
-    border: 1px solid #eee;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 6px; /* space between lines inside the item */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-  
-  /* Each line inside the item can be styled as a label-value pair */
-  .prescription-details-2 li span.medicine-name {
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .prescription-details-2 li .medicine-detail-row {
-    display: flex;
-    gap: 8px;
+  .generate-pdf-button,
+  .menu-back {
+    padding: 10px;
     font-size: 0.9rem;
-    color: #555;
   }
-  
-  /* Label style */
-  .prescription-details-2 li .label {
-    font-weight: 600;
-    color: #333;
-  }
-
-  .button-reteta{
-    display: flex;
-    flex-direction: row;
-  }
-  .send-reteta{
-    display: flex;
-    flex-direction: column;
-  }
-
-  .status-message {
-    padding: 10px 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    text-align: center;
-  }
-  
-  .status-message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
-  
-  .status-message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
-  
-  
+}

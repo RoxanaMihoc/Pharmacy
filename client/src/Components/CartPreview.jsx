@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Modal, Button } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { useHistory } from "react-router-dom";
+import { useCart } from "../Context/CartContext";
 import { fetchCart, fetchCartItems, removeItemFromCart } from '../Pages/Services/cartServices'
-import "./cart-preview.css";
+import "./styles/cart-preview.css";
 
 const CartPreview = ({ show, handleClose, switchToCartPage }) => {
-  const [cartItems, setCartItems] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const { cartItems, setCartItems, totalPrice, setTotalPrice } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState([]);
   const { currentUser } = useAuth();
@@ -17,6 +17,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
     const fetchCartData = async () => {
       try {
         const data = await fetchCart(currentUser); // Use the service function
+        console.log("feth",data);
         setCartItems(data); // Set the fetched cart data in state
       } catch (error) {
         console.error("Error fetching cart data:", error.message);
@@ -26,55 +27,54 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
     fetchCartData();
   }, [currentUser]);
 
-   useEffect(() => {
-      console.log("ALAL", cartItems);
-      const populateCartItems = async () => {
-        const promises = cartItems.map(async (id) => {
-          const { success, data } = await fetchCartItems(id.productId);
-          if (success) {
-            return { ...data, presId: id.prescriptionId };
-          }
-          return null;
-        });
-  
-        const resolvedData = await Promise.all(promises);
-        console.log(resolvedData);
-  
-        // Filter out null values and set the cart state
-        const filteredData = resolvedData.filter((item) => item !== null);
-        setCart(filteredData); // Update the cart state with enriched data
-        console.log("Cart lala", filteredData);
-      };
-  
-      if (cartItems) {
-        populateCartItems();
-      }
-    }, [cartItems]);
+  useEffect(() => {
+    const populateCartItems = async () => {
+      const promises = cartItems.map(async (item) => {
+        const { success, data } = await fetchCartItems(item.productId);
+        if (success) {
+          return { ...data, presId: item.prescriptionId };
+        }
+        return null;
+      });
+
+      const resolvedData = await Promise.all(promises);
+
+      // Filter out null values and update the cart state
+      const filteredData = resolvedData.filter((item) => item !== null);
+      setCart(filteredData);
+
+      // Calculate the total price
+      const total = filteredData.reduce((sum, item) => sum + item[0].price, 0);
+      setTotalPrice(total);
+    };
+
+    if (cartItems.length > 0) {
+      populateCartItems();
+    } else {
+      setCart([]); // Clear the cart when cartItems is empty
+      setTotalPrice(0);
+    }
+  }, [cartItems, setCart, setTotalPrice]);
 
   const handleRemoveItem = async (e, productId) => {
-      e.preventDefault();
-    
-      const { success } = await removeItemFromCart(currentUser, productId); // Use the service function
-    
-      if (success) {
-        // Filter the cart directly
-        const updatedCart = cart.filter((product) => {
-          if (product._id === productId) {
-            // Save the price before filtering out the product
-            setTotalPrice(
-              (Number(totalPrice) - Number(product.price)).toFixed(20)
-            );
-            return false; // Don't include the product in the updated cart
-          }
-          return true; // Include other products in the updated cart
-        });
-    
-        setCart(updatedCart); // Update the cart state
-        setCartItems(cartItems.filter((item) => item !== productId)); // Update cart items
-      } else {
-        console.error("Failed to remove item from cart");
-      }
-    };
+    e.preventDefault();
+
+    const { success } = await removeItemFromCart(currentUser, productId);
+    if (success) {
+      const updatedCart = cart.filter((product) => product[0]._id !== productId);
+      setCart(updatedCart);
+
+      const updatedCartItems = cartItems.filter(
+        (item) => item.productId !== productId
+      );
+      setCartItems(updatedCartItems);
+
+      const total = updatedCart.reduce((sum, product) => sum + product[0].price, 0);
+      setTotalPrice(total);
+    } else {
+      console.error("Failed to remove item from cart");
+    }
+  };
 
   const updateTotalPrice = async (productId) => {
     let total = 0;
@@ -93,6 +93,14 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
 
     setTotalPrice(total);
   };
+
+  const setTotal = async (productPrice) => {
+
+    let totalPrice2 = totalPrice +  productPrice;
+
+    setTotalPrice(totalPrice2);
+  }
+
 
   const handleQuantityChange = async (productId, newQuantity) => {
     if (newQuantity > 0) {
@@ -153,7 +161,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
         )}
         <div className="cart-summary">
           <p>Total {cart.length} produse:</p>
-          <p>{totalPrice} Lei</p>
+          <p>{totalPrice.toFixed(2)} Lei</p>
         </div>
       </Modal.Body>
       <Modal.Footer>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import "./styles/diagnosis.css"; // Updated CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllProducts } from "../../Services/productServices";
 
 const Diagnosis = () => {
@@ -279,12 +279,12 @@ useEffect(() => {
           </table>
         </div>
         </div>
-        {/* Footer Buttons */}
       <div className="footer-buttons">
+      <button className="cancel-button">Renunță</button>
         <button className="save-button" onClick={handleSave}>
-          Salvează
+        Mai departe {" "}
+        <FontAwesomeIcon icon={faArrowRight} className="search-icon" />
         </button>
-        <button className="cancel-button">Renunță</button>
       </div>
     </div>
   );
