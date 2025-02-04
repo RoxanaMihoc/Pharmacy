@@ -18,13 +18,13 @@ const CurrentPrescription = () => {
   );
   const [completed, setCompleted] = useState(false);
   const [limitExceeded, setLimitExceeded] = useState({}); // Track dosage limit exceeded messages
-  const { currentUser, name } = useAuth();
+  const { currentUser, name, token } = useAuth();
   const [historyVisibility, setHistoryVisibility] = useState({}); // State for tracking individual medication history visibility
 
   useEffect(() => {
     const fetchCurrentPrescriptionsData = async () => {
       const { success, data, error } = await fetchCurrentPrescriptions(
-        currentUser
+        currentUser, token
       );
 
       if (success) {
@@ -132,7 +132,7 @@ const CurrentPrescription = () => {
         currentUser,
         prescription.doctorId,
         name,
-        completed);
+        completed, token);
     }
     else
     {
@@ -144,7 +144,7 @@ const CurrentPrescription = () => {
       currentUser,
       prescription.doctorId,
       name,
-      completed
+      completed, token
     );
   
 
@@ -189,7 +189,7 @@ const CurrentPrescription = () => {
       prescription._id,
       medicationId,
       medication.progressHistory,
-      currentUser
+      currentUser, token
     );
 
     if (success) {

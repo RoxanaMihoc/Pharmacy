@@ -8,32 +8,6 @@
   cursor: pointer;
 }
 
-
-.button-h .additional-content-container {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 100%; /* Position to the right of the button */
-  width: 900px; /* Set the width of the additional content */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 10px;
-  z-index: 1;
-  height:59vh;
-
-}
-
-.button-h:hover .additional-content-container {
-  display: grid;
-  grid-template-columns: 50% 50%;
-}
-
-.additional-content-container .sub-additional-content-container1{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
-}
-
 .hover-button:hover {
   transform: translateX(5%);
   transition: background-color 0.5s ease;

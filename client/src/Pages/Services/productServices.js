@@ -1,9 +1,14 @@
 const BASE_URL = "http://localhost:3000";
 
 //get all brands
-export const fetchBrands = async () => {
+export const fetchBrands = async (token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/brands`);
+    const response = await fetch(`${BASE_URL}/home/brands`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch brands");
     }
@@ -16,11 +21,15 @@ export const fetchBrands = async () => {
 };
 
 //get all products by category
-export const fetchProductsByCategory = async (category, subcategory) => {
+export const fetchProductsByCategory = async (category, subcategory,token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/product/${encodeURIComponent(category)}/${encodeURIComponent(subcategory)}`
-    );
+      `${BASE_URL}/home/product/${encodeURIComponent(category)}/${encodeURIComponent(subcategory)}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
     if (!response.ok) {
       throw new Error("Failed to fetch products");
     }
@@ -33,9 +42,14 @@ export const fetchProductsByCategory = async (category, subcategory) => {
 };
 
 //get details about product
-export const fetchProductDetails = async (productId) => {
+export const fetchProductDetails = async (productId,token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/product/details/${productId}`);
+    const response = await fetch(`${BASE_URL}/home/product/details/${productId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch product details");
     }
@@ -48,11 +62,15 @@ export const fetchProductDetails = async (productId) => {
 };
 
 //get products with the same brand as current product
-export const fetchProductsByBrand = async (brand) => {
+export const fetchProductsByBrand = async (brand,token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/products?brand=${encodeURIComponent(brand)}`
-    );
+      `${BASE_URL}/home/products?brand=${encodeURIComponent(brand)}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
     if (!response.ok) {
       throw new Error("Failed to fetch products by brand");
     }
@@ -65,9 +83,14 @@ export const fetchProductsByBrand = async (brand) => {
 };
 
 // Services/productServices.js
-export const fetchAllProducts = async () => {
+export const fetchAllProducts = async (token) => {
   try {
-    const response = await fetch("http://localhost:3000/home/all-products");
+    const response = await fetch("http://localhost:3000/home/all-products", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Something went wrong while fetching products!");

@@ -14,7 +14,7 @@ const FavoritesPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchFavorites(currentUser); // Fetch favorites data
+        const data = await fetchFavorites(currentUser,token); // Fetch favorites data
         setFavoritesItems(data); // Update state with the fetched data
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -29,7 +29,7 @@ const FavoritesPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resolvedFavorites = await populateFavoriteItems(favoritesItems); // Fetch favorite item details
+        const resolvedFavorites = await populateFavoriteItems(favoritesItems,token); // Fetch favorite item details
         setFavorites(resolvedFavorites); // Update state with resolved data
         console.log("Fetched Favorites:", resolvedFavorites);
       } catch (error) {
@@ -45,7 +45,7 @@ const FavoritesPage = () => {
   const handleRemoveItem = async (e, productId) => {
     e.preventDefault();
     try {
-      const { success } = await removeFavoriteItem(currentUser, productId);
+      const { success } = await removeFavoriteItem(currentUser, productId,token);
       if (success) {
         // Update favorites and favoritesItems state
         const updatedfavorites = favorites.map((itemArray) =>
@@ -61,7 +61,7 @@ const FavoritesPage = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-        const result = await addToCart(currentUser, productId);
+        const result = await addToCart(currentUser, productId,token);
         console.log("Product added to favorites:", result);
         if (result.success) {
           console.log(result);

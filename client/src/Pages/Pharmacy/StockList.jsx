@@ -14,7 +14,7 @@ const StockList = () => {
     const currentUser = "66746a45149b6a27a9018fa5";
     const [editStockId, setEditStockId] = useState(null); // ID of the stock currently being edited
     const [editQuantity, setEditQuantity] = useState(''); // Edited quantity value
-    // const { currentUser } = useAuth();
+    // const { currentUser, token } = useAuth();
     
     
 

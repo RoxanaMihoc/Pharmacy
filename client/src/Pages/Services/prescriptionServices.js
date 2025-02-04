@@ -1,11 +1,14 @@
 const BASE_URL = "http://localhost:3000";
 
 // Services/prescriptionServices.js
-export const sendPrescriptionData = async (prescriptionData) => {
+export const sendPrescriptionData = async (prescriptionData,token) => {
   try {
     const response = await fetch(`${BASE_URL}/home/add-prescription`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(prescriptionData),
     });
 
@@ -21,12 +24,15 @@ export const sendPrescriptionData = async (prescriptionData) => {
   }
 };
 
-export const fetchPrescriptions = async (currentUser) => {
+export const fetchPrescriptions = async (currentUser, token) => {
   try {
     const response = await fetch(
       `${BASE_URL}/home/all-prescriptions/${currentUser}`,
       {
-        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     if (!response.ok) {
@@ -40,7 +46,7 @@ export const fetchPrescriptions = async (currentUser) => {
   }
 };
 
-export const markPresAsCurrent = async (prescriptionId, currentUser) => {
+export const markPresAsCurrent = async (prescriptionId, currentUser, token) => {
   try {
     const response = await fetch(
       `${BASE_URL}/home/prescription/${prescriptionId}`,
@@ -48,8 +54,9 @@ export const markPresAsCurrent = async (prescriptionId, currentUser) => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({currentUser: currentUser}),
+        body: JSON.stringify({ currentUser: currentUser }),
       }
     );
 
@@ -67,7 +74,7 @@ export const markPresAsCurrent = async (prescriptionId, currentUser) => {
 // prescriptionServices.js
 export const removeCurrentPrescription = async (
   prescriptionId,
-  currentUser
+  currentUser, token
 ) => {
   try {
     const response = await fetch(
@@ -76,6 +83,7 @@ export const removeCurrentPrescription = async (
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ currentPrescription: false, currentUser }),
       }
@@ -93,9 +101,14 @@ export const removeCurrentPrescription = async (
 };
 
 //For Doctors
-export const fetchPrescriptionsForDoctors = async (user) => {
+export const fetchPrescriptionsForDoctors = async (user, token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/prescription/${user}`);
+    const response = await fetch(`${BASE_URL}/home/prescription/${user}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -110,11 +123,15 @@ export const fetchPrescriptionsForDoctors = async (user) => {
 };
 
 //all doctor prescriptions
-export const fetchAllPrescriptions = async (currentUser) => {
+export const fetchAllPrescriptions = async (currentUser, token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/all-prescriptions/${currentUser}`
-    );
+      `${BASE_URL}/home/all-prescriptions/${currentUser}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
     if (!response.ok) {
       throw new Error("Failed to fetch prescriptions");
@@ -128,10 +145,16 @@ export const fetchAllPrescriptions = async (currentUser) => {
   }
 };
 
-export const fetchCurrentPrescriptions = async (currentUser) => {
+export const fetchCurrentPrescriptions = async (currentUser, token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/current-prescription/${currentUser}`
+      `${BASE_URL}/home/current-prescription/${currentUser}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     if (!response.ok) {
       throw new Error("Failed to fetch prescriptions");
@@ -151,7 +174,7 @@ export const updateMedicationProgress = async (
   currentUser,
   doctorId,
   name,
-  completed
+  completed, token
 ) => {
   console.log("dnaodn", completed);
   if (completed == false) {
@@ -161,7 +184,7 @@ export const updateMedicationProgress = async (
         `${BASE_URL}/home/update-progress/${prescriptionId}/${medicationId}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
           body: JSON.stringify({
             progressHistory,
             currentUser,
@@ -181,8 +204,7 @@ export const updateMedicationProgress = async (
       console.error("Error updating medication progress:", error);
       return { success: false, error: error.message };
     }
-  }
-  else{
+  } else {
     return { success: false, error: "Pres completed" };
   }
 };
@@ -191,14 +213,14 @@ export const deleteLastProgressEntry = async (
   prescriptionId,
   medicationId,
   progressHistory,
-  currentUser
+  currentUser,token
 ) => {
   try {
     const response = await fetch(
       `${BASE_URL}/home/delete-progress/${prescriptionId}`,
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
         body: JSON.stringify({
           medicationId,
           progressHistory,
@@ -226,7 +248,7 @@ export const notifyDoctorAboutCompletion = async (
   currentUser,
   doctorId,
   name,
-  completed
+  completed,token
 ) => {
   try {
     console.log("Med", medicationId);
@@ -234,7 +256,7 @@ export const notifyDoctorAboutCompletion = async (
       `${BASE_URL}/home/progress-completed/${prescriptionId}/${medicationId}`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
         body: JSON.stringify({
           progressHistory,
           currentUser,

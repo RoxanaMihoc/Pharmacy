@@ -1,12 +1,13 @@
 const BASE_URL = "http://localhost:3000";
 
-export const fetchNotifications = async (currentUser, role) => {
+export const fetchNotifications = async (currentUser, role, token) => {
   try {
     const response = await fetch(
       `${BASE_URL}/home/notifications/${currentUser}/${role}`,
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -25,12 +26,13 @@ export const fetchNotifications = async (currentUser, role) => {
 
 // notifServices.js
 
-export const saveNotificationToDatabase = async (userId, role, notification) => {
+export const saveNotificationToDatabase = async (userId, role, notification,token) => {
   try {
     await fetch(`${BASE_URL}/home/add-notification`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         userId,

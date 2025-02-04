@@ -36,7 +36,7 @@ const Diagnosis = () => {
 useEffect(() => {
   const fetchProducts = async () => {
     try {
-      const { success, data, error } = await fetchAllProducts();
+      const { success, data, error } = await fetchAllProducts(token);
 
       if (success) {
         setPrescriptions(data); // Update state with fetched products

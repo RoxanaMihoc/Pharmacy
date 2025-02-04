@@ -235,7 +235,6 @@ const UserForm = () => {
                   value={formData.email}
                   onChange={handleChange}
                 />
-                <small>exemplu@exemplu.com</small>
               </div>
             </div>
 

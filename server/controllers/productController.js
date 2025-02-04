@@ -9,21 +9,19 @@ function removeNonLetters(str) {
   // Capitalize the first letter and concatenate it with the rest of the string
   return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1);
 }
-router.getAllProducts= async (req, res) =>{
+router.getAllProducts = async (req, res) => {
   try {
-  const products = await Product.find({});
-  res.json(products);
+    const products = await Product.find({});
+    res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 // Route to get products by category
 router.getProductsByCategory = async (req, res) => {
   const { category, subcategory } = req.params;
-  console.log(
-    "LALA " + removeNonLetters(category) + " " + removeNonLetters(subcategory)
-  );
+
   if (subcategory != "undefined") {
     query = {
       category: removeNonLetters(category),
@@ -38,6 +36,12 @@ router.getProductsByCategory = async (req, res) => {
       query,
       "category title brand price photo insurance"
     );
+    console.log(
+      "BLABLA",
+      removeNonLetters(category),
+      removeNonLetters(subcategory),
+      products
+    );
     res.json(products);
   } catch (error) {
     console.error(error);
@@ -48,7 +52,7 @@ router.getProductsByCategory = async (req, res) => {
 // for product/productId
 router.getProductsById = async (req, res) => {
   const { productId } = req.params;
-  console.log("Product: ",productId);
+  console.log("Product: ", productId);
 
   query = { _id: productId };
 
@@ -72,7 +76,7 @@ router.getProductById = async (req, res) => {
   try {
     const product = await Product.find(
       query,
-      "category title brand price photo availability description subcategory1 subcategory2"
+      "category title brand price photo availability description subcategory1 subcategory2 prospect"
     );
     console.log("In controler " + product);
     res.json(product);
@@ -102,7 +106,7 @@ router.getProductsByBrand = async (req, res) => {
 
 router.getBrands = async (req, res) => {
   try {
-    const brands = await Product.distinct('brand');
+    const brands = await Product.distinct("brand");
     res.json(brands);
   } catch (err) {
     res.status(500).json({ message: err.message });

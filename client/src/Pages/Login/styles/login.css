@@ -3,7 +3,9 @@
   flex-direction: column;
   justify-content:center;
   align-items: center;
-  background: linear-gradient(to top left,  #2C3E50, rgb(224, 233, 235));
+  background: rgb(224, 233, 235);
+  font-family: "Poppins", sans-serif;
+
 }
 
 .navbar {
@@ -26,7 +28,7 @@
 .nav-links {
   list-style-type: none;
   display: flex;
-  margin-right: 200px;
+  flex-direction: row;
 
 }
 
@@ -44,19 +46,24 @@
  .main-container {
   display: flex;
   justify-content: center;
-  max-width: 1200px;
+  align-items: center;
+  max-width: 800px;
   width: 45%;
   padding: 4%;
   min-height: 100vh;
+  
 } 
 
 .login-container {
   background-color: #ffffff;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 5px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 321px rgba(0, 0, 0, 0.1);
   width: 60vh;
   margin-right: 0;
+  height: 800px;
+  border: 2px solid;
+  border-color: #8f8b8b;
 }
 
 .form-container {
@@ -64,38 +71,103 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background-color: #ffffff;
   padding-left:20px;
   padding-right:20px;
+  
 }
 
-.input-container {
-  width: 50vh;
-  height: 40px;
-  margin-bottom: 20px;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2C3E50;
+  padding: 1rem 2rem;
 }
 
-.input-container-password {
-  width: 48vh;
-  height: 18px;
-  margin-bottom: 25px;
-}
-
-.input-container input {
+.input-container input[type="email"] {
   background: transparent;
-  width: 100%;
   height: 100%;
   border: none;
   outline: none;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  font-size: 16px;
+  border: 2px solid #b4b1b1;
+  border-radius: 12px;
+  font-size: 18px;
   padding: 0 2px 5px 5px;
+  width: 35vh;
+  padding-right: 40px;
+  padding-left: 10px;
+  flex: 1;
+}
+
+.input-container input[type="text"] {
+  background: transparent;
+  height: 100%;
+  border: none;
+  outline: none;
+  border: 2px solid #b4b1b1;
+  border-radius: 12px;
+  font-size: 18px;
+  padding: 0 2px 5px 5px;
+  width: 35vh;
+  padding-right: 40px;
+  padding-left: 10px;
+  flex: 1;
 
 }
 
+
+.input-container input[type="password"] {
+  background: transparent;
+  height: 100%;
+  border: none;
+  outline: none;
+  border: 2px solid #b4b1b1;
+  border-radius: 12px;
+  font-size: 18px;
+  padding: 0 2px 5px 5px;
+  width: 35vh;
+  padding-right: 40px; 
+  padding-left: 10px;
+  flex: 1;
+}
+
+.user-icon {
+  position: absolute;
+  right: 10px;  /* Plasează iconița la dreapta */
+  font-size: 18px;
+  color: #656b70;
+  margin-right: 5px;
+}
+
 .input-container input::placeholder {
-  color: #2C3E50;
+  color: #8f8b8b;
+  
+}
+
+.input-container {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 35vh;
+  height: 48px;
+  margin-right: 2px;
+  margin-bottom: 35px;
+  border-radius: 15px;
+  
+}
+
+.error-message{
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 35vh;
+  height: 48px;
+  margin-right: 2px;
+  border-radius: 15px;
 }
 
 .buttons-container {
@@ -109,9 +181,16 @@
   height:45px;
   outline:none;
   border-radius: 40px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top:10%;
+  border: 2px solid;
+  border-color: #abadaf;
   color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #cbced1;
+  font-weight:500 ;
+}
+
+.buttons-container button:hover{
+  background-color: #85888b;
 }
 
 .button-container {
@@ -120,6 +199,7 @@
   padding: 6px;
   background-color: #ffffff;
   height:20%;
+ 
 }
 
 .button-container button{
@@ -127,8 +207,13 @@
   border: none;
   cursor: pointer;
   width: 200px;
-  height: 80%;
-  font-size:25px;
+  height: 50%;
+  font-size:22px;
+  font-weight: bold;
+  border-radius: 0%;
+
+ 
+
 }
 
 .button-container button:hover {
@@ -143,7 +228,8 @@
 
 .button-container .signup-unselected {
   color: rgb(165, 168, 172); /* Change color for unselected state */
-  border-bottom: 2px rgb(165, 168, 172)
+  border-bottom: 2px rgb(165, 168, 172);
+
 }
 
 /* Targeting all select elements */
@@ -156,12 +242,68 @@ select {
 }
 
 @media (max-width: 768px) {
-  .navbar {
-      flex-direction: column;
-      gap: 1rem;
+  .main-container {
+    width: 100%;
+    padding: 5%;
   }
-  .nav-links {
-    margin-right: 0;
+
+  .login-container {
+    width: 100%;
+    max-width: 350px;
+    min-height: 450px;
+  }
+
+  .input-container {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .buttons-container button {
+    width: 90%;
+  }
+  
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-logo {
+    font-size: 1.2rem;
+  }
+
+  .nav-links li a {
+    font-size: 14px;
+  }
+
+  .main-container {
+    padding: 10%;
+  }
+
+  .login-container {
+    max-width: 320px;
+    min-height: 400px;
+    padding: 15px;
+  }
+
+  .input-container input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .buttons-container {
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .button-container button {
+    height: 40px;
+    font-size: 14px;
   }
 }
 

@@ -1,6 +1,8 @@
 // src/context/AuthContext.js
 import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import {jwtDecode} from "jwt-decode"; // Import jwt-decode
+
 
 const AuthContext = createContext();
 
@@ -12,22 +14,41 @@ export const AuthProvider = ({ children }) => {
   const history = useHistory();
 
   useEffect(() => {
+    console.log(token)
     if (token) {
-      const [header, payload, signature] = token.split(".");
-      const decodedPayload = JSON.parse(atob(payload));
-      console.log( "lalal Paiload",decodedPayload);
-      setCurrentUser(decodedPayload.userId);
-      setRole(decodedPayload.role);
-      setCurrentUserName(decodedPayload.firstName + " " + decodedPayload.lastName);
+      // Check if the token is correctly formatted
+      if (token.split(".").length !== 3) {
+        console.error("Invalid token format:", token);
+        localStorage.removeItem("token"); // Remove bad token
+        setToken(null);
+        history.push("/login"); // Redirect to login
+        return;
+      }
+
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log("Decoded Token:", decodedToken);
+
+        setCurrentUser(decodedToken.userId || null);
+        setRole(decodedToken.role || null);
+        setCurrentUserName(`${decodedToken.firstName || ""} ${decodedToken.lastName || ""}`);
+      } catch (error) {
+        console.error("Invalid token:", error);
+        localStorage.removeItem("token");
+        setToken(null);
+        history.push("/login");
+      }
     } else {
       setCurrentUser(null);
+      setRole(null);
+      setCurrentUserName(null);
     }
-  }, [token]);
+  }, [token, history]);
 
   const login = (token) => {
     // Set the JWT token in both state and localStorage
     setToken(token);
-    localStorage.setItem("token", token);
+    localStorage.setItem('jwt', token);
   };
 
   const logout = () => {

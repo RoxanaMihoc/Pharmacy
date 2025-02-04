@@ -1,5 +1,6 @@
 // controllers/cartController.js
 const User = require('../models/userModel');
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const addToFavorites = async (req, res) => {
   console.log("in addto favorites backend");

@@ -1,13 +1,14 @@
 const Order = require("../models/orderModel");
 const express = require("express");
 const router = express.Router();
+const SECRET_KEY = process.env.JWT_SECRET;
 
 exports.addToOrders = async (req, res, io, userSockets) => {
   const { cartItems, addressDetails, totalPrice, user, pharmacist, doctor, doctorId } = req.body;
   console.log("In add to orders:", pharmacist);
   console.log("In add to orders:", cartItems);
   console.log("In add to orders:", doctorId);
-
+  
   const generateRandomNumber = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };

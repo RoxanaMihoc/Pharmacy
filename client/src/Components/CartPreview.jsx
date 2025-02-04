@@ -10,13 +10,13 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
   const { cartItems, setCartItems, totalPrice, setTotalPrice } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState([]);
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   console.log(currentUser);
   const history = useHistory();
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const data = await fetchCart(currentUser); // Use the service function
+        const data = await fetchCart(currentUser, token); // Use the service function
         console.log("feth",data);
         setCartItems(data); // Set the fetched cart data in state
       } catch (error) {
@@ -30,7 +30,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
   useEffect(() => {
     const populateCartItems = async () => {
       const promises = cartItems.map(async (item) => {
-        const { success, data } = await fetchCartItems(item.productId);
+        const { success, data } = await fetchCartItems(item.productId, token);
         if (success) {
           return { ...data, presId: item.prescriptionId };
         }
@@ -42,6 +42,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
       // Filter out null values and update the cart state
       const filteredData = resolvedData.filter((item) => item !== null);
       setCart(filteredData);
+      console.log(cart);
 
       // Calculate the total price
       const total = filteredData.reduce((sum, item) => sum + item[0].price, 0);
@@ -59,7 +60,7 @@ const CartPreview = ({ show, handleClose, switchToCartPage }) => {
   const handleRemoveItem = async (e, productId) => {
     e.preventDefault();
 
-    const { success } = await removeItemFromCart(currentUser, productId);
+    const { success } = await removeItemFromCart(currentUser, productId, token);
     if (success) {
       const updatedCart = cart.filter((product) => product[0]._id !== productId);
       setCart(updatedCart);

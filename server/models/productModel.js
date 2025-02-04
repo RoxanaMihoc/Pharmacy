@@ -11,7 +11,8 @@ const productSchema = new mongoose.Schema({
   subcategory1: String,
   subcategory2: String,
   availability: String,
-  description: String
+  description: String,
+  prospect: String,
 });
 
 module.exports = productsDB.model('Product', productSchema, 'products');

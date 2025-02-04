@@ -13,7 +13,7 @@ export const loginUser = async (email, password, identifier, role) => {
     });
 
     if (!response.ok) {
-      throw new Error("Invalid email or password. Please try again.");
+      throw new Error("Credențiale invalide. Încearcă din nou.");
     }
 
     const data = await response.json();

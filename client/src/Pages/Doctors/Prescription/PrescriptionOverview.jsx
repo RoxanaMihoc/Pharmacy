@@ -12,7 +12,7 @@ const socket = io("http://localhost:3000");
 const PrescriptionOverview = () => {
   const location = useLocation();
   const history = useHistory();
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
 
   const [statusMessage, setStatusMessage] = useState(""); // State for success or failure message
   const [statusType, setStatusType] = useState(""); // To differentiate success or error
@@ -53,7 +53,7 @@ const sendPrescription = async () => {
     };
 
     // Call the service function
-    const { success, data, error } = await sendPrescriptionData(prescriptionData);
+    const { success, data, error } = await sendPrescriptionData(prescriptionData, token);
 
     if (success) {
       // Set success message

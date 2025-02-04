@@ -39,7 +39,7 @@ const PrescriptionsList = () => {
     const fetchPrescriptions = async () => {
       try {
         const { success, data, error } = await fetchAllPrescriptions(
-          currentUser
+          currentUser, token
         );
 
         if (success) {

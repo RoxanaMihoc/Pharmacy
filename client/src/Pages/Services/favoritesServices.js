@@ -2,9 +2,13 @@
 const BASE_URL = "http://localhost:3000";
 
 //get favorites for user
-export const fetchFavorites = async (currentUser) => {
+export const fetchFavorites = async (currentUser, token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/favorites/${currentUser}`);
+    const response = await fetch(`${BASE_URL}/home/favorites/${currentUser}`,{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }});
     if (!response.ok) {
       throw new Error("Failed to fetch favorites data");
     }
@@ -17,13 +21,14 @@ export const fetchFavorites = async (currentUser) => {
 };
 
 //add to favorites for user
-export const addToFavorites = async (userId, productId) => {
+export const addToFavorites = async (userId, productId, token) => {
   try {
     console.log('Product added to cart:', userId, productId);
     const response = await fetch(`${BASE_URL}/home/favorites`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ userId, productId }),
     });
@@ -43,10 +48,14 @@ export const addToFavorites = async (userId, productId) => {
 };
 
 // Fetch a single product's details by ID
-export const fetchFavoriteItemDetails = async (productId) => {
+export const fetchFavoriteItemDetails = async (productId, token) => {
   try {
     console.log("Product Id:", productId);
-    const response = await fetch(`${BASE_URL}/home/product/${productId}`);
+    const response = await fetch(`${BASE_URL}/home/product/${productId}`,{
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }});
     if (!response.ok) {
       throw new Error("Failed to fetch product details.");
     }
@@ -59,10 +68,10 @@ export const fetchFavoriteItemDetails = async (productId) => {
 };
 
 // Fetch multiple product details based on a list of product IDs
-export const populateFavoriteItems = async (favoritesItems) => {
+export const populateFavoriteItems = async (favoritesItems, token) => {
   try {
     const promises = favoritesItems.map(async (id) => {
-      const { success, data } = await fetchFavoriteItemDetails(id);
+      const { success, data } = await fetchFavoriteItemDetails(id, token);
       return success ? data : null; // Return data if successful, otherwise null
     });
 
@@ -74,12 +83,16 @@ export const populateFavoriteItems = async (favoritesItems) => {
   }
 };
 
-export const removeFavoriteItem = async (currentUser, productId) => {
+export const removeFavoriteItem = async (currentUser, productId, token) => {
   try {
     const response = await fetch(
       `${BASE_URL}/home/favorites/${currentUser}/${productId}`,
       {
         method: "DELETE",
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          }
       }
     );
     if (!response.ok) {

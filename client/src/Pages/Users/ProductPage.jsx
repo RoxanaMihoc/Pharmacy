@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import SecondaryMenu from "../../Components/SecondMenu";
-import { useAuth } from '../../Context/AuthContext';
+import { useAuth } from "../../Context/AuthContext";
 import "./styles/product-page.css"; // Import your CSS file
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightLong, faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
-import { fetchBrands, fetchProductsByCategory } from "../Services/productServices";
-import {addToFavorites} from '../Services/favoritesServices';
-import { addToCart, addToCartF } from '../Services/cartServices';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRightLong,
+  faArrowLeftLong,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  fetchBrands,
+  fetchProductsByCategory,
+} from "../Services/productServices";
+import { addToFavorites } from "../Services/favoritesServices";
+import { addToCart, addToCartF } from "../Services/cartServices";
 import { useCart } from "../../Context/CartContext";
 
 const ProductPage = () => {
@@ -17,11 +23,11 @@ const ProductPage = () => {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([10, 150]);
   const [displayedPriceRange, setDisplayedPriceRange] = useState([10, 150]);
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const { category, subcategory } = useParams();
   const [products, setProducts] = useState([]);
   const prescriptionId = null;
-   const { cartItems, setCartItems, totalPrice, setTotalPrice } = useCart();
+  const { cartItems, setCartItems, totalPrice, setTotalPrice } = useCart();
 
   // PAGINATION - START
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,11 +39,15 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedBrands = await fetchBrands(); // Fetch brands
+        const fetchedBrands = await fetchBrands(token); // Fetch brands
         setBrands(fetchedBrands);
 
-        const fetchedProducts = await fetchProductsByCategory(category, subcategory); // Fetch products
+        const fetchedProducts = await fetchProductsByCategory(
+          category,
+          subcategory
+        ); // Fetch products
         setProducts(fetchedProducts);
+        console.log("rani", products);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -48,30 +58,35 @@ const ProductPage = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-      const result = await addToCart(currentUser, productId, prescriptionId);
-      console.log('Product added to cart:', result);
+      const result = await addToCart(currentUser, productId, prescriptionId,token);
+      console.log("Product added to cart:", result);
       if (result.success) {
-        const result2 = addToCartF(productId);
+        const result2 = addToCartF(productId,token);
         setCartItems((prev) => [...prev, { productId, prescriptionId }]);
         console.log(result2);
       }
     } catch (error) {
-      console.error('Failed to add product to cart:', error.message);
+      console.error("Failed to add product to cart:", error.message);
       // Handle error, show an error message to the user
     }
   };
 
   const handleAddToFavorites = async (productId) => {
     try {
-      const result = await addToFavorites(currentUser, productId, category, subcategory);
-      console.log('Product added to cart:', result);
+      const result = await addToFavorites(
+        currentUser,
+        productId,
+        category,
+        subcategory,token
+      );
+      console.log("Product added to cart:", result);
       if (result.success) {
-        const result2 = addToCartF(productId);
+        const result2 = addToCartF(productId,token);
         console.log(result2);
       }
       // Handle success, update UI or show a message
     } catch (error) {
-      console.error('Failed to add product to cart:', error.message);
+      console.error("Failed to add product to cart:", error.message);
       // Handle error, show an error message to the user
     }
   };
@@ -105,7 +120,10 @@ const ProductPage = () => {
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
   // Produsele care vor fi afișate pe pagina curentă
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   // Numărul total de pagini
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -117,14 +135,14 @@ const ProductPage = () => {
       window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top
     }
   };
-  
+
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
       window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top
     }
   };
-  
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top
@@ -134,9 +152,20 @@ const ProductPage = () => {
   const linkMap = {
     "medicamente-otc": "Medicamente fara reteta",
     "afectiuni-ale-cavitatii-bucale": "Afectiuni ale cavitatii bucale",
-    "antispastice-balonare-constipatie": "Antiacide, Antispastice, Balonare",
+    "antispastice-balonare-antiacide": "Antiacide, Antispastice, Balonare",
     "enzime-digestive": "Enzime Digestive",
-    "greata-gastrita": "Gastrita si ulcer, Greata si varsaturi",
+    "greata-gastrita": "Gastrita, ulcer, greata si varsaturi",
+    "ochi": "Ochi",
+    "corp": "Corp",
+    "machiaj": "Machiaj",
+    "micoze": "Micoze",
+    "rani": "Rani",
+    "sinuzita": "Sinuzita",
+    "picaturi": "Picaturi",
+    "dureri": "Dureri de gat",
+    "vitamina-a": "Suplimente Vitamina A",
+    "vitamina-c": "Suplimente Vitamina C",
+    "sistemul-digestiv": "Sistemul digestiv",
   };
 
   function getMappedText(subdirectory) {
@@ -150,7 +179,7 @@ const ProductPage = () => {
         <Row>
           {/* Coloana de filtre */}
           <Col md={3} className="filter-container">
-            <h1>{getMappedText(subcategory)}</h1>
+            <h2>{getMappedText(subcategory)}</h2>
             <h3 className="brands-filter">Branduri</h3>
             <div className="brands-scrollable">
               <Form.Group>
@@ -174,10 +203,10 @@ const ProductPage = () => {
               value={priceRange[1]}
               className="range-slider"
               style={{
-                '--min': priceRange[0],
-                '--max': priceRange[1],
-                '--min-limit': 10,
-                '--max-limit': 150,
+                "--min": priceRange[0],
+                "--max": priceRange[1],
+                "--min-limit": 10,
+                "--max-limit": 150,
               }}
               onChange={(e) =>
                 handlePriceChange([priceRange[0], parseInt(e.target.value)])
@@ -197,11 +226,18 @@ const ProductPage = () => {
               {currentProducts.map((product) => (
                 <Col key={product._id} md={4} className="mb-4">
                   <Card className="card-porduct-page">
-                    <Card.Img
-                      className="card-img-1"
-                      variant="top"
-                      src={product.photo}
-                    />
+                    {product.photo ? (
+                      <Card.Img
+                        className="card-img-1"
+                        variant="top"
+                        src={product.photo}
+                      />
+                    ) : (
+                      <div className="no-photo-message">
+                        Se eliberează doar pe bază de rețetă.
+                      </div>
+                    )}
+
                     <Card.Body>
                       <Link to={`/home/product-page/${product._id}`}>
                         <Card.Title
@@ -239,9 +275,9 @@ const ProductPage = () => {
             {totalPages > 1 && (
               <div className="pagination">
                 {currentPage > 1 && (
-                  <span
-                  className="transparent-button"
-                  onClick={handlePrevPage}><FontAwesomeIcon icon={faArrowLeftLong} /></span>
+                  <span className="transparent-button" onClick={handlePrevPage}>
+                    <FontAwesomeIcon icon={faArrowLeftLong} />
+                  </span>
                 )}
 
                 {Array.from({ length: totalPages }, (_, i) => (
@@ -255,9 +291,9 @@ const ProductPage = () => {
                 ))}
 
                 {currentPage < totalPages && (
-                  <span
-                  className="transparent-button"
-                  onClick={handleNextPage}><FontAwesomeIcon icon={faArrowRightLong} /></span>
+                  <span className="transparent-button" onClick={handleNextPage}>
+                    <FontAwesomeIcon icon={faArrowRightLong} />
+                  </span>
                 )}
               </div>
             )}

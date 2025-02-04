@@ -52,7 +52,7 @@ const PatientProfile = ({ onBack }) => {
       console.log(patientId);
       try {
         const { success, data, error } = await fetchPatientDetailsForDoctorPage(
-          patientId.patientId
+          patientId.patientId,token
         );
   
         if (success) {
@@ -81,7 +81,7 @@ const PatientProfile = ({ onBack }) => {
 
   const fetchPrescriptions = async () => {
     try {
-      const { success, data, error } = await fetchPrescriptionsForDoctors(user);
+      const { success, data, error } = await fetchPrescriptionsForDoctors(user,token);
   
       if (success) {
         console.log(data);

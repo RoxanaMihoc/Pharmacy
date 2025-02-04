@@ -99,7 +99,7 @@ const NotificationBell = () => {
       try {
         // Save notification to the database
         console.log("try to save notif")
-        await saveNotificationToDatabase(currentUser, role, normalizedNotification);
+        await saveNotificationToDatabase(currentUser, role, normalizedNotification,token);
         setShowNotifications(true);
       } catch (error) {
         console.error("Error saving notification:", error);

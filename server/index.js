@@ -12,6 +12,7 @@ const doctorRoutes = require('./routes/doctorRoutes');
 const prescriptionRoutes = require('./routes/prescriptionRoutes');
 const notificationRoutes = require('./routes/notificationRoutes'); 
 const pharmacyRoutes = require('./routes/pharmacyRoutes'); 
+require('dotenv').config();
 
 const app = express();
 

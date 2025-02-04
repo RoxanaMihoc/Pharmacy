@@ -1,5 +1,6 @@
 // pharmacyController.js
 const Pharmacy = require("../models/pharmacyModel");
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const checkStock = async (req, res) => {
   try {

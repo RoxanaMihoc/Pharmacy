@@ -28,7 +28,7 @@ const CartPage = () => {
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        const data = await fetchCart(currentUser); // Use the service function
+        const data = await fetchCart(currentUser, token); // Use the service function
         setCartItems(data); // Set the fetched cart data in state
       } catch (error) {
         console.error("Error fetching cart data:", error.message);
@@ -42,7 +42,7 @@ const CartPage = () => {
     console.log("ALAL", cartItems);
     const populateCartItems = async () => {
       const promises = cartItems.map(async (id) => {
-        const { success, data } = await fetchCartItems(id.productId);
+        const { success, data } = await fetchCartItems(id.productId,token);
         if (success) {
           return { ...data, presId: id.prescriptionId };
         }
@@ -74,7 +74,7 @@ const CartPage = () => {
 
   const handleRemoveItem = async (e, productId) => {
     e.preventDefault();
-    const { success } = await removeItemFromCart(currentUser, productId);
+    const { success } = await removeItemFromCart(currentUser, productId,token);
 
     if (success) {
       // Update the cart state immediately

@@ -5,6 +5,21 @@
     max-width: 1400px;
 
 }
+.no-photo-message {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: #d9534f; /* Bootstrap danger color */
+    padding: 20px;
+    background-color: #f8d7da; /* Light red background */
+    border-radius: 5px;
+    height: 170px;
+  }
+  
 
 /* Filter section styles */
 .filter-container {

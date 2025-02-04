@@ -20,7 +20,7 @@ const PrescriptionsList = () => {
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleId, setVisibleId] = useState(null);
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const [currentPrescriptionId, setCurrentPrescriptionId] = useState(null);
   const [doctor, setDoctor] = useState("");
   const itemsPerPage = 8; // Prescriptions per page
@@ -43,7 +43,7 @@ const PrescriptionsList = () => {
     const getDoctorForPatient = async () => {
       if (currentUser) {
         const { success, firstNameD, lastNameD } = await fetchDoctorName(
-          currentUser
+          currentUser,token
         );
 
         if (success) {
@@ -60,7 +60,7 @@ const PrescriptionsList = () => {
   useEffect(() => {
     const fetchPrescriptionsData = async () => {
       try {
-        const data = await fetchPrescriptions(currentUser);
+        const data = await fetchPrescriptions(currentUser,token);
         setPrescriptions(data);
 
         // Find and set the active prescription
@@ -78,7 +78,7 @@ const PrescriptionsList = () => {
     fetchPrescriptionsData();
   }, [currentUser]);
 
-  const handleMarkAsCurrent = async (prescriptionId) => {
+  const handleMarkAsCurrent = async (prescriptionId,token) => {
     try {
       console.log("lalalaaaa")
       const { success } = await markPresAsCurrent(prescriptionId, currentUser);
@@ -92,7 +92,7 @@ const PrescriptionsList = () => {
     }
   };
 
-  const handleRemoveCurrent = async () => {
+  const handleRemoveCurrent = async (token) => {
     try {
       if (!currentPrescriptionId) return;
 

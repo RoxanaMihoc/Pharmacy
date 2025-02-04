@@ -7,7 +7,7 @@ import "./styles/prescription-details.css";
 const PrescriptionDetails = () => {
   const location = useLocation();
   const { notification } = location.state;
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const history = useHistory();
 
   const addAllToCart = () => {
@@ -16,7 +16,7 @@ const PrescriptionDetails = () => {
         const result = await addToCart(
           currentUser,
           product.medication._id,
-          notification.prescriptionNumber
+          notification.prescriptionNumber,token
         );
         console.log("Product added to cart:", result);
       } catch (error) {

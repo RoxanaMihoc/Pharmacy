@@ -1,9 +1,13 @@
 const BASE_URL = "http://localhost:3000";
 
 //getAll orders for user
-export const fetchOrders = async (currentUser) => {
+export const fetchOrders = async (currentUser, token) => {
     try {
-      const response = await fetch(`${BASE_URL}/home/orders/${currentUser}`);
+      const response = await fetch(`${BASE_URL}/home/orders/${currentUser}`,{
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }});
       if (!response.ok) {
         throw new Error("Failed to fetch orders");
       }
@@ -15,12 +19,13 @@ export const fetchOrders = async (currentUser) => {
     }
   };
 
-  export const submitOrderApi = async (orderDetails) => {
+  export const submitOrderApi = async (orderDetails,token) => {
     try {
       const response = await fetch(`${BASE_URL}/home/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(orderDetails),
       });

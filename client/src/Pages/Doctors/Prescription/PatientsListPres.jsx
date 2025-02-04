@@ -17,7 +17,7 @@ const PatientsListPres = () => {
     const fetchPatients = async () => {
       try {
         const { success, data, error } = await fetchPatientsFromAPI(
-          currentUser.currentUser
+          currentUser.currentUser, token
         );
 
         if (success) {

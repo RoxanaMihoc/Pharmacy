@@ -1,24 +1,26 @@
 // controllers/cartController.js
 const User = require("../models/userModel");
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const addToCart = async (req, res) => {
   console.log("in addto cart backend");
   const { userId, productId, prescriptionId } = req.body;
-  console.log("Pres",prescriptionId);
+  console.log("Pres", prescriptionId);
+  
 
   try {
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        {
-          $addToSet: {
-            cart: {
-              productId: productId,
-              prescriptionId: prescriptionId,
-            },
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $addToSet: {
+          cart: {
+            productId: productId,
+            prescriptionId: prescriptionId,
           },
         },
-        { new: true }
-      );
+      },
+      { new: true }
+    );
 
     res.status(200).json({
       success: true,
@@ -34,6 +36,7 @@ const addToCart = async (req, res) => {
 const deleteProductFromCart = async (req, res) => {
   const { currentUser, productId } = req.params;
   console.log("IN DELETE CART", currentUser, productId);
+  
 
   try {
     // Update user's cart in the database
@@ -65,11 +68,10 @@ const deleteProductFromCart = async (req, res) => {
   }
 };
 
-
 const deleteCartFromUser = async (req, res) => {
   const { currentUser } = req.params;
   console.log("in delete cart");
-
+  
   try {
     // Update user's cart in the database
     await User.findByIdAndUpdate(

@@ -12,11 +12,11 @@ import ceva from "../../Utils/ceva.png";
 const PharmacyPage = () => {
   const history = useHistory();
 
-  const handleRoleSelectionLogIn = (role) => {
+  const handleLoggedOutLogIn = (role) => {
     history.push('/login', { role });
   };
 
-  const handleRoleSelectionSignUp = (role) => {
+  const handleLoggedOutSignUp = (role) => {
     history.push('/register', { role });
   };
   return (
@@ -27,14 +27,14 @@ const PharmacyPage = () => {
                 <FontAwesomeIcon icon={faCommentMedical} /> MedMonitor
               </Link>
         <ul className="nav-links">
-        <button className="button-role" onClick={() => handleRoleSelectionLogIn('Doctor')}>Doctor</button>
-        <button className="button-role" onClick={() => handleRoleSelectionLogIn('Pharmacist')}>Pharmacist</button>
+        <button className="button-role" onClick={() => handleLoggedOutLogIn('Doctor')}>Doctor</button>
+        <button className="button-role" onClick={() => handleLoggedOutLogIn('Pharmacist')}>Pharmacist</button>
         <button className="button-role" >Blog</button>
         <button className="button-role" >FAQ</button>
         </ul>
         <div className="nav-buttons">
-          <button className="btn sign-up" onClick={() => handleRoleSelectionSignUp('Patient')}>Înregistrare</button>
-          <button className="btn sign-in"onClick={() => handleRoleSelectionLogIn('Patient')}>Conectare</button>
+          <button className="btn sign-up" onClick={() => handleLoggedOutSignUp('Patient')}>Înregistrare</button>
+          <button className="btn sign-in"onClick={() => handleLoggedOutLogIn('Patient')}>Conectare</button>
         </div>
       </nav>
 
@@ -45,8 +45,8 @@ const PharmacyPage = () => {
     <p className="hero-subtitle">Cea mai bună alegere pentru tine și familia ta</p>
     <p className="hero-sub-subtitle">Prescripții medicale • Achiziții online • Livrare gratuită  </p>
     <div className="hero-buttons">
-      <button className="btn primary">Search medicine</button>
-      <button className="btn secondary">Doctor’s consultation</button>
+      <button className="btn primary">Caută medicamente</button> 
+      <button className="btn secondary">Doctori Parteneri</button>
     </div>
   </div>
 

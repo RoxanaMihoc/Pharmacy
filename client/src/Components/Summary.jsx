@@ -15,7 +15,7 @@ const Summary = ({
   onOrderSubmitted,
   pharmacy,
 }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const user = currentUser;
   const [price, setTotalPrice] = useState(0);
   const [doctor, setDoctor] = useState("");
@@ -82,7 +82,7 @@ const Summary = ({
 useEffect(() => {
   const getDoctorForPatient = async () => {
     if (currentUser) {
-      const { success, firstNameD, lastNameD, doctorId } = await  fetchDoctorName(currentUser);
+      const { success, firstNameD, lastNameD, doctorId } = await  fetchDoctorName(currentUser, token);
 
       if (success) {
         setDoctor(firstNameD + " " + lastNameD); // Set the doctor data in state
@@ -112,13 +112,13 @@ const submitOrder = async () => {
       doctorId,
     };
 
-    const { success: orderSuccess, data: orderData } = await submitOrderApi(orderDetails);
+    const { success: orderSuccess, data: orderData } = await submitOrderApi(orderDetails, token);
 
     if (orderSuccess) {
       console.log("Order submitted:", orderData);
 
       // Delete the cart if the order was successfully submitted
-      const { success: deleteSuccess, error } = await deleteCart(currentUser);
+      const { success: deleteSuccess, error } = await deleteCart(currentUser, token);
 
       if (deleteSuccess) {
         console.log("Cart deleted successfully");

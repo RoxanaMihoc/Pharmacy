@@ -11,7 +11,7 @@ import { useAuth } from "./Context/AuthContext";
 import DoctorSelection from "./Pages/Login/DoctorSelection";
 import "./Pages/styles/main.css";
 import UserForm from "./Pages/Login/UserForm";
-import RoleSelection from "./Pages/Login/RoleSelection";
+import LoggedOut from "./Pages/Login/LoggedOut";
 import HomeUser from "./Pages/Users/Home-User";
 import Recommend from "./Pages/Doctors/Prescription/Recommend";
 import Pharmacy from "./Pages/Pharmacy/HomePharmacy";
@@ -40,7 +40,7 @@ const App = () => {
         <Route path="/others" component={UserForm} />
         <Route path="/login" component={FirstPage} />
         <Route path="/register" component={FirstPage} />
-        <Route path="/role" component={RoleSelection} />
+        <Route path="/role" component={LoggedOut} />
         <Route path="/doctors" component={DoctorSelection} />
         <Route path="/rem" component={Recommend} />
         <Route

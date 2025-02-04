@@ -1,8 +1,10 @@
 const Doctor = require('../models/doctorModel');
 const User = require("../models/userModel");
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const getAllDoctors= async (req, res) =>{
     try {
+      
         console.log("in doctors");
     const doctors = await Doctor.find({});
     res.json(doctors);
@@ -16,6 +18,7 @@ const getAllPatientsByDoctorId= async (req, res) =>{
   const { currentUser } = req.params;
   console.log("lalain get all doct", currentUser);
   query ={ doctor: currentUser};
+  
 
   try {
     const patients = await User.find( query);
@@ -30,6 +33,7 @@ const getAllPatientsByDoctorId= async (req, res) =>{
 const getPatientDetails = async (req, res) =>{
   const {patientId} = req.params;
   console.log("id",patientId.patient);
+  
 
   query ={ _id: patientId};
 
@@ -48,6 +52,7 @@ const getPatientDetails = async (req, res) =>{
 const getDoctorName = async (req, res) => {
   try {
     const { doctorId } = req.params;
+    
 
     // Fetch the doctor by ID
     const doctor = await Doctor.findById(doctorId).select('firstName lastName');

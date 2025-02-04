@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%; /* Ensures the body can fill the screen height */
+  font-family: "Poppins", sans-serif;
 }
 
 button {

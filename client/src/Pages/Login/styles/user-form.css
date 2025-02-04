@@ -1,148 +1,157 @@
 .doctor-selection-container-nav {
-    min-height: 100vh; /* Use min-height if you want it to expand if content exceeds one screen */
-    padding: 1%;
-    background: linear-gradient(to top left, #2C3E50, rgb(224, 233, 235));
-  }
+  min-height: 100vh; /* Use min-height if you want it to expand if content exceeds one screen */
+  padding: 1%;
+  background: linear-gradient(to top left,  #226bb4, rgb(253, 255, 255));
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: center;
+  background-color: #2C3E50;
+  padding: 1rem 2rem;
+}
+ 
+.nav-logo {
+  margin-left: 30px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.nav-links {
+  list-style-type: none;
+  display: flex;
+  margin-right: 200px;
+
+}
+
+.nav-links li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #cccccc;
+}
+
+/* Main form container */
+.form-container2 {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 20px;
+  border: 2px solid;
+  border-color: #8f8b8b;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Headings */
+.form-container2 h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.form-container2 h2 {
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+/* Error message */
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Form styling */
+.user-details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Rows and groups */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;       /* Keep fields responsive */
+  gap: 1rem;
   
-  .navbar {
-    display: flex;
-    flex-direction: row;
-    justify-content:center;
-    align-items: center;
-    background-color: #2C3E50;
-    padding: 1rem 2rem;
-  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;              /* let each group share space */
   
-  .nav-logo {
-    margin-left: 30px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffffff;
-  }
-  
-  .nav-links {
-    list-style-type: none;
-    display: flex;
-    margin-right: 200px;
-  
-  }
-  
-  .nav-links li a {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-  
-  .nav-links li a:hover {
-    color: #cccccc;
-  }
-  
-  /* Main form container */
-  .form-container2 {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    background-color: #fff;
-    border-radius: 8px;
-  }
-  
-  /* Headings */
-  .form-container2 h1 {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  
-  .form-container2 h2 {
-    font-size: 1.25rem;
-    margin: 1.5rem 0 0.75rem;
-  }
-  
-  /* Error message */
-  .error-message {
-    color: red;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  
-  /* Form styling */
-  .user-details-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  /* Rows and groups */
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;       /* Keep fields responsive */
-    gap: 1rem;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    flex: 1;              /* let each group share space */
-  }
-  
-  .form-group.wide {
-    flex: 1 1 100%;
-  }
-  
-  .split {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  /* Label and input together */
-  .form-group label {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-  
-  /* Inputs, selects, textareas */
-  .user-details-form input[type="text"],
-  .user-details-form input[type="email"],
-  .user-details-form input[type="date"],
-  .user-details-form input[type="tel"],
-  .user-details-form input[type="number"],
-  .user-details-form select {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-  
-  /* Radio group for meds question */
-  .radio-group {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 0.5rem;
-  }
-  
-  .radio-group label {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 1rem;
-  }
-  
-  /* Submit button */
-  .button-form {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    background-color: #2f4858;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    align-self: flex-start; /* Or center if you prefer */
-    transition: background-color 0.2s;
-  }
-  
-  .button-form:hover {
-    background-color: #263848;
-  }
+}
+
+.form-group.wide {
+  flex: 1 1 100%;
+}
+
+.split {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Label and input together */
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Inputs, selects, textareas */
+.user-details-form input[type="text"],
+.user-details-form input[type="email"],
+.user-details-form input[type="date"],
+.user-details-form input[type="tel"],
+.user-details-form input[type="number"],
+.user-details-form select {
+  padding: 0.5rem;
+
+  font-size: 1rem;
+  border: 2px solid #b4b1b1;
+border-radius: 12px;
+}
+
+/* Radio group for meds question */
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1rem;
+}
+
+.button-formular button{
+  align-items: center;
+  width:60%;
+  height:45px;
+  outline:none;
+  border-radius: 40px;
+  border: 2px solid;
+  border-color: #abadaf;
+  margin-top:10%;
+  margin-left: 150px;
+  color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #cbced1;
+  font-weight:500 ;
+}
+
+.button-formular  button:hover{
+  background-color: #85888b;
+}
   

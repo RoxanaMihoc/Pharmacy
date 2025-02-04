@@ -44,7 +44,7 @@ const NotificationBell = () => {
           await saveNotificationToDatabase(
             currentUser,
             role,
-            normalizedNotification
+            normalizedNotification,token
           );
         } catch (error) {
           console.error("Error saving notification to the database:", error);
@@ -108,7 +108,7 @@ const NotificationBell = () => {
       try {
         const { success, fetchedNotifications } = await fetchNotifications(
           currentUser,
-          role
+          role,token
         );
         if (success) {
           console.log(fetchedNotifications)

@@ -15,7 +15,7 @@ import { fetchOrders } from "../Services/orderServices";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleOrderId, setVisibleOrderId] = useState(null);
@@ -46,7 +46,7 @@ const OrdersPage = () => {
 
   const fetchOrdersData = async () => {
     try {
-      const data = await fetchOrders(currentUser); // Use the service function
+      const data = await fetchOrders(currentUser,token); // Use the service function
       setOrders(data);
       console.log(data);
     } catch (error) {

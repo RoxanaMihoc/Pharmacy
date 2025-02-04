@@ -1,10 +1,12 @@
 const Notification = require("../models/notificationModel");
 const { notifDB } = require("../config/database");
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const addNotification = async (req, res) => {
   try {
     const { userId, role, notification } = req.body;
     console.log("in notig", userId, role,  notification);
+    
 
     // Determine the collection name dynamically based on the role
     const collectionName =

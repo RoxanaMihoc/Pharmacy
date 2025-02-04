@@ -10,16 +10,19 @@ import {
 import { useParams, Link } from "react-router-dom";
 import SecondaryMenu from "../../Components/SecondMenu";
 import { useAuth } from "../../Context/AuthContext";
-import {addToFavorites} from '../Services/favoritesServices';
+import { addToFavorites } from "../Services/favoritesServices";
 import "./styles/product-details.css"; // Import your CSS file
-import { fetchProductDetails, fetchProductsByBrand } from "../Services/productServices";
+import {
+  fetchProductDetails,
+  fetchProductsByBrand,
+} from "../Services/productServices";
 
 const ProductDetails = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState([{}]);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [brand, setBrand] = useState("");
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const [activeTab, setActiveTab] = useState("description");
   const productsGridRef = useRef(null);
   const [showFullText, setShowFullText] = useState(false);
@@ -27,9 +30,10 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchProductDetails(productId);
+        const data = await fetchProductDetails(productId,token);
         setProduct(data);
         setBrand(data.brand);
+        console.log("gais", product);
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -41,7 +45,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchProductsByBrand(brand);
+        const data = await fetchProductsByBrand(brand,token);
         setRelatedProducts(data);
       } catch (error) {
         console.error("Error fetching related products:", error);
@@ -72,13 +76,13 @@ const ProductDetails = () => {
     productsGridRef.current.scrollBy({ left: 200, behavior: "smooth" });
   };
 
-  const handleAddToFavorites = async (productId) => {
+  const handleAddToFavorites = async (productId,) => {
     try {
       const result = await addToFavorites(
         currentUser,
         productId,
         category,
-        subcategory
+        subcategory,token
       );
       console.log("Product added to favorites:", result);
       // Handle success, update UI or show a message
@@ -151,7 +155,7 @@ const ProductDetails = () => {
               className={activeTab === "usefulInfo" ? "active" : ""}
               onClick={() => setActiveTab("usefulInfo")}
             >
-              Informatii utile
+              Prospect medical
             </button>
           </div>
           <div className="tab-content">
@@ -178,21 +182,31 @@ const ProductDetails = () => {
                         <p
                           key={index}
                           dangerouslySetInnerHTML={{
-                            __html: processedLine + (index === 2 && !showFullText ? "..." : ""),
+                            __html:
+                              processedLine +
+                              (index === 2 && !showFullText ? "..." : ""),
                           }}
                         ></p>
                       );
                     })}
 
-                <button className="show-more-button" onClick={toggleShowFullText}>
+                <button
+                  className="show-more-button"
+                  onClick={toggleShowFullText}
+                >
                   {showFullText ? "Afișează mai puțin" : "Afișează mai mult"}
                 </button>
               </div>
             )}
             {activeTab === "usefulInfo" && (
               <div className="useful-info">
-                <h2>Informatii utile</h2>
-                <p>Informatii suplimentare despre produs.</p>
+                  <iframe
+                    src={product.prospect}
+                    title="Prospect PDF"
+                    className="prospect-pdf"
+                    width="100%"
+                    height="600px"
+                  ></iframe>
               </div>
             )}
           </div>

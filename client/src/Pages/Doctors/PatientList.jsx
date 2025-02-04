@@ -11,13 +11,13 @@ const PatientList = () => {
   const [filter, setFilter] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
   const [loading, setLoading] = useState(true);
-  const { currentUser } = useAuth();
+  const { currentUser, token } = useAuth();
   const history = useHistory();
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const { success, data, error } = await fetchPatientsFromAPI(currentUser);
+        const { success, data, error } = await fetchPatientsFromAPI(currentUser, token);
   
         if (success) {
           setPatients(data);

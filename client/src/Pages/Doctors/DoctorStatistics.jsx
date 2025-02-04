@@ -24,7 +24,7 @@ const DoctorStatistics = () => {
     const fetchPrescriptions = async () => {
       try {
         const { success, data, error } = await fetchAllPrescriptions(
-          currentUser
+          currentUser,token
         );
 
         if (success) {
@@ -82,7 +82,7 @@ const DoctorStatistics = () => {
     try {
       const { success, fetchedNotifications } = await fetchNotifications(
         currentUser,
-        role
+        role,token
       );
 
       if (success) {
@@ -143,9 +143,6 @@ const DoctorStatistics = () => {
                   <li key={index}>
                     <div className="notification-message">
                     • {notification.message}
-                    </div>
-                    <div className="notification-date">
-                      {new Date(notification.date).toLocaleDateString()}
                     </div>
                   </li>
                 )

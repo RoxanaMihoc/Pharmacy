@@ -1,6 +1,6 @@
 // FirstPage.js
 import React, { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link} from "react-router-dom";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,12 +15,19 @@ import "./styles/login.css";
 const FirstPage = () => {
   const location = useLocation();
   console.log(location);
+  const role = location.state?.role;
+  const [isDoctor, setIsDoctor] = useState(false);
 
   // Initialize component state based on the URL parameter
   const [showLogin, setShowLogin] = useState(location.pathname === "/login");
 
   useEffect(() => {
     setShowLogin(location.pathname === "/login");
+    if(role =="Doctor")
+      { setIsDoctor(true);
+        console.log(isDoctor)
+    
+      }
   }, [location]);
 
   return (
@@ -32,18 +39,13 @@ const FirstPage = () => {
       </Link>
         </div>
         <ul className="nav-links">
-          <li>
-            <a href="#medicines">Medicines</a>
-          </li>
-          <li>
-            <a href="#doctors">Doctors</a>
-          </li>
-          <li>
-            <a href="#blog">Blog</a>
-          </li>
-          <li>
-            <a href="#faq">FAQ</a>
-          </li>
+
+            <button className="button-role" >Medicines</button>
+            <button className="button-role" >Blog</button>
+            <button className="button-role" >FAQ</button>
+
+
+
         </ul>
         <div className="nav-buttons"></div>
       </nav>
@@ -57,15 +59,18 @@ const FirstPage = () => {
               >
                 Conectare
               </button>
-              <button
-                onClick={() => setShowLogin(false)}
-                className={showLogin ? "signup-unselected" : "login-selected"}
-              >
-                Înregistrare
-              </button>
+              {/* Hide SignUp button if the role is "Doctor" */}
+              {!isDoctor && (
+                <button
+                  onClick={() => setShowLogin(false)}
+                  className={showLogin ? "signup-unselected" : "login-selected"}
+                >
+                  Înregistrare
+                </button>
+              )}
             </div>
             <div className="form-container">
-              {showLogin ? <Login /> : <SignUp />}
+            {showLogin ? <Login /> : !isDoctor && <SignUp />}
             </div>
           </div>
         </div>

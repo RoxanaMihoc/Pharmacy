@@ -1,11 +1,11 @@
 const Prescription = require("../models/prescriptionModel");
 const { prescriptionDB } = require("../config/database");
 const { ObjectId } = require("mongodb"); // Import ObjectId from MongoDB
+const SECRET_KEY = process.env.JWT_SECRET;
 
 exports.addPrescription = async (req, res, io, userSockets) => {
   const { diagnosis, doctorId, patient, products, investigations } = req.body;
-  console.log("Prescriptie::::::", products);
-
+  console.log("Prescriptie::::::", products); 
   const generateRandomNumber = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };

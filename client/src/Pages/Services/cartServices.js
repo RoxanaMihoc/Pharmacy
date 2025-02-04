@@ -1,26 +1,27 @@
 const BASE_URL = "http://localhost:3000";
 
-export const addToCart = async (userId, productId, prescriptionId) => {
+export const addToCart = async (userId, productId, prescriptionId,token) => {
   try {
-    console.log('Product added to cart:', userId, productId, prescriptionId);
+    console.log("Product added to cart:", userId, productId, prescriptionId);
     const response = await fetch(`${BASE_URL}/home/add`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId, productId, prescriptionId}),
+      body: JSON.stringify({ userId, productId, prescriptionId }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to add product to cart');
+      throw new Error("Failed to add product to cart");
     }
 
     const data = await response.json();
     printProductsToFav(data);
-    return { success: true, message: 'Product added to cart successfully' };
+    return { success: true, message: "Product added to cart successfully" };
     // Handle successful response (e.g., display a success message)
   } catch (error) {
-    console.error('Error adding product to cart:', error);
+    console.error("Error adding product to cart:", error);
     // Handle error (e.g., display an error message)
   }
 };
@@ -30,34 +31,42 @@ const printProductsToFav = async (data) => {
   console.log(data);
 };
 
-export const addToCartF = async (productId) => {
+export const addToCartF = async (productId, token) => {
   try {
-    const response = await fetch(
-      `${BASE_URL}/home/product/${productId}`
-    );
+    const response = await fetch(`${BASE_URL}/home/product/${productId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
-      throw new Error('Failed to add product to cart');
+      throw new Error("Failed to add product to cart");
     }
 
     const data = await response.json();
     printProductsToFav(data);
-    return { success: true, data};
+    return { success: true, data };
     // Handle successful response (e.g., display a success message)
   } catch (error) {
-    console.error('Error adding product to cart:', error);
+    console.error("Error adding product to cart:", error);
     // Handle error (e.g., display an error message)
   }
 };
 
 //GET CART FOR USER
-export const fetchCart = async (currentUser) => {
+export const fetchCart = async (currentUser, token) => {
   if (!currentUser) {
     throw new Error("No user logged in");
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/home/cart/${currentUser}`);
+    const response = await fetch(`${BASE_URL}/home/cart/${currentUser}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch cart data");
     }
@@ -70,10 +79,15 @@ export const fetchCart = async (currentUser) => {
 };
 
 //GET details about items FROM CART
-export const fetchCartItems = async (productId) => {
+export const fetchCartItems = async (productId,token) => {
   console.log("Product Id: " + productId);
   try {
-    const response = await fetch(`${BASE_URL}/home/product/${productId}`);
+    const response = await fetch(`${BASE_URL}/home/product/${productId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch product data");
     }
@@ -87,11 +101,18 @@ export const fetchCartItems = async (productId) => {
 
 // cartServices.js
 
-export const removeItemFromCart = async (currentUser, productId) => {
+export const removeItemFromCart = async (currentUser, productId,token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/cart/${currentUser}/${productId}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${BASE_URL}/home/cart/${currentUser}/${productId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (!response.ok) {
       throw new Error("Failed to remove item from cart");
     }
@@ -102,10 +123,14 @@ export const removeItemFromCart = async (currentUser, productId) => {
   }
 };
 
-export const deleteCart = async (currentUser) => {
+export const deleteCart = async (currentUser,token) => {
   try {
     const response = await fetch(`${BASE_URL}/home/cart/${currentUser}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {
@@ -118,8 +143,3 @@ export const deleteCart = async (currentUser) => {
     return { success: false, error: error.message };
   }
 };
-
-
-
-
-
