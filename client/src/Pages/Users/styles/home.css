@@ -11,6 +11,7 @@
 .home-doctor {
   display: flex;
   min-height: 100vh; /* Full viewport height */
+  align-items: stretch;
 }
 
 /* Top Navigation Bar */
@@ -48,7 +49,6 @@
   text-align: center; /* Center-align title */
 }
 
-/* Sidebar Styling */
 .sidebar {
   flex: 0 0 300px; /* Fixed width for larger screens */
   background-color: #2C3E50; /* Dark background */
@@ -56,8 +56,10 @@
   display: flex;
   flex-direction: column; /* Stack items vertically */
   padding: 20px;
-  height: 100vh; /* Full viewport height */
+  min-height: 100vh; /* Ensure it covers at least the viewport height */
+  height: auto; /* Allow it to grow based on content */
   transition: transform 0.8s ease; /* Smooth transition for show/hide */
+  position: relative;
 }
 
 .sidebar-header {
@@ -88,6 +90,7 @@
 .sidebar.active {
   transform: translateX(0);
 }
+
 
 .menu-open-button {
   position: fixed  !important;

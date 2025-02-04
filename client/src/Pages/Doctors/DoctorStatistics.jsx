@@ -12,7 +12,7 @@ const DoctorStatistics = () => {
     totalPrescriptions: 0,
   });
 
-  const { currentUser, name, role } = useAuth();
+  const { currentUser, name, role, token } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const history = useHistory();
 

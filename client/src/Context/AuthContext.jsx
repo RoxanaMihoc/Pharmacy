@@ -7,7 +7,7 @@ import {jwtDecode} from "jwt-decode"; // Import jwt-decode
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(localStorage.getItem("jwt") || null);
   const [currentUser, setCurrentUser] = useState(null);
   const [role, setRole] = useState(null);
   const [name, setCurrentUserName] = useState(null);

@@ -283,7 +283,8 @@ const CurrentPrescription = () => {
                       <p>{med.medication.brand}</p>
                       <p>
                         <b>Doză:</b> {med.doza} pe zi
-                        <p></p>
+                        </p>
+                        <p>
                         <b>Durată:</b> {med.durata} zile
                       </p>
                       <button

@@ -279,8 +279,8 @@ const CartPage = () => {
             <div>
               {cart.length > 0 && (
                 <div className="ppppp">
-                  <h5>Total: {totalPrice} Lei</h5>
-                  <h2>Selectează o farmacie:</h2>
+                  <h5>Total: {totalPrice.toFixed()} Lei</h5>
+                  {/* <h2>Selectează o farmacie:</h2>
                   <div className="pharmacy-list">
                     {pharmacies.length > 0 ? (
                       pharmacies.map((pharmacy) => (
@@ -303,9 +303,9 @@ const CartPage = () => {
                         </div>
                       ))
                     ) : (
-                      <p>Nicio farmacie disponibila.</p> // Message displayed when there are no pharmacies
+                      <p>Nicio farmacie disponibila.</p> 
                     )}
-                  </div>
+                  </div> */}
                 </div>
               )}
               <div className="section">

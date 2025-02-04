@@ -22,11 +22,13 @@ exports.register = async (req, res) => {
       postalCode,
       medicationList,
       city,
+      doctorName,
     } = req.body;
     let postal_code = postalCode;
     let birth_date = birthDate;
     let phone = phoneNumber;
     let doctor = selectedDoctor;
+    let doctorNameB = doctorName;
     // Check if the email is already taken
     const existingUser = await User.findOne({ identifier });
     if (existingUser) {
@@ -45,6 +47,7 @@ exports.register = async (req, res) => {
       cart: [],
       favorites: [],
       doctor,
+      doctorNameB,
       gender,
       phone,
       address,

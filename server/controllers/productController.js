@@ -32,21 +32,24 @@ router.getProductsByCategory = async (req, res) => {
   }
 
   try {
-    const products = await Product.find(
-      query,
-      "category title brand price photo insurance"
-    );
+    // Define default fields
+    let fields = "category title brand price photo insurance permitted";
+
+    // Fetch products with dynamic projection
+    const products = await Product.find(query, fields);
+    
     console.log(
-      "BLABLA",
-      removeNonLetters(category),
-      removeNonLetters(subcategory),
-      products
+        "BLABLA",
+        removeNonLetters(category),
+        removeNonLetters(subcategory),
+        products
     );
+
     res.json(products);
-  } catch (error) {
+} catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
-  }
+}
 };
 
 // for product/productId

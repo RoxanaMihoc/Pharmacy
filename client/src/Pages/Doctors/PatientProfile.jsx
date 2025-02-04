@@ -8,9 +8,11 @@ import {
   faArrowRightLong,
   faArrowLeftLong,
 } from "@fortawesome/free-solid-svg-icons";
+import {useAuth} from "../../Context/AuthContext";
 
 const PatientProfile = ({ onBack }) => {
   const [patient, setPatient] = useState(null);
+  const {token} = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

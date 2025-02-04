@@ -9,7 +9,7 @@ import "./styles/favorites-page.css";
 const FavoritesPage = () => {
   const [favoritesItems, setFavoritesItems] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const { currentUser} = useAuth();
+  const { currentUser, token} = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {

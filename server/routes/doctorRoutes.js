@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const doctorController = require('../controllers/doctorController');
+const { verifyToken } = require('../middleware/verifyToken');
 
 router.get('/all-doctors', doctorController.getAllDoctors);
-router.get('/patients-list/:currentUser', doctorController.getAllPatientsByDoctorId);
-router.get('/patient/:patientId', doctorController.getPatientDetails);
-router.get('/details/:doctorId', doctorController.getDoctorName);
+router.get('/patients-list/:currentUser', verifyToken, doctorController.getAllPatientsByDoctorId);
+router.get('/patient/:patientId', verifyToken, doctorController.getPatientDetails);
+router.get('/details-doc/:doctorId', verifyToken, doctorController.getDoctorName);
 
 module.exports = router;

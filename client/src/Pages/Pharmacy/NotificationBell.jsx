@@ -12,7 +12,7 @@ const NotificationBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [allNotifications, setAllNotifications] = useState([]);
-  const { currentUser, role } = useAuth();
+  const { currentUser, role, token } = useAuth();
   console.log(role);
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();

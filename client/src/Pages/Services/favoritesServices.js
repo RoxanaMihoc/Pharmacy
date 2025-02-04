@@ -23,7 +23,7 @@ export const fetchFavorites = async (currentUser, token) => {
 //add to favorites for user
 export const addToFavorites = async (userId, productId, token) => {
   try {
-    console.log('Product added to cart:', userId, productId);
+    console.log('Product added to cart:', userId, productId, token);
     const response = await fetch(`${BASE_URL}/home/favorites`, {
       method: 'POST',
       headers: {
@@ -34,7 +34,7 @@ export const addToFavorites = async (userId, productId, token) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to add product to cart');
+      throw new Error('Failed to add product to favorites');
     }
 
     const data = await response.json();

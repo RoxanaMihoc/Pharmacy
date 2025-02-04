@@ -31,7 +31,7 @@ const addNotification = async (req, res) => {
 const getNotificationsByRole = async (req, res) => {
   try {
     console.log(" in get notif: Fetching notifications by role...");
-    const { currentUser, role } = req.params; // Extract role and currentUser from params
+    const { currentUser, role } = req.params; 
 
     // Determine the collection dynamically based on the role
     const collectionName =

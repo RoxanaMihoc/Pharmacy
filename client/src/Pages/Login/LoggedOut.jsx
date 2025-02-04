@@ -3,11 +3,11 @@ import { useHistory, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTablets, faUsers, faArrowLeftLong, faCommentMedical } from '@fortawesome/free-solid-svg-icons';
 import './styles/page.css';
-import vitamins from "../../Utils/vitamins.png";
-import flu from "../../Utils/flu.png";
-import pres from "../../Utils/pres.png";
-import skin from "../../Utils/skin.png";
-import ceva from "../../Utils/ceva.png";
+import vitamins from "../../Assets/vitamins.png";
+import flu from "../../Assets/flu.png";
+import pres from "../../Assets/pres.png";
+import skin from "../../Assets/skin.png";
+import ceva from "../../Assets/ceva.png";
 
 const PharmacyPage = () => {
   const history = useHistory();

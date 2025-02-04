@@ -1,11 +1,15 @@
 const BASE_URL = "http://localhost:3000";
 
 //For Doctors
-export const fetchPatientDetailsForDoctorPage = async (patientId) => {
+export const fetchPatientDetailsForDoctorPage = async (patientId, token) => {
     try {
       const response = await fetch(
-        `${BASE_URL}/doctors/patient/${patientId}`
-      );
+        `${BASE_URL}/doctors/patient/${patientId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+    });
   
       if (!response.ok) {
         throw new Error("Failed to fetch patient data");
@@ -19,11 +23,15 @@ export const fetchPatientDetailsForDoctorPage = async (patientId) => {
     }
   };
 
-  export const fetchPatientsFromAPI = async (currentUser) => {
+  export const fetchPatientsFromAPI = async (currentUser, token) => {
     try {
       const response = await fetch(
-        `${BASE_URL}/doctors/patients-list/${currentUser}`
-      );
+        `${BASE_URL}/doctors/patients-list/${currentUser}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+    });
   
       if (!response.ok) {
         throw new Error("Failed to fetch patients");
@@ -38,21 +46,22 @@ export const fetchPatientDetailsForDoctorPage = async (patientId) => {
   };
 
 //For User
-export const fetchDoctorName = async (currentUser) => {
+export const fetchDoctorName = async (currentUser, token) => {
   try {
-    let response = await fetch(`${BASE_URL}/home/details/${currentUser}`);
+    let response = await fetch(`${BASE_URL}/home/details/${currentUser}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+});
     if (!response.ok) {
       throw new Error("Failed to fetch doctor data");
     }
     let data = await response.json();
-    const doctorId = data.doctor;
+    const doctorName = data.doctorNameB;
+    console.log(doctorName);
 
-    response = await fetch(`${BASE_URL}/doctors/details/${doctorId}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch doctor data");
-    }
-    data = await response.json();
-    return { success: true, firstNameD: data.firstName, lastNameD:data.lastName, doctorId};
+    return { success: true, doctorName};
   } catch (error) {
     console.error("Error in fetchDoctorDetails:", error);
     return { success: false, error: error.message };

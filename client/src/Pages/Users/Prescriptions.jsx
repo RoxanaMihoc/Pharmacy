@@ -42,12 +42,12 @@ const PrescriptionsList = () => {
   useEffect(() => {
     const getDoctorForPatient = async () => {
       if (currentUser) {
-        const { success, firstNameD, lastNameD } = await fetchDoctorName(
+        const { success, doctorName} = await fetchDoctorName(
           currentUser,token
         );
 
         if (success) {
-          setDoctor(firstNameD + " " + lastNameD); // Set the doctor data in state
+          setDoctor(doctorName); // Set the doctor data in state
         } else {
           console.error("Error fetching doctor data");
         }

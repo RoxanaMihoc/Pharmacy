@@ -1,19 +1,29 @@
 // routes/recommendationRoutes.js
 const express = require('express');
 const prescriptionController = require('../controllers/prescriptionController');
+const { verifyToken } = require('../middleware/verifyToken');
 const router = express.Router();
 
-router.get('/all-prescriptions/:currentUser',prescriptionController.getAllPrescriptionsBasedOnRole);
-router.get('/prescription/:user',prescriptionController.getPrescriptionsByPatientId);
-router.get('/current-prescription/:currentUser',prescriptionController.getCurentPrescription);
-router.patch('/prescription/:prescriptionId',prescriptionController.setPrescriptionsAsCurrent);
-router.patch('/prescription/remove-current/:prescriptionId',prescriptionController.setPrescriptionsAsNotCurrent);
-router.put("/delete-progress/:prescriptionId", prescriptionController.deleteLastProgress);
-module.exports = (io, userSockets) => {
+router.get('/all-prescriptions/:currentUser', verifyToken, prescriptionController.getAllPrescriptionsBasedOnRole);
+  router.get('/prescription/:user', verifyToken, prescriptionController.getPrescriptionsByPatientId);
+  router.get('/current-prescription/:currentUser', verifyToken, prescriptionController.getCurentPrescription);
+  router.patch('/prescription/:prescriptionId', verifyToken, prescriptionController.setPrescriptionsAsCurrent);
+  router.patch('/prescription/remove-current/:prescriptionId', verifyToken, prescriptionController.setPrescriptionsAsNotCurrent);
+  router.put("/delete-progress/:prescriptionId", verifyToken, prescriptionController.deleteLastProgress);
+  module.exports = (io, userSockets) => {
   console.log("in rout",userSockets);
-    router.post('/add-prescription', (req, res) => prescriptionController.addPrescription(req, res, io, userSockets));
-    router.put('/update-progress/:prescriptionId/:medicationId',(req, res) => prescriptionController.updateProgress(req, res, io, userSockets));
-    router.post('/progress-completed/:prescriptionId/:medicationId',(req, res) => prescriptionController.progressCompleted(req, res, io, userSockets));
+  router.post('/add-prescription', verifyToken, (req, res) => 
+    prescriptionController.addPrescription(req, res, io, userSockets)
+  );
+
+  router.put('/update-progress/:prescriptionId/:medicationId', verifyToken, (req, res) => 
+    prescriptionController.updateProgress(req, res, io, userSockets)
+  );
+
+  router.post('/progress-completed/:prescriptionId/:medicationId', verifyToken, (req, res) => 
+    prescriptionController.progressCompleted(req, res, io, userSockets)
+  );
+
     return router;
   };
 

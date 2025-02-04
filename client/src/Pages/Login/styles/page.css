@@ -83,29 +83,29 @@
     align-items: center;
     background: #607F8B;
     padding: 4rem;
-    justify-content: center;
+    justify-content: space-between;
     text-align: center;
 }
 
 .hero-content {
     flex: 1;
-    max-width: 500px;
+    max-width: 1000px;
     margin-bottom: 1rem;
 }
 
 .hero-title {
-    font-size: 4rem;
+    font-size: 8rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
 .hero-subtitle {
-    font-size: 1.5rem;
+    font-size: 2rem;
     margin-bottom: 1rem;
 }
 
 .hero-sub-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
@@ -128,14 +128,14 @@
 
 .hero-image {
     flex: 1;
-    max-width: 400px;
+    max-width: 1000px;
     display: flex;
     justify-content: center;
 }
 
 .hero-image img {
     width: 100%;
-    max-width: 300px;
+    max-width: 800px;
     height: auto;
 }
 

@@ -5,12 +5,13 @@ import { faCommentMedical } from "@fortawesome/free-solid-svg-icons";
 
 import { fetchAllDoctors } from "../Services/authServices";
 import "./styles/doctor-selection.css"; // Updated CSS
-// import doc from "../../Utils/doc.png";
+// import doc from "../../Assets/doc.png";
 
 const DoctorSelection = () => {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [doctorName, setDoctorName] = useState("");
 
   const location = useLocation();
   const history = useHistory();
@@ -33,8 +34,10 @@ const DoctorSelection = () => {
     }, []);
     
 
-  const handleRadioChange = (doctorId) => {
-    setSelectedDoctor(doctorId);
+  const handleRadioChange = (doctor) => {
+    setSelectedDoctor(doctor._id);
+    setDoctorName(doctor.firstName + " " + doctor.lastName);
+    console.log(doctorName);
   };
 
   const handleRegister = async (e) => {
@@ -51,6 +54,7 @@ const DoctorSelection = () => {
       identifier,
       role,
       selectedDoctor,
+      doctorName
     });
   };
 
@@ -105,7 +109,7 @@ const DoctorSelection = () => {
                   type="radio"
                   name="doctorSelection"
                   checked={selectedDoctor === doctor._id}
-                  onChange={() => handleRadioChange(doctor._id)}
+                  onChange={() => handleRadioChange(doctor)}
                 />
               </label>
             </div>

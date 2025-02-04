@@ -10,14 +10,14 @@ const PatientsListPres = () => {
   const [patients, setPatients] = useState([]);
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState("");
-  const currentUser = useAuth();
+  const {currentUser, token} = useAuth();
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
         const { success, data, error } = await fetchPatientsFromAPI(
-          currentUser.currentUser, token
+          currentUser, token
         );
 
         if (success) {
@@ -76,9 +76,9 @@ const PatientsListPres = () => {
         />
       </div>
       <div className="patient-items-container">
-        {filteredPatients.map((patient) => (
+        {filteredPatients.map((patient, index) => (
           <div
-            key={patient.id}
+            key={index}
             onClick={() => handlePatientSelect(patient)}
             className="patient-item"
           >

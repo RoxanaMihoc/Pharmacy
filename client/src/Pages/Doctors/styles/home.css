@@ -11,6 +11,7 @@
   .home-doctor {
     display: flex;
     min-height: 100vh; /* Full viewport height */
+    align-items: stretch;
   }
   
   /* Top Navigation Bar */
@@ -48,46 +49,48 @@
     text-align: center; /* Center-align title */
   }
   
-  /* Sidebar Styling */
-.sidebar {
-  flex: 0 0 300px; /* Fixed width for larger screens */
-  background-color: #2C3E50; /* Dark background */
-  color: #fff; /* White text */
-  display: flex;
-  flex-direction: column; /* Stack items vertically */
-  padding: 20px;
-  height: 100vh; /* Full viewport height */
-  transition: transform 0.8s ease; /* Smooth transition for show/hide */
-}
-
-.sidebar-header {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.sidebar ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.sidebar ul li {
-  padding: 10px 0;
-  cursor: pointer;
-}
-
-.sidebar ul li:hover {
-  background-color: #34495E; /* Highlight on hover */
-}
-
-.sidebar.hidden {
-  transform: translateX(-100%);
-}
-
-.sidebar.active {
-  transform: translateX(0);
-}
+  .sidebar {
+    flex: 0 0 300px; /* Fixed width for larger screens */
+    background-color: #2C3E50; /* Dark background */
+    color: #fff; /* White text */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    padding: 20px;
+    min-height: 100vh; /* Ensure it covers at least the viewport height */
+    height: auto; /* Allow it to grow based on content */
+    transition: transform 0.8s ease; /* Smooth transition for show/hide */
+    position: relative;
+  }
+  
+  .sidebar-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  
+  .sidebar ul li:hover {
+    background-color: #34495E; /* Highlight on hover */
+  }
+  
+  .sidebar.hidden {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
   
   .menu-open-button {
     position: fixed  !important;

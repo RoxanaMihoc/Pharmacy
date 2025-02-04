@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
   maritalStatus: { type: String, required: true },
   medicationList: { type: String},
   allergies: { type: String },
+  doctorNameB:{type:String},
 
 });
 

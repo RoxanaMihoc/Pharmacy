@@ -44,10 +44,11 @@ const ProductPage = () => {
 
         const fetchedProducts = await fetchProductsByCategory(
           category,
-          subcategory
+          subcategory,
+          token
         ); // Fetch products
         setProducts(fetchedProducts);
-        console.log("rani", products);
+        console.log("rani", fetchedProducts);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -58,10 +59,15 @@ const ProductPage = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-      const result = await addToCart(currentUser, productId, prescriptionId,token);
+      const result = await addToCart(
+        currentUser,
+        productId,
+        prescriptionId,
+        token
+      );
       console.log("Product added to cart:", result);
       if (result.success) {
-        const result2 = addToCartF(productId,token);
+        const result2 = addToCartF(productId, token);
         setCartItems((prev) => [...prev, { productId, prescriptionId }]);
         console.log(result2);
       }
@@ -73,15 +79,14 @@ const ProductPage = () => {
 
   const handleAddToFavorites = async (productId) => {
     try {
+      console.log(token);
       const result = await addToFavorites(
         currentUser,
         productId,
-        category,
-        subcategory,token
+        token,
       );
-      console.log("Product added to cart:", result);
       if (result.success) {
-        const result2 = addToCartF(productId,token);
+        const result2 = addToCartF(productId, token);
         console.log(result2);
       }
       // Handle success, update UI or show a message
@@ -155,14 +160,14 @@ const ProductPage = () => {
     "antispastice-balonare-antiacide": "Antiacide, Antispastice, Balonare",
     "enzime-digestive": "Enzime Digestive",
     "greata-gastrita": "Gastrita, ulcer, greata si varsaturi",
-    "ochi": "Ochi",
-    "corp": "Corp",
-    "machiaj": "Machiaj",
-    "micoze": "Micoze",
-    "rani": "Rani",
-    "sinuzita": "Sinuzita",
-    "picaturi": "Picaturi",
-    "dureri": "Dureri de gat",
+    ochi: "Ochi",
+    corp: "Corp",
+    machiaj: "Machiaj",
+    micoze: "Micoze",
+    rani: "Rani",
+    sinuzita: "Sinuzita",
+    picaturi: "Picaturi",
+    dureri: "Dureri de gat",
     "vitamina-a": "Suplimente Vitamina A",
     "vitamina-c": "Suplimente Vitamina C",
     "sistemul-digestiv": "Sistemul digestiv",
@@ -252,12 +257,14 @@ const ProductPage = () => {
                       </Card.Subtitle>
                       <Card.Text>{`Preț: ${product.price} Lei`}</Card.Text>
 
-                      <button
-                        className="add-fav-card"
-                        onClick={() => handleAddToCart(product._id)}
-                      >
-                        Adaugă produs
-                      </button>
+                      {product?.permitted === true && (
+                        <button
+                          className="add-fav-card"
+                          onClick={() => handleAddToCart(product._id)}
+                        >
+                          Adaugă produs
+                        </button>
+                      )}
 
                       <button
                         className="add-fav-card"

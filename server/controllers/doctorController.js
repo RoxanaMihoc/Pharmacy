@@ -48,11 +48,9 @@ const getPatientDetails = async (req, res) =>{
 
 }
 
-
 const getDoctorName = async (req, res) => {
   try {
     const { doctorId } = req.params;
-    
 
     // Fetch the doctor by ID
     const doctor = await Doctor.findById(doctorId).select('firstName lastName');

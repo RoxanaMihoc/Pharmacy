@@ -4,10 +4,12 @@ import "./styles/diagnosis.css"; // Updated CSS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllProducts } from "../../Services/productServices";
+import {useAuth} from "../../../Context/AuthContext";
 
 const Diagnosis = () => {
   const [filter, setFilter] = useState("");
   const [prescriptions, setPrescriptions] = useState([]);
+  const {token}= useAuth();
 
   // Textareas in the left column
   const [diagnosis, setDiagnosis] = useState("");
@@ -175,9 +177,9 @@ useEffect(() => {
             {filter.length > 0 && (
               <div className="medicine-search-results-overlay">
                 <ul className="medicine-search-results">
-                  {filteredPrescriptions.map((med) => (
+                  {filteredPrescriptions.map((med, index) => (
                     <li
-                      key={med.id}
+                      key={index}
                       onClick={() => handleSelectMedicine(med)}
                       className="medicine-search-result-item"
                     >

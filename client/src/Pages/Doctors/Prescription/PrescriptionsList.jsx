@@ -17,7 +17,7 @@ const PrescriptionsList = () => {
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleId, setVisibleId] = useState(null);
-  const { currentUser, role } = useAuth();
+  const { currentUser, role, token } = useAuth();
   const itemsPerPage = 8; // Define how many prescriptions per page
   const history = useHistory();
   const [sortOption, setSortOption] = useState(null); // Tracks current sort option

@@ -17,6 +17,7 @@ const UserForm = () => {
     identifier,
     role,
     selectedDoctor,
+    doctorName,
   } = location.state || {};
 
   // Form State: replicate the fields from your screenshots
@@ -57,6 +58,7 @@ const UserForm = () => {
         identifier,
         role,
         selectedDoctor,
+        doctorName,
         birthDate: formData.birthDate,
         gender: formData.gender,
         height: formData.height,
