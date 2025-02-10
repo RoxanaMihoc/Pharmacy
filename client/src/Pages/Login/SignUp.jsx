@@ -24,7 +24,7 @@ const SignUp = () => {
     }
     if (!/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/.test(password)) {
       setErrorMessage(
-        "Parola trebuie să conțină cel puțin 8 caractere, o literă mare și un caracter special."
+        "Parola trebuie să conțină cel puțin 8 caractere, o cifra, o literă mare și un caracter special."
       );
       return false;
     }

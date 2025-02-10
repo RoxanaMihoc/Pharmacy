@@ -7,6 +7,6 @@ const { verifyToken } = require('../middleware/verifyToken');
 console.log("in notif route");
 
 router.post('/add-notification', verifyToken, notificationController.addNotification);
-router.get('/notifications/:currentUser/:role', verifyToken, notificationController.getNotificationsByRole);
+router.get('/notifications', verifyToken, notificationController.getNotificationsByRole);
 
 module.exports = router;

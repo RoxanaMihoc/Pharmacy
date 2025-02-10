@@ -46,7 +46,7 @@ const OrdersPage = () => {
 
   const fetchOrdersData = async () => {
     try {
-      const data = await fetchOrders(currentUser,token); // Use the service function
+      const data = await fetchOrders(token); // Use the service function
       setOrders(data);
       console.log(data);
     } catch (error) {

@@ -11,14 +11,16 @@
     margin-bottom: 20px;
      border-radius: 15px;
      /* border: 1px solid #8b8989; */
-    background-color: transparent;
+    background-color: #fff;
+    text-align: center;
 }
 
 .medications-section {
     padding: 20px;
      border-radius: 15px;
-     /* border: 1px solid #8b8989; */
-    background-color: transparent;
+     border: 1px solid #8b8989;
+     background-color: #fff;
+     margin-bottom: 40px;
 }
 
 .diagnosis-heading,

@@ -15,7 +15,7 @@ router.getAllProducts = async (req, res) => {
     res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 // Route to get products by category
@@ -37,6 +37,10 @@ router.getProductsByCategory = async (req, res) => {
 
     // Fetch products with dynamic projection
     const products = await Product.find(query, fields);
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({ error: "No products found with given category." });
+    }
     
     console.log(
         "BLABLA",
@@ -48,7 +52,7 @@ router.getProductsByCategory = async (req, res) => {
     res.json(products);
 } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
 }
 };
 
@@ -67,7 +71,7 @@ router.getProductsById = async (req, res) => {
     res.json(product);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 //for product/details/productId
@@ -85,7 +89,7 @@ router.getProductById = async (req, res) => {
     res.json(product);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 
@@ -103,7 +107,7 @@ router.getProductsByBrand = async (req, res) => {
     res.json(product);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 

@@ -4,8 +4,8 @@ const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET;
 
 exports.addToOrders = async (req, res, io, userSockets) => {
-  const { cartItems, addressDetails, totalPrice, user, pharmacist, doctor, doctorId } = req.body;
-  console.log("In add to orders:", pharmacist);
+  const { cartItems, addressDetails, totalPrice, doctor, doctorId } = req.body;
+  const user = req.currentUser;
   console.log("In add to orders:", cartItems);
   console.log("In add to orders:", doctorId);
   
@@ -28,6 +28,13 @@ exports.addToOrders = async (req, res, io, userSockets) => {
   } = addressDetails;
 
   try {
+
+    if (!cartItems || cartItems.length === 0) {
+      return res.status(400).json({ success: false, message: "Cart is empty." });
+    }
+    if (!addressDetails) {
+      return res.status(400).json({ success: false, message: "Address details are required." });
+    }
     const newOrder = new Order({
       firstName,
       lastName,
@@ -52,34 +59,6 @@ exports.addToOrders = async (req, res, io, userSockets) => {
 
     let date = newOrder.date;
     console.log(date);
-
-    // Notify the pharmacist
-    // if (userSockets[pharmacist] && userSockets[pharmacist].socketId) {
-    //   io.to(userSockets[pharmacist].socketId).emit("new-order", {
-    //     id: newOrder._id,
-    //     message: "A fost plasată o noua comanda.",
-    //     orderDetails: {
-    //       firstName,
-    //       lastName,
-    //       phone,
-    //       email,
-    //       identifier,
-    //       address,
-    //       county,
-    //       city,
-    //       paymentMethod,
-    //       additionalInfo,
-    //       cart: cartItems,
-    //       totalPrice: totalPrice,
-    //       user: user,
-    //       status: "Comandă trimisă",
-    //       pharmacist: pharmacist,
-    //       orderNumber,
-    //       date,
-    //     },
-    //   });
-    // }
-
     // Notify the doctor if the prescription ID exists in cart items
     // const presIdExists = cartItems.some((item) => item.presId !== null);
     if ( userSockets[doctorId] && userSockets[doctorId].socketId) {
@@ -100,13 +79,13 @@ exports.addToOrders = async (req, res, io, userSockets) => {
       });
     }
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: "Order saved successfully",
     });
   } catch (error) {
     console.error("Error saving order:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal Error" });
   }
 };
 
@@ -121,8 +100,8 @@ exports.getAllOrders = async (req, res) => {
 };
 
 exports.getOrdersForUser = async (req, res) => {
-  const { currentUser } = req.params;
-  console.log("in get orders");
+  const  currentUser  = req.currentUser;
+  console.log("in get orders", currentUser);
   try {
     const orders = await Order.find({ user: currentUser });
     res.json(orders);

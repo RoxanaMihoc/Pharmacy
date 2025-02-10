@@ -1,9 +1,9 @@
 const BASE_URL = "http://localhost:3000";
 
 //getAll orders for user
-export const fetchOrders = async (currentUser, token) => {
+export const fetchOrders = async (token) => {
     try {
-      const response = await fetch(`${BASE_URL}/home/orders/${currentUser}`,{
+      const response = await fetch(`${BASE_URL}/home/orders/user`,{
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

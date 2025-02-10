@@ -1,6 +1,6 @@
 .doctor-selection-container-nav {
   min-height: 100vh; /* Use min-height if you want it to expand if content exceeds one screen */
-  background: linear-gradient(to top left, #2C3E50, rgb(224, 233, 235));
+ background: rgb(224, 233, 235);
 }
 
 /* Navbar (adjust to your style) */

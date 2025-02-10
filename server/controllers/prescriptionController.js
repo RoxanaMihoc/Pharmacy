@@ -4,8 +4,9 @@ const { ObjectId } = require("mongodb"); // Import ObjectId from MongoDB
 const SECRET_KEY = process.env.JWT_SECRET;
 
 exports.addPrescription = async (req, res, io, userSockets) => {
-  const { diagnosis, doctorId, patient, products, investigations } = req.body;
+  const { diagnosis, doctorId, products, investigations } = req.body;
   console.log("Prescriptie::::::", products); 
+  const patient = req.currentUser;
   const generateRandomNumber = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };
@@ -24,10 +25,17 @@ exports.addPrescription = async (req, res, io, userSockets) => {
 
     const patientCollectionName = `patient_${patient._id}`;
     const patientCollection = prescriptionDB.collection(patientCollectionName);
-    await patientCollection.insertOne({
+    let result = await patientCollection.insertOne({
       prescriptionId: newPrescription._id,
       ...newPrescription.toObject(),
     });
+
+    if(!result)
+    {
+      return res.status(404).json({
+        message: "Fail to create prescription.",
+      });
+    }
 
     // Create or update the doctor collection
     const doctorCollectionName = `doctor_${doctorId}`;
@@ -38,7 +46,7 @@ exports.addPrescription = async (req, res, io, userSockets) => {
     });
 
     console.log(typeof patient._id);
-    console.log(userSockets[patient._id]);
+    console.log("user socket",userSockets);
     let date = newPrescription.date;
     console.log(date);
 
@@ -70,14 +78,14 @@ exports.addPrescription = async (req, res, io, userSockets) => {
 
 exports.getAllPrescriptionsBasedOnRole = async (req, res) => {
   try {
-    const { currentUser } = req.params;
-    console.log("currentUser:", currentUser);
+    const currentUser = req.currentUser;
+    console.log("currentUser:", currentUser, " ", req.currentUser);
 
     let collectionName = `doctor_${currentUser}`;
     let collection = prescriptionDB.collection(collectionName);
 
     let prescriptions = await collection.find({}).toArray();
-    console.log("Doctor Prescriptions:", prescriptions);
+    console.log( prescriptions);
 
     // If no prescriptions found in doctor_{user}, try patient_{user}
     if (prescriptions.length === 0) {
@@ -87,16 +95,20 @@ exports.getAllPrescriptionsBasedOnRole = async (req, res) => {
       console.log("Patient Prescriptions:", prescriptions);
     }
 
+    if (!prescriptions || prescriptions.length === 0) {
+      return res.status(404).json({ error: "No prescriptions found for this user." });
+    }
+
     res.json(prescriptions);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 
 exports.getPrescriptionsByPatientId = async (req, res) => {
   try {
-    const { user } = req.params;
+    const {user} = req.currentUser;
     console.log("lol", user);
     let collectionName = `patient_${user}`;
     console.log(user);
@@ -106,13 +118,13 @@ exports.getPrescriptionsByPatientId = async (req, res) => {
     res.json(prescriptions);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 
 exports.setPrescriptionsAsCurrent = async (req, res) => {
   const { prescriptionId } = req.params;
-  const { currentUser } = req.body;
+  const currentUser = req.currentUser;
 
   console.log("IN SET", prescriptionId, currentUser);
 
@@ -143,7 +155,7 @@ exports.setPrescriptionsAsCurrent = async (req, res) => {
 
 exports.setPrescriptionsAsNotCurrent = async (req, res) => {
   const { prescriptionId } = req.params;
-  const { currentUser } = req.body;
+  const currentUser = req.currentUser;
 
   console.log("IN DELETE", prescriptionId, currentUser);
 
@@ -176,7 +188,7 @@ exports.setPrescriptionsAsNotCurrent = async (req, res) => {
 
 exports.getCurentPrescription = async (req, res) => {
   try {
-    const { currentUser } = req.params;
+    const currentUser = req.currentUser;
     console.log("lol - current pres", currentUser);
     let collectionName = `patient_${currentUser}`;
     let collection = prescriptionDB.collection(collectionName);
@@ -187,15 +199,16 @@ exports.getCurentPrescription = async (req, res) => {
     res.json(prescription);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 
 exports.updateProgress = async (req, res, io, userSockets) => {
   try {
     console.log(req.body);
-    const { progressHistory, currentUser, doctorId, name } = req.body;
+    const { progressHistory, doctorId, name } = req.body;
     const { prescriptionId, medicationId } = req.params;
+    const currentUser = req.currentUser;
 
     console.log(
       "Updating progress",
@@ -214,7 +227,7 @@ exports.updateProgress = async (req, res, io, userSockets) => {
     });
 
     if (!prescription) {
-      return res.status(404).send({ message: "Prescription not found" });
+      return res.status(404).send({ message: "Prescription not  found."});
     }
 
     // Find the medication in the products array by its _id
@@ -311,14 +324,15 @@ exports.updateProgress = async (req, res, io, userSockets) => {
     res.status(200).send({ message: "Progress history updated successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 
 exports.deleteLastProgress = async (req, res) => {
   try {
-    const { medicationId, currentUser } = req.body; // Extract medication ID and user ID
-    const { prescriptionId } = req.params; // Get the prescription ID from the route
+    const { medicationId} = req.body;
+    const currentUser  = req.currentUser;
+    const { prescriptionId } = req.params;
 
     console.log("Deleting last progress for medication", medicationId);
 
@@ -366,15 +380,16 @@ exports.deleteLastProgress = async (req, res) => {
     res.status(200).send({ message: "Last progress entry deleted successfully." });
   } catch (error) {
     console.error("Error deleting last progress entry:", error);
-    res.status(500).send({ error: "Internal Server Error" });
+    res.status(500).send({ error: "Internal Error" });
   }
 };
 
 exports.progressCompleted = async (req, res, io, userSockets) => {
   try {
     console.log("IN PROGRESS COMPLETED");
-    const { progressHistory, currentUser, doctorId, name } = req.body;
+    const { progressHistory, doctorId, name } = req.body;
     const { prescriptionId, medicationId } = req.params;
+    const currentUser = req.currentUser;
 
     console.log(
       "progress completed",
@@ -491,7 +506,7 @@ exports.progressCompleted = async (req, res, io, userSockets) => {
     res.status(200).send({ message: "Progress history updated successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 

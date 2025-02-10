@@ -80,30 +80,6 @@ const sendPrescription = async () => {
   }, 5000);
 };
 
-
-  const generatePDF = () => {
-    setTimeout(() => {
-      const input = document.getElementsByClassName("overview-container")[0];
-      if (!input) {
-        console.error("Element to generate PDF from was not found!");
-        return;
-      }
-
-      html2canvas(input, { scale: 1, useCORS: true })
-        .then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          const pdf = new jsPDF({ orientation: "portrait" });
-          const imgWidth = 210; // A4 width in mm
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-          pdf.save("prescription-overview.pdf");
-        })
-        .catch((err) => {
-          console.error("Failed to generate PDF", err);
-        });
-    }, 500);
-  };
-
   const handleBack=() =>{
     history.push("/doctor/stats");
   }
@@ -183,9 +159,6 @@ const sendPrescription = async () => {
       <div className="button-reteta">
       <button onClick={sendPrescription} className="send-button2">
         Trimite Prescripție
-      </button>
-      <button onClick={generatePDF} className="generate-pdf-button">
-        Generează PDF
       </button>
 
       <button className="menu-back" onClick={handleBack}>

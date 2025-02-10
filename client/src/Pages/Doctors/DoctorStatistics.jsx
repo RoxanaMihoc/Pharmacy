@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./styles/doctor-statistics.css";
 import { useAuth } from "../../Context/AuthContext";
 import { useLocation, useHistory } from "react-router-dom";
-import { fetchAllPrescriptions } from "../Services/prescriptionServices";
+import { fetchPrescriptions } from "../Services/prescriptionServices";
 import { fetchNotifications } from "../Notifications/Services/notificationServices";
 
 const DoctorStatistics = () => {
@@ -21,13 +21,13 @@ const DoctorStatistics = () => {
   };
 
   useEffect(() => {
-    const fetchPrescriptions = async () => {
+    const fetchAllPrescriptions = async () => {
       try {
-        const { success, data, error } = await fetchAllPrescriptions(
-          currentUser,token
+        const data = await fetchPrescriptions(token
         );
+        console.log(data);
 
-        if (success) {
+        if (data) {
           // Calculate statistics
           const lastThreeMonths = new Date();
           lastThreeMonths.setMonth(lastThreeMonths.getMonth() - 3);
@@ -45,15 +45,13 @@ const DoctorStatistics = () => {
             prescriptionsLastThreeMonths: prescriptionsLastThreeMonths.length,
             avgPrescriptionsPerMonth,
           });
-        } else {
-          console.error("Error fetching prescriptions:", error);
         }
       } catch (error) {
         console.error("Unexpected error:", error);
       }
     };
 
-    fetchPrescriptions();
+    fetchAllPrescriptions();
     fetchNotificationsData(); // Keep this call as is, assuming it's already refactored
   }, [currentUser]);
 
@@ -80,12 +78,10 @@ const DoctorStatistics = () => {
 
   const fetchNotificationsData = async () => {
     try {
-      const { success, fetchedNotifications } = await fetchNotifications(
-        currentUser,
-        role,token
+      const { fetchedNotifications } = await fetchNotifications(token
       );
 
-      if (success) {
+      if (fetchedNotifications) {
         const normalized = fetchedNotifications.map(normalizeNotification);
         setNotifications(sortNotifications(normalized)); // Sort before setting state
         console.log(normalized);

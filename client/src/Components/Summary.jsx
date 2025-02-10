@@ -82,7 +82,7 @@ const Summary = ({
 useEffect(() => {
   const getDoctorForPatient = async () => {
     if (currentUser) {
-      const { success, firstNameD, lastNameD, doctorId } = await  fetchDoctorName(currentUser, token);
+      const { success, firstNameD, lastNameD, doctorId } = await  fetchDoctorName(token);
 
       if (success) {
         setDoctor(firstNameD + " " + lastNameD); // Set the doctor data in state

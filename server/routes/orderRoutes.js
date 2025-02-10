@@ -3,9 +3,8 @@ const ordersController  = require('../controllers/ordersController');
 const { verifyToken } = require('../middleware/verifyToken');
 const router = express.Router();
 // Route to add a product to the cart
-router.get('/orders',verifyToken, ordersController.getAllOrders);
-router.get('/orders/:currentUser', verifyToken, ordersController.getOrdersForUser);
-router.put('/orders/:currentUser', verifyToken, ordersController.getOrdersForUser);
+router.get('/orders/user', verifyToken, ordersController.getOrdersForUser);
+// router.put('/orders/:currentUser', verifyToken, ordersController.getOrdersForUser);
 
 module.exports = (io, userSockets) => {
     console.log("in rout o",userSockets);

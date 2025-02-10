@@ -222,7 +222,7 @@ const ProductDetails = () => {
               {relatedProducts.length > 0 ? (
                 relatedProducts.map((relatedProduct) => (
                   <div className="product-card" key={relatedProduct._id}>
-                    <Link to={`/home/product/details/${relatedProduct._id}`}>
+                    <Link to={`/home/product-page/${relatedProduct._id}`}>
                       <img
                         src={relatedProduct.photo}
                         alt={relatedProduct.title}

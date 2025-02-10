@@ -1,43 +1,56 @@
 // controllers/userController.js
 const User = require("../models/userModel");
 const Doctor = require("../models/doctorModel");
-const Pharmacist = require("../models/pharmacistModel");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "09b844471b9798b9e81ae3f67efb02c0196f51291d450fa53359d1e3f2bfa0b9a99b93210585a6d2fe3f79ec340f3c38e2ff4e1e48aabe20f1cd422732863663";
 
+const isValidEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+  
+const isIdentifierValid = (identifier, role) => {
+  if(role =="Patient")
+  {
+    return /^\d{13}$/.test(identifier);
+  }
+  else
+  {
+    return /^DI\d{6}$/.test(identifier);
+  }
+};
+
+const isPasswordValid = (password) =>{
+  return !/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/.test(password);
+}
 exports.register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, identifier } = req.body;
-    console.log("In register", req.body);
-
-    const {
-      selectedDoctor,
-      birthDate,
-      gender,
-      height,
-      weight,
-      maritalStatus,
-      phoneNumber,
-      address,
-      postalCode,
-      medicationList,
-      city,
-      doctorName,
-    } = req.body;
+    const {firstName, lastName, email, password, identifier,selectedDoctor, 
+           birthDate,gender,height,weight,phoneNumber, address,
+            postalCode, medicationList, city, doctorName,} = req.body;
     let postal_code = postalCode;
     let birth_date = birthDate;
     let phone = phoneNumber;
     let doctor = selectedDoctor;
     let doctorNameB = doctorName;
-    // Check if the email is already taken
-    const existingUser = await User.findOne({ identifier });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "identifier is already registered." });
+    let role = "Patient";
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format." });
     }
 
-    // Create a new user
+    if (!isIdentifierValid(identifier,role)) {
+      return res.status(400).json({ message: "Invalid identifier for User." });
+    }
+
+    if (!isIdentifierValid(password)) {
+      return res.status(400).json({ message: "Invalid password." });
+    }
+
+    const existingUser = await User.findOne({ identifier });
+    if (existingUser) {
+      return res.status(409).json({ message: "User is already registered." });
+    }
+
     const newUser = new User({
       firstName,
       lastName,
@@ -58,6 +71,7 @@ exports.register = async (req, res) => {
       weight,
       maritalStatus,
       medicationList,
+      role,
     });
     await newUser.save();
     console.log("lala", newUser._id, selectedDoctor);
@@ -71,46 +85,55 @@ exports.register = async (req, res) => {
     console.log(ret);
 
     await newUser.save();
-    res.status(201).json({ message: "Pharmacist registered successfully." });
+    res.status(201).json({ message: "User registered successfully." });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Error" });
   }
 };
 
 exports.login = async (req, res) => {
   try {
-    const { email, password, identifier } = req.body;
+    const { email, password, identifier, role } = req.body;
 
-    let user = await User.findOne({ identifier });
-    let role = " ";
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format." });
+    }
 
-    if (!user) {
-      console.log("Look for a doctor");
+    if (!isIdentifierValid(identifier,role)) {
+      return res.status(400).json({ message: "Invalid identifier for User." });
+    }
+
+    // if (!isPasswordValid(password)) {
+    //   return res.status(400).json({ message: "Invalid password." });
+    // }
+ 
+    let user = "";
+    if(role == "Patient")
+    {
+      user = await User.findOne({ identifier });
+    }
+    else
+    {
       user = await Doctor.findOne({ identifier });
     }
 
-    if (!user) {
-      console.log("Look for a pharmacist");
-      user = await Pharmacist.findOne({ identifier });
+    if(!user)
+    {
+      return res.status(401).json({ message: "Incorrect identifier." });
     }
 
-    if (user) {
-      role = user.role;
-      console.log(
-        `The role of the user with identifier ${identifier} is: ${role}`
-      );
+    if (email != user.email)
+    {
+      return res.status(401).json({ message: "Incorrect email." });
     }
+
     console.log(user);
-    // If the user doesn't exist or password is incorrect
-    if (!user || !(await user.comparePassword(password))) {
-      return res
-        .status(401)
-        .json({ message: "Parola invalida." });
-    }
-    console.log("in loginnn")
 
-    // Create and send a JWT token
+    if (!(await user.comparePassword(password))) {
+      return res.status(401).json({ message: "Incorrect Password." });
+    }
+    console.log("before jwt");
     const token = jwt.sign(
       {
         userId: user._id,
@@ -118,18 +141,22 @@ exports.login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
       },
-       SECRET_KEY, { expiresIn: '24h' }
+      SECRET_KEY,
+      { expiresIn: "24h" }
     );
+
     res.json({ token, role });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Error" });
   }
 };
 
+
 exports.getCartbyId = async (req, res) => {
   try {
-    const { currentUser } = req.params;
+    const currentUser = req.currentUser;
     //currentUser null for some reason
     console.log("In cart", currentUser);
     let user = await User.findById(currentUser);
@@ -144,13 +171,13 @@ exports.getCartbyId = async (req, res) => {
     res.json(cart);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 
 exports.getFavoritesbyId = async (req, res) => {
   try {
-    const { currentUser } = req.params;
+    const currentUser = req.currentUser;
     await User.findById(currentUser)
       .then((user) => {
         if (!user) {
@@ -168,13 +195,13 @@ exports.getFavoritesbyId = async (req, res) => {
       });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 
 exports.getDetailsOfCurrentUser = async (req, res) => {
   try {
-    const { currentUser } = req.params;
+    const currentUser = req.currentUser;
     //currentUser null for some reason
     console.log("In details about user", currentUser);
     let user = await User.findById(currentUser);
@@ -188,6 +215,6 @@ exports.getDetailsOfCurrentUser = async (req, res) => {
     res.json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };

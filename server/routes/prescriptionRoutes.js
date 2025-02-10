@@ -4,9 +4,9 @@ const prescriptionController = require('../controllers/prescriptionController');
 const { verifyToken } = require('../middleware/verifyToken');
 const router = express.Router();
 
-router.get('/all-prescriptions/:currentUser', verifyToken, prescriptionController.getAllPrescriptionsBasedOnRole);
-  router.get('/prescription/:user', verifyToken, prescriptionController.getPrescriptionsByPatientId);
-  router.get('/current-prescription/:currentUser', verifyToken, prescriptionController.getCurentPrescription);
+router.get('/all-prescriptions', verifyToken, prescriptionController.getAllPrescriptionsBasedOnRole);
+  router.get('/prescription', verifyToken, prescriptionController.getPrescriptionsByPatientId);
+  router.get('/current-prescription', verifyToken, prescriptionController.getCurentPrescription);
   router.patch('/prescription/:prescriptionId', verifyToken, prescriptionController.setPrescriptionsAsCurrent);
   router.patch('/prescription/remove-current/:prescriptionId', verifyToken, prescriptionController.setPrescriptionsAsNotCurrent);
   router.put("/delete-progress/:prescriptionId", verifyToken, prescriptionController.deleteLastProgress);

@@ -4,7 +4,8 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 const addToCart = async (req, res) => {
   console.log("in addto cart backend");
-  const { userId, productId, prescriptionId } = req.body;
+  const { productId, prescriptionId } = req.body;
+  const userId = req.currentUser;
   console.log("Pres", prescriptionId);
   
 
@@ -22,6 +23,13 @@ const addToCart = async (req, res) => {
       { new: true }
     );
 
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found or no matching product in cart.",
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: "Product added to cart successfully",
@@ -29,12 +37,13 @@ const addToCart = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding product to cart:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal Error" });
   }
 };
 
 const deleteProductFromCart = async (req, res) => {
-  const { currentUser, productId } = req.params;
+  const { productId } = req.params;
+  const currentUser = req.currentUser;
   console.log("IN DELETE CART", currentUser, productId);
   
 
@@ -53,7 +62,7 @@ const deleteProductFromCart = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({
         success: false,
-        message: "User not found or no matching product in cart",
+        message: "User not found or no matching product in cart.",
       });
     }
 
@@ -64,21 +73,28 @@ const deleteProductFromCart = async (req, res) => {
     });
   } catch (error) {
     console.error("Error removing product from cart:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal Error" });
   }
 };
 
 const deleteCartFromUser = async (req, res) => {
-  const { currentUser } = req.params;
+  const currentUser = req.currentUser;
   console.log("in delete cart");
   
   try {
     // Update user's cart in the database
-    await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       currentUser,
       { $set: { cart: [] } },
       { new: true }
     );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
 
     res.status(200).json({
       success: true,
@@ -86,7 +102,7 @@ const deleteCartFromUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error removing cart after the user placed an order:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal Error" });
   }
 };
 

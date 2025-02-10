@@ -197,7 +197,7 @@ const PatientProfile = ({ onBack }) => {
                               entry.date && entry.dosesTaken ? (
                                 <li key={index}>
                                 <FontAwesomeIcon icon={faArrowRightLong} /> {formatDate2(entry.date)}: {entry.dosesTaken}{" "}
-                                  doze luate
+                                  doză luate
                                   {entry.timeTaken &&
                                     entry.timeTaken.length > 0 && (
                                       <ul>

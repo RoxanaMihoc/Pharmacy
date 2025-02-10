@@ -41,7 +41,7 @@ export const registerUser = async (userData) => {
       });
   
       if (!response.ok) {
-        throw new Error("User already registered. Please use another email.");
+        throw new Error("User already registered. Please try again with different credentials.");
       }
   
       const data = await response.json();

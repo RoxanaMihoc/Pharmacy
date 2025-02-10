@@ -9,13 +9,11 @@ import {
   deleteLastProgressEntry,
   notifyDoctorAboutCompletion,
 } from "../Services/prescriptionServices";
+import lala2 from "../../Assets/lala2.png"
 
 const CurrentPrescription = () => {
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [notes, setNotes] = useState(
-    "Patient is allergic to walnuts and ivy syrup."
-  );
   const [completed, setCompleted] = useState(false);
   const [limitExceeded, setLimitExceeded] = useState({}); // Track dosage limit exceeded messages
   const { currentUser, name, token } = useAuth();
@@ -250,8 +248,13 @@ const CurrentPrescription = () => {
             )}
           </div>
           <div className="add-notes-section">
-            <h3>Notes</h3>
-            <p>{notes}</p>
+            <div className="hero-image">
+                <img
+                  src={lala2}
+                  alt="Additional pharmacy-related illustration"
+                />
+              </div>
+            
           </div>
         </div>
 

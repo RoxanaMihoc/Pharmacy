@@ -28,7 +28,6 @@ const PharmacyPage = () => {
               </Link>
         <ul className="nav-links">
         <button className="button-role" onClick={() => handleLoggedOutLogIn('Doctor')}>Doctor</button>
-        <button className="button-role" onClick={() => handleLoggedOutLogIn('Pharmacist')}>Pharmacist</button>
         <button className="button-role" >Blog</button>
         <button className="button-role" >FAQ</button>
         </ul>

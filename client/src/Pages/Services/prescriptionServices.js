@@ -24,10 +24,10 @@ export const sendPrescriptionData = async (prescriptionData,token) => {
   }
 };
 
-export const fetchPrescriptions = async (currentUser, token) => {
+export const fetchPrescriptions = async (token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/all-prescriptions/${currentUser}`,
+      `${BASE_URL}/home/all-prescriptions`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export const removeCurrentPrescription = async (
 //For Doctors
 export const fetchPrescriptionsForDoctors = async (user, token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/prescription/${user}`, {
+    const response = await fetch(`${BASE_URL}/home/prescription`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -122,33 +122,10 @@ export const fetchPrescriptionsForDoctors = async (user, token) => {
   }
 };
 
-//all doctor prescriptions
-export const fetchAllPrescriptions = async (currentUser, token) => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/home/all-prescriptions/${currentUser}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch prescriptions");
-    }
-
-    const data = await response.json();
-    return { success: true, data };
-  } catch (error) {
-    console.error("Error in fetchAllPrescriptions:", error);
-    return { success: false, error: error.message };
-  }
-};
-
 export const fetchCurrentPrescriptions = async (currentUser, token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/current-prescription/${currentUser}`,
+      `${BASE_URL}/home/current-prescription`,
       {
         headers: {
           "Content-Type": "application/json",

@@ -61,7 +61,7 @@ export const fetchCart = async (currentUser, token) => {
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/home/cart/${currentUser}`, {
+    const response = await fetch(`${BASE_URL}/home/cart`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -104,7 +104,7 @@ export const fetchCartItems = async (productId,token) => {
 export const removeItemFromCart = async (currentUser, productId,token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/cart/${currentUser}/${productId}`,
+      `${BASE_URL}/home/cart/${productId}`,
       {
         method: "DELETE",
         headers: {
@@ -125,7 +125,7 @@ export const removeItemFromCart = async (currentUser, productId,token) => {
 
 export const deleteCart = async (currentUser,token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/cart/${currentUser}`, {
+    const response = await fetch(`${BASE_URL}/home/delete-cart`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

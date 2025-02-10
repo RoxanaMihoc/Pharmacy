@@ -92,9 +92,7 @@ const DoctorSelection = () => {
               <div className="doctor-name-photo">
                 <img
                   src={
-                    doctor.imageUrl
-                      ? doctor.imageUrl
-                      : "https://via.placeholder.com/50?text=Doctor"
+                    doctor.photo
                   }
                   alt={`${doctor.firstName} ${doctor.lastName} profile`}
                   className="doctor-photo"

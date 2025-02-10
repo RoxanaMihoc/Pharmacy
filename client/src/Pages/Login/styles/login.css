@@ -15,6 +15,7 @@
   align-items: center;
   background-color: #2C3E50;
   padding: 1rem 2rem;
+  max-height: 70px;
 }
 
 .nav-logo {
@@ -61,7 +62,7 @@
   box-shadow: 0 0 321px rgba(0, 0, 0, 0.1);
   width: 60vh;
   margin-right: 0;
-  height: 800px;
+  height: 700px;
   border: 2px solid;
   border-color: #8f8b8b;
 }

@@ -4,7 +4,8 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 const addNotification = async (req, res) => {
   try {
-    const { userId, role, notification } = req.body;
+    const {  role, notification } = req.body;
+    const userId = req.currentUser;
     console.log("in notig", userId, role,  notification);
     
 
@@ -30,8 +31,9 @@ const addNotification = async (req, res) => {
 
 const getNotificationsByRole = async (req, res) => {
   try {
-    console.log(" in get notif: Fetching notifications by role...");
-    const { currentUser, role } = req.params; 
+    console.log(" in get notif: Fetching notifications by role..."); 
+    const currentUser = req.currentUser;
+    const role = req.role;
 
     // Determine the collection dynamically based on the role
     const collectionName =
@@ -49,7 +51,7 @@ const getNotificationsByRole = async (req, res) => {
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error fetching notifications:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Error" });
   }
 };
 

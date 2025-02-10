@@ -1,9 +1,9 @@
 const BASE_URL = "http://localhost:3000";
 
-export const fetchNotifications = async (currentUser, role, token) => {
+export const fetchNotifications = async (token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/notifications/${currentUser}/${role}`,
+      `${BASE_URL}/home/notifications/`,
       {
         headers: {
           "Content-Type": "application/json",

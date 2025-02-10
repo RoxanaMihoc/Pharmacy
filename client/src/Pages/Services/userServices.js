@@ -26,7 +26,7 @@ export const fetchPatientDetailsForDoctorPage = async (patientId, token) => {
   export const fetchPatientsFromAPI = async (currentUser, token) => {
     try {
       const response = await fetch(
-        `${BASE_URL}/doctors/patients-list/${currentUser}`, {
+        `${BASE_URL}/doctors/patients-list`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -46,9 +46,9 @@ export const fetchPatientDetailsForDoctorPage = async (patientId, token) => {
   };
 
 //For User
-export const fetchDoctorName = async (currentUser, token) => {
+export const fetchDoctorName = async (token) => {
   try {
-    let response = await fetch(`${BASE_URL}/home/details/${currentUser}`, {
+    let response = await fetch(`${BASE_URL}/home/details`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ export const fetchDoctorName = async (currentUser, token) => {
     }
     let data = await response.json();
     const doctorName = data.doctorNameB;
-    console.log(doctorName);
+    console.log("doctor",doctorName);
 
     return { success: true, doctorName};
   } catch (error) {

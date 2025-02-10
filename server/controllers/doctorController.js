@@ -15,7 +15,7 @@ const getAllDoctors= async (req, res) =>{
 }
 
 const getAllPatientsByDoctorId= async (req, res) =>{
-  const { currentUser } = req.params;
+  const currentUser = req.currentUser;
   console.log("lalain get all doct", currentUser);
   query ={ doctor: currentUser};
   
@@ -23,6 +23,10 @@ const getAllPatientsByDoctorId= async (req, res) =>{
   try {
     const patients = await User.find( query);
     console.log(patients);
+    if(!patients)
+    {
+      return res.status(404).json({ message: 'Patients list not found.' });
+    }
     res.json(patients);
   } catch (error) {
     console.error(error);

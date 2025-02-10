@@ -1,7 +1,8 @@
 .doctor-selection-container-nav {
   min-height: 100vh; /* Use min-height if you want it to expand if content exceeds one screen */
   padding: 1%;
-  background: linear-gradient(to top left,  #226bb4, rgb(253, 255, 255));
+  background: rgb(224, 233, 235);
+  font-family: "Poppins", sans-serif;
 }
 
 .navbar {

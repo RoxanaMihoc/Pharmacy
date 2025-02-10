@@ -4,7 +4,7 @@ const BASE_URL = "http://localhost:3000";
 //get favorites for user
 export const fetchFavorites = async (currentUser, token) => {
   try {
-    const response = await fetch(`${BASE_URL}/home/favorites/${currentUser}`,{
+    const response = await fetch(`${BASE_URL}/home/favorites-list`,{
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ export const addToFavorites = async (userId, productId, token) => {
 
     const data = await response.json();
     console.log(data);
-    return { success: true, message: 'Product added to favorites successfully' };
+    return { success: true, message: 'Product added to favorites list successfully' };
     // Handle successful response (e.g., display a success message)
   } catch (error) {
     console.error('Error adding product to favorites:', error);
@@ -86,7 +86,7 @@ export const populateFavoriteItems = async (favoritesItems, token) => {
 export const removeFavoriteItem = async (currentUser, productId, token) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/home/favorites/${currentUser}/${productId}`,
+      `${BASE_URL}/home/favorites/${productId}`,
       {
         method: "DELETE",
           headers: {

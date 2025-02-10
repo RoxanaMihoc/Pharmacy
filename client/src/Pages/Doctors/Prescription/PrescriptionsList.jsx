@@ -10,7 +10,7 @@ import {
   faSort,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { fetchAllPrescriptions } from "../../Services/prescriptionServices";
+import { fetchPrescriptions } from "../../Services/prescriptionServices";
 
 const PrescriptionsList = () => {
   const [prescriptions, setPrescriptions] = useState([]);
@@ -38,7 +38,7 @@ const PrescriptionsList = () => {
   useEffect(() => {
     const fetchPrescriptions = async () => {
       try {
-        const { success, data, error } = await fetchAllPrescriptions(
+        const { success, data, error } = await fetchPrescriptions(
           currentUser, token
         );
 
@@ -145,7 +145,7 @@ const PrescriptionsList = () => {
           </div>
           <button
             className="refresh-button"
-            onClick={() => fetchAllPrescriptions(currentUser)}
+            onClick={() => fetchPrescriptions(currentUser)}
           >
             <span>↻</span>
           </button>

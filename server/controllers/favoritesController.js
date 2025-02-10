@@ -4,7 +4,8 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 const addToFavorites = async (req, res) => {
   console.log("in addto favorites backend");
-  const { userId, productId } = req.body;
+  const { productId } = req.body;
+  const userId = req.currentUser;
   console.log(userId, productId);
 
   try {
@@ -15,9 +16,16 @@ const addToFavorites = async (req, res) => {
       { new: true }
     );
 
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found or no matching product in favorites.",
+      });
+    }
+
     console.log(updatedUser);
 
-    res.status(200).json({ success: true, message: 'Product added to favorites successfully', productId });
+    res.status(200).json({ success: true, message: 'Product added to favorites list successfully', productId });
   } catch (error) {
     console.error('Error adding product to favorites:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -25,7 +33,8 @@ const addToFavorites = async (req, res) => {
 };
 
 const deleteProductFromFavorites = async (req, res) =>{
-  const { currentUser, productId } = req.params;
+  const { productId } = req.params;
+  const currentUser = req.currentUser;
 
   try {
     // Update user's cart in the database
@@ -34,6 +43,13 @@ const deleteProductFromFavorites = async (req, res) =>{
       { $pull: { favorites: productId } },
       { new: true }
     );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found or no matching product in favorites.",
+      });
+    }
 
     res.status(200).json({ success: true, message: 'Product removed from favorites successfully', productId });
   } catch (error) {

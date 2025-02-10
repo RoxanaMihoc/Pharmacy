@@ -117,7 +117,8 @@ const NotificationBell = () => {
       try {
         const {success, fetchedNotifications} = await fetchNotifications(
           currentUser,
-          role
+          role,
+          token,
         );
         if(success)
         {

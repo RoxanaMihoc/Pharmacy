@@ -17,6 +17,13 @@
     margin-bottom: 20px;
   }
 
+  .recommendation-text {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
 /* Left Column */
 .left-column {
   flex: 1 1 40%; /* Adjusts to take 40% or full width on smaller screens */

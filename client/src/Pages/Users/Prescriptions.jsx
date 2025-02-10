@@ -42,9 +42,9 @@ const PrescriptionsList = () => {
   useEffect(() => {
     const getDoctorForPatient = async () => {
       if (currentUser) {
-        const { success, doctorName} = await fetchDoctorName(
-          currentUser,token
+        const { success, doctorName} = await fetchDoctorName(token
         );
+        console.log(doctorName)
 
         if (success) {
           setDoctor(doctorName); // Set the doctor data in state
@@ -55,12 +55,12 @@ const PrescriptionsList = () => {
     };
 
     getDoctorForPatient();
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     const fetchPrescriptionsData = async () => {
       try {
-        const data = await fetchPrescriptions(currentUser,token);
+        const data = await fetchPrescriptions(token);
         setPrescriptions(data);
 
         // Find and set the active prescription
@@ -76,7 +76,7 @@ const PrescriptionsList = () => {
     };
 
     fetchPrescriptionsData();
-  }, [currentUser]);
+  }, []);
 
   const handleMarkAsCurrent = async (prescriptionId,token) => {
     try {
