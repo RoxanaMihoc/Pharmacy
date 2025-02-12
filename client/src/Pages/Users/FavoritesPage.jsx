@@ -98,7 +98,7 @@ const FavoritesPage = () => {
                         style={{ height: "200px", objectFit: "cover" }}
                       />
                       <Card.Body className="favorite-body">
-                        <Link to={`/home/product/details/${product._id}`}>
+                        <Link to={`/home/product/details/${product._id}`}style={{ textDecoration: "none", color: "black", textAlign: "center" }}>
                           <Card.Title style={{ textAlign: "center" }}>
                             {product.title}
                           </Card.Title>

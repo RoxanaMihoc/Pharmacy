@@ -38,7 +38,7 @@ const deleteProductFromFavorites = async (req, res) =>{
 
   try {
     // Update user's cart in the database
-    await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       currentUser,
       { $pull: { favorites: productId } },
       { new: true }

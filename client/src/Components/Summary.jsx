@@ -170,7 +170,7 @@ const submitOrder = async () => {
                           />
                         </div>
                         <div className="price-detail">
-                          {item[0]?.insurance === "no" ? (
+                          {item[0]?.insurance !== "no" ? (
                             <div>Preț: {item[0]?.price} Lei</div>
                           ) : (
                             <div>Acoperit de asigurare</div>
@@ -227,7 +227,7 @@ const submitOrder = async () => {
                 <p>
                   <strong>Livrare:</strong> {addressDetails.deliveryMethod}
                 </p>
-              <h3> Preț total: {price} Lei </h3>
+              <h3> Preț total: {totalPrice} Lei </h3>
               <button
                 className="submit-order-button"
                 onClick={handleOrderClick}

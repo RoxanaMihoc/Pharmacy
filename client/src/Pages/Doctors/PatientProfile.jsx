@@ -93,7 +93,6 @@ const PatientProfile = ({ onBack }) => {
           (prescription) => prescription.currentPrescription === true
         );
         setCurrentPrescription(current || null);
-        console.log(currentPrescription);
       } else {
         console.error("Error fetching prescriptions:", error);
         setError(error);

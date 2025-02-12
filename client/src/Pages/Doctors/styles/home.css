@@ -6,6 +6,7 @@
     flex-grow: 1; /* Takes up remaining space */
     overflow-y: auto; /* Allows scrolling within the content area */
     background-color: rgb(224, 233, 235);
+    font-family: "Poppins", sans-serif;
   }
   
   .home-doctor {

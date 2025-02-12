@@ -128,7 +128,7 @@ const Login = () => {
       <div className="buttons-container">
         <button type="submit">Conectare</button>
         <button
-          style={{ fontSize: "10px" }}
+          style={{ fontSize: "16px" }}
           type="button"
           onClick={() => console.log("Forgot Password clicked")}
         >

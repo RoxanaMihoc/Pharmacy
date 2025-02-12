@@ -244,7 +244,7 @@ const Diagnosis = () => {
                         onChange={(e) =>
                           handleTableChange(index, "doza", e.target.value)
                         }
-                        placeholder="Doza"
+                        placeholder="Doză/zi"
                       />
                     </td>
                     <td>
@@ -274,7 +274,7 @@ const Diagnosis = () => {
                         onChange={(e) =>
                           handleTableChange(index, "durata", e.target.value)
                         }
-                        placeholder="Durata"
+                        placeholder="Durată/zile"
                       />
                     </td>
                   </tr>
@@ -287,8 +287,7 @@ const Diagnosis = () => {
       <div className="footer-buttons">
         <button className="cancel-button">Renunță</button>
         <button className="save-button" onClick={handleSave}>
-          Mai departe{" "}
-          <FontAwesomeIcon icon={faArrowRight} className="search-icon" />
+           Mai departe <span className="arrow">→</span>
         </button>
       </div>
     </div>

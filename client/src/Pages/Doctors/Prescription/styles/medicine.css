@@ -5,6 +5,7 @@
     justify-content: center;
     height: 100%; /* Make sure modal takes full height of viewport */
     margin: 0; /* Remove default margin to ensure proper centering */
+    font-family: "Poppins", sans-serif;
   }
   
   .modal-content {

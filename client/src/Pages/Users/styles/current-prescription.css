@@ -4,6 +4,7 @@
   margin: 0 auto;
   padding: 20px;
   font-size: 18px; /* Base font size */
+  font-family: "Poppins", sans-serif;
 }
 
 .current-prescription-container-all {

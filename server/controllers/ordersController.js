@@ -50,7 +50,6 @@ exports.addToOrders = async (req, res, io, userSockets) => {
       totalPrice: totalPrice,
       user: user,
       status: "în așteptare",
-      pharmacist: pharmacist,
       orderNumber: orderNumber,
     });
     console.log("Attempting to save:", newOrder);

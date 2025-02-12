@@ -244,10 +244,10 @@ const ProductPage = () => {
                     )}
 
                     <Card.Body>
-                      <Link to={`/home/product-page/${product._id}`}>
+                      <Link to={`/home/product-page/${product._id}`} className="custom-link">
                         <Card.Title
                           className="card-title"
-                          style={{ textAlign: "center" }}
+                          style={{ textDecoration: "none", color: "black", textAlign: "center" }}
                         >
                           {product.title}
                         </Card.Title>

@@ -3,6 +3,7 @@
     max-width: 800px;
     /* Smaller width for better layout */
     margin: 0 auto;
+    font-family: "Poppins", sans-serif;
 }
 
 .diagnosis-section,

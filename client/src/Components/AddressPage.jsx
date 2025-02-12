@@ -206,7 +206,7 @@ const AddressPage = ({ onSubmit }) => {
                     onChange={handleInputChange}
                   />
                 </label>
-                <p>Ridicare din magazin</p>
+                <p>Ridicare din farmacie</p>
                 {formData.deliveryMethod === "Ridicare din magazin" && (
                   <p className="delivery-info">
                     Comanda va putea fi ridicată începând cu data de {futureDate} de la magazinul din locația Iași.
@@ -223,24 +223,12 @@ const AddressPage = ({ onSubmit }) => {
                     onChange={handleInputChange}
                   />
                 </label>
-                <p>Livrare SamDay</p>
+                <p>Livrare curier</p>
                 {formData.deliveryMethod === "Livrare acasă" && (
                   <p className="delivery-info">
                     Comanda va fi livrată la domiciliu începând cu data de {futureDate}.
                   </p>
                 )}
-              </div>
-              <div className="method">
-                <label>
-                  <input
-                    type="radio"
-                    name="deliveryMethod"
-                    value="Easybox"
-                    checked={formData.deliveryMethod === "Easybox"}
-                    onChange={handleInputChange}
-                  />
-                </label>
-                <p>Easybox</p>
               </div>
             </div>
           </div>

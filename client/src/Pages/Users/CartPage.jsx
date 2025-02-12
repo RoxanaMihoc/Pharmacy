@@ -279,7 +279,7 @@ const CartPage = () => {
             <div>
               {cart.length > 0 && (
                 <div className="ppppp">
-                  <h5>Total: {totalPrice.toFixed()} Lei</h5>
+                  <h5>Total: {totalPrice.toFixed(2)} Lei</h5>
                   {/* <h2>Selectează o farmacie:</h2>
                   <div className="pharmacy-list">
                     {pharmacies.length > 0 ? (
@@ -357,7 +357,7 @@ const CartPage = () => {
                 }`}
                 onClick={() => setActiveStep("Cos de cumparaturi")}
                 style={{
-                  backgroundColor: "#776e6e",
+                  backgroundColor: "#828e99",
                   color: "white",
                   border: "none",
                 }}
@@ -370,7 +370,7 @@ const CartPage = () => {
                 }`}
                 onClick={() => setActiveStep("Adresa si contact")}
                 style={{
-                  backgroundColor: "#776e6e",
+                  backgroundColor: "#828e99",
                   color: "white",
                   border: "none",
                 }}
@@ -384,7 +384,7 @@ const CartPage = () => {
                 onClick={() => setActiveStepState("Sumar comanda")}
                 disabled={!canProceedToSummary()}
                 style={{
-                  backgroundColor: "#776e6e",
+                  backgroundColor: "#828e99",
                   color: "white",
                   border: "none",
                 }}
@@ -398,7 +398,7 @@ const CartPage = () => {
                 onClick={() => setActiveStep("Comanda plasata")}
                 disabled={!orderSubmitted}
                 style={{
-                  backgroundColor: "#776e6e",
+                  backgroundColor: "#828e99",
                   color: "white",
                   border: "none",
                 }}

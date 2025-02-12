@@ -78,10 +78,10 @@ const PrescriptionsList = () => {
     fetchPrescriptionsData();
   }, []);
 
-  const handleMarkAsCurrent = async (prescriptionId,token) => {
+  const handleMarkAsCurrent = async (prescriptionId) => {
     try {
       console.log("lalalaaaa")
-      const { success } = await markPresAsCurrent(prescriptionId, currentUser);
+      const { success } = await markPresAsCurrent(prescriptionId, token);
 
       if (success) {
         setCurrentPrescriptionId(prescriptionId); // Update the current active prescription ID
@@ -92,14 +92,11 @@ const PrescriptionsList = () => {
     }
   };
 
-  const handleRemoveCurrent = async (token) => {
+  const handleRemoveCurrent = async () => {
     try {
       if (!currentPrescriptionId) return;
 
-      const { success, error } = await removeCurrentPrescription(
-        currentPrescriptionId,
-        currentUser
-      );
+      const { success, error } = await removeCurrentPrescription(currentPrescriptionId, token);
 
       if (success) {
         setCurrentPrescriptionId(null); // Clear the active prescription

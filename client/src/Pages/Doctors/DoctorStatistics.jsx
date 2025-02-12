@@ -119,8 +119,8 @@ const DoctorStatistics = () => {
           <p>Medie Rețete pe lună</p>
         </div>
         <div className="stat-card">
-          <h2>12</h2>
-          <p>Pacienți cu rețete active</p>
+          <h2>3</h2>
+          <p>Pacienți activi</p>
         </div>
       </div>
 

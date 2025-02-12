@@ -19,9 +19,9 @@ const isIdentifierValid = (identifier, role) => {
   }
 };
 
-const isPasswordValid = (password) =>{
-  return !/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/.test(password);
-}
+// const isPasswordValid = (password) =>{
+//   return !/^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/.test(password);
+// }
 exports.register = async (req, res) => {
   try {
     const {firstName, lastName, email, password, identifier,selectedDoctor, 
@@ -42,9 +42,10 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Invalid identifier for User." });
     }
 
-    if (!isIdentifierValid(password)) {
-      return res.status(400).json({ message: "Invalid password." });
-    }
+    // if (!isPasswordValid(password)) {
+    //   console.log(password);
+    //   return res.status(400).json({ message: "Invalid password." });
+    // }
 
     const existingUser = await User.findOne({ identifier });
     if (existingUser) {
@@ -69,7 +70,6 @@ exports.register = async (req, res) => {
       postal_code,
       height,
       weight,
-      maritalStatus,
       medicationList,
       role,
     });
@@ -100,9 +100,9 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email format." });
     }
 
-    if (!isIdentifierValid(identifier,role)) {
-      return res.status(400).json({ message: "Invalid identifier for User." });
-    }
+    // if (!isIdentifierValid(identifier,role)) {
+    //   return res.status(400).json({ message: "Invalid identifier for User." });
+    // }
 
     // if (!isPasswordValid(password)) {
     //   return res.status(400).json({ message: "Invalid password." });
@@ -117,6 +117,7 @@ exports.login = async (req, res) => {
     {
       user = await Doctor.findOne({ identifier });
     }
+    console.log(user);
 
     if(!user)
     {

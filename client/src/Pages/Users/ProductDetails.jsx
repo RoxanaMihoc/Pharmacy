@@ -118,7 +118,7 @@ const ProductDetails = () => {
                 <strong>Cod produs:</strong> {product._id}
               </p>
               <p>
-                <strong>Disponibilitate:</strong> {product.availability}
+                <strong>Disponibilitate:</strong> In stoc
               </p>
             </div>
             <div className="purchase-info">

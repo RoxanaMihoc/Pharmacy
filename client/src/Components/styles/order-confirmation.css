@@ -4,6 +4,7 @@
   align-items: center;
   height: 50vh; /* Full viewport height */
   background-color: transparent;
+  font-family: "Poppins", sans-serif;
 }
 
 .order-card {

@@ -16,7 +16,6 @@ const orderSchema = new mongoose.Schema({
   totalPrice: Number,
   user: String,
   status: { type: String, default: 'în așteptare' },
-  pharmacist: String,
   orderNumber: String,
   date: { type: Date, default: Date.now },
   cart: {

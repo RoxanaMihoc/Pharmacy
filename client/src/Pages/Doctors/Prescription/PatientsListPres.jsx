@@ -109,8 +109,8 @@ const PatientsListPres = () => {
         disabled={!selectedPatient}
         className="send-button"
       >
-        Mai departe {" "}
-        <FontAwesomeIcon icon={faArrowRight} className="search-icon" />
+        Mai departe <span className="arrow">→</span>
+        
       </button>
     </div>
   );

@@ -17,7 +17,7 @@ const Sidebar = ({ onNavigate, setActiveTab }) => {
             <ul>
             <li onClick={() => handleNavigate('/pharmacy', 'stoc')}><FontAwesomeIcon icon={faStore} /> Stoc</li>
             <li onClick={() => handleNavigate('/pharmacy/orders', 'comenzi')}><FontAwesomeIcon icon={faCubesStacked} /> Comenzi</li>
-            <li onClick={logout} ><FontAwesomeIcon icon={faArrowLeftLong} /> Logout</li>
+            <li onClick={logout} ><FontAwesomeIcon icon={faArrowLeftLong} /> Deconectare</li>
             </ul>
         </div>
     );

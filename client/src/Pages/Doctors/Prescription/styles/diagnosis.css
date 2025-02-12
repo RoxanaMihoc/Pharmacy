@@ -7,6 +7,10 @@
   border-radius: 15px;
   display: flex;
   flex-direction: column;
+  font-family: "Poppins", sans-serif;
+}
+.search-icon{
+  background-color: transparent;
 }
 
   /* Two-column area */
@@ -192,7 +196,6 @@
 }
 
 .save-button {
-  color: #fff;
   border: none;
 }
 

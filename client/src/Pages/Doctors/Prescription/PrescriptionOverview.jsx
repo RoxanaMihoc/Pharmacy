@@ -3,8 +3,6 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
 import "./styles/overview.css"; // Updated CSS
 import io from "socket.io-client";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import { sendPrescriptionData } from "../../Services/prescriptionServices";
 
 const socket = io("http://localhost:3000");

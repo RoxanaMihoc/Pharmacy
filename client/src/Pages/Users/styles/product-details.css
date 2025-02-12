@@ -5,6 +5,7 @@
   align-items: center;
   background-color: #f5f5f5;
   padding: 20px;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Product container */
@@ -19,7 +20,8 @@
   width: 90%;
   max-width: 1400px;
   gap: 40px;
-  min-height: 400px; /* Ensure consistent height */
+  min-height: 400px;
+  /* Ensure consistent height */
 }
 
 /* Product image section */
@@ -30,22 +32,25 @@
 
 
 .product-image-x {
-  width: 100px; /* Face imaginea să ocupe tot spațiul disponibil */
+  width: 300px;
+  /* Face imaginea să ocupe tot spațiul disponibil */
 
-  height: 100px; /* Menține proporțiile imaginii */
-  object-fit: contain; /* Asigură păstrarea proporțiilor */
+  height: 300px;
+  /* Menține proporțiile imaginii */
+  object-fit: contain;
+  /* Asigură păstrarea proporțiilor */
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
 
- .product-image-container h1 {
+.product-image-container h1 {
   width: 100%;
   font-size: 18px;
   color: #333;
   margin-bottom: 15px;
-} 
+}
 
 /* Product details section */
 .product-details {
@@ -80,11 +85,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 400px; /* Same height as the product container */
+  min-height: 400px;
+  /* Same height as the product container */
 }
 
 .price-box {
   margin-bottom: 20px;
+
 }
 
 .price {
@@ -100,6 +107,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
+
 }
 
 .quantity-controls input {
@@ -120,26 +128,8 @@
   font-weight: bold;
   width: 100%;
   transition: background-color 0.3s ease;
-}
+  margin-bottom: 15px;
 
-.add-to-cart:hover {
-  background-color: #218838;
-}
-
-.add-to-favorites {
-  background-color: #ffc107;
-  color: #333;
-  padding: 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  width: 100%;
-  transition: background-color 0.3s ease;
-}
-
-.add-to-favorites:hover {
-  background-color: #e0a800;
 }
 
 /* Tabs styling */
@@ -162,13 +152,10 @@
 }
 
 .tabs button.active {
-  border-bottom: 3px solid #6c63ff;
-  color: #6c63ff;
+  border-bottom: 3px solid #828e99;
+  color: #828e99;
 }
 
-.tabs button:hover {
-  color: #6c63ff;
-}
 
 /* Tab content styling */
 .tab-content {
@@ -217,15 +204,18 @@
 }
 
 .products-grid::-webkit-scrollbar {
-  display: none;  /* This hides the scrollbar for Chrome, Safari, and newer versions of Opera*/
+  display: none;
+  /* This hides the scrollbar for Chrome, Safari, and newer versions of Opera*/
 }
 
 .product-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Asigură alinierea spațiată între elemente */
+  justify-content: space-between;
+  /* Asigură alinierea spațiată între elemente */
   flex: 0 0 220px;
-  height: 400px; /* Setează o înălțime consistentă */
+  height: 400px;
+  /* Setează o înălțime consistentă */
   border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 10px;
@@ -243,7 +233,8 @@
 .product-card img {
   width: 100%;
   height: 150px;
-  object-fit: contain; /* Asigură păstrarea proporțiilor imaginii */
+  object-fit: contain;
+  /* Asigură păstrarea proporțiilor imaginii */
   margin-bottom: 10px;
   border-radius: 10px 10px 0 0;
 }
@@ -253,7 +244,8 @@
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
-  flex-grow: 1; /* Face titlul să ocupe spațiul liber */
+  flex-grow: 1;
+  /* Face titlul să ocupe spațiul liber */
 }
 
 .product-card .product-brand {
@@ -270,21 +262,30 @@
   text-align: center;
 }
 
-.product-card .card-add-to-cart {
-  background-color: #28a745;
-  color: white;
-  padding: 10px;
+
+.add-to-cart,
+.add-to-favorites {
+
+  background-color: #ddd8d8;
+  color: black;
+  border-radius: 8px;
+  padding: 5px 10px;
+  width: 100%;
+  cursor: pointer;
+  padding: 15px;
   border: none;
   border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: auto; /* Împinge butonul în partea de jos */
+  font-weight: bold;
   transition: background-color 0.3s ease;
+  margin-bottom: 15px;
 }
 
-.product-card .card-add-to-cart:hover {
-  background-color: #218838;
+.add-to-cart:hover,
+.add-to-favorites:hover {
+  background-color: #828e99;
+  border: 2px solid #828e99;
+  box-shadow: 0 4px 4px rgba(0, 0, 0.5, 0.5);
+  font-weight: 500;
 }
 
 
@@ -301,15 +302,12 @@
   margin-right: 10px;
 }
 
-.card-nav-button:hover {
-  background-color: #5a54d6;
-}
-
 
 .description ul {
   margin: 10px 0;
   padding-left: 20px;
-  list-style-type: disc; /* Cerculețe pentru subpuncte */
+  list-style-type: disc;
+  /* Cerculețe pentru subpuncte */
 }
 
 .description li {
@@ -321,10 +319,11 @@
   margin-bottom: 6px;
   line-height: 1.8;
   font-size: 14px;
+  width: 1500px;
 }
 
 .show-more-button {
-  background-color: #6c63ff;
+  background-color: #828e99;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -333,11 +332,6 @@
   margin-top: 10px;
   transition: background-color 0.3s ease;
 }
-
-.show-more-button:hover {
-  background-color: #5a54d6;
-}
-
 
 /* Media queries for responsiveness */
 @media (max-width: 1200px) {
@@ -369,7 +363,9 @@
     font-size: 20px;
   }
 
-  .product-details p, .stock-status, .price-per-unit {
+  .product-details p,
+  .stock-status,
+  .price-per-unit {
     font-size: 14px;
   }
 
@@ -377,11 +373,13 @@
     font-size: 30px;
   }
 
-  .quantity-controls button, .quantity-controls input {
+  .quantity-controls button,
+  .quantity-controls input {
     padding: 8px 12px;
   }
 
-  .add-to-cart, .add-to-favorites {
+  .add-to-cart,
+  .add-to-favorites {
     padding: 12px 20px;
   }
 
@@ -405,7 +403,9 @@
     font-size: 18px;
   }
 
-  .product-details p, .stock-status, .price-per-unit {
+  .product-details p,
+  .stock-status,
+  .price-per-unit {
     font-size: 12px;
   }
 
@@ -413,11 +413,13 @@
     font-size: 24px;
   }
 
-  .quantity-controls button, .quantity-controls input {
+  .quantity-controls button,
+  .quantity-controls input {
     padding: 6px 10px;
   }
 
-  .add-to-cart, .add-to-favorites {
+  .add-to-cart,
+  .add-to-favorites {
     padding: 10px 15px;
   }
 

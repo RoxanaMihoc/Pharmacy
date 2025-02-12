@@ -36,25 +36,23 @@ const PrescriptionsList = () => {
   };
 
   useEffect(() => {
-    const fetchPrescriptions = async () => {
+    const fetchAllPrescriptions = async () => {
       try {
-        const { success, data, error } = await fetchPrescriptions(
-          currentUser, token
+        const { data } = await fetchPrescriptions(
+           token
         );
 
-        if (success) {
+        if (data) {
           setPrescriptions(data);
-          console.log(prescriptions);
-        } else {
-          console.error("Error fetching prescriptions:", error);
+          console.log("LALAL",prescriptions[0].patient.firstNme);
         }
       } catch (error) {
         console.error("Unexpected error:", error);
       }
     };
 
-    fetchPrescriptions();
-  }, [currentUser, role]);
+    fetchAllPrescriptions();
+  }, []);
 
   // const fetchSummaryStats = async () => {
   //   try {

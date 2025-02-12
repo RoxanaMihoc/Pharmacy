@@ -5,6 +5,9 @@
   max-height: 200px;
   overflow-y: auto;
 } */
+.cart-items{
+  font-family: "Poppins", sans-serif;
+}
 
 /* .cart-item {
   display: flex;
@@ -68,7 +71,7 @@
 }
 
 .modal-footer .button-fav-preview:hover {
-  background-color: #776e6e;
+  background-color: #828e99;
   box-shadow: 0 4px 4px rgba(0, 0, 0.5, 0.5);
   color: #ffffff;
   font-weight: 500;

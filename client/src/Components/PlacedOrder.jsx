@@ -17,7 +17,7 @@ const PlacedOrder = () => {
           Comanda ta este acum în curs de procesare.
         </p>
         <p>
-          Vei primi un e-mail cu detalii despre livrare și estimările de livrare.
+          Vei primi un e-mail cu detaliile despre comandă.
         </p>
         <button className="home-button" onClick={handleGoHome}>
         <span className="arrow">←</span> {"   "}

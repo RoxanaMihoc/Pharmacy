@@ -70,6 +70,10 @@
 
 }
 
+.price-submit p{
+  font-size: 20px;
+}
+
 .submit-order-button:disabled {
   background-color: #ccc; /* Gri */
   cursor: not-allowed; /* Schimbă cursorul pentru a indica interdicția */

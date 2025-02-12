@@ -39,14 +39,13 @@ export const fetchPrescriptions = async (token) => {
       throw new Error(`Failed to fetch data: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Error:", error.message);
   }
 };
 
-export const markPresAsCurrent = async (prescriptionId, currentUser, token) => {
+export const markPresAsCurrent = async (prescriptionId, token) => {
   try {
     const response = await fetch(
       `${BASE_URL}/home/prescription/${prescriptionId}`,
@@ -56,7 +55,7 @@ export const markPresAsCurrent = async (prescriptionId, currentUser, token) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ currentUser: currentUser }),
+        body: JSON.stringify({}),
       }
     );
 
@@ -73,10 +72,10 @@ export const markPresAsCurrent = async (prescriptionId, currentUser, token) => {
 
 // prescriptionServices.js
 export const removeCurrentPrescription = async (
-  prescriptionId,
-  currentUser, token
+  prescriptionId,token
 ) => {
   try {
+    console.log(token);
     const response = await fetch(
       `${BASE_URL}/home/prescription/remove-current/${prescriptionId}`,
       {
@@ -85,7 +84,7 @@ export const removeCurrentPrescription = async (
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ currentPrescription: false, currentUser }),
+        body: JSON.stringify({ currentPrescription: false }),
       }
     );
 
@@ -101,7 +100,7 @@ export const removeCurrentPrescription = async (
 };
 
 //For Doctors
-export const fetchPrescriptionsForDoctors = async (user, token) => {
+export const fetchPrescriptionsForDoctors = async (token) => {
   try {
     const response = await fetch(`${BASE_URL}/home/prescription`, {
       headers: {

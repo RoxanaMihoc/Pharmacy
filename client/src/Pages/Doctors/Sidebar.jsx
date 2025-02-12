@@ -42,7 +42,7 @@ const Sidebar = ({ onNavigate, setActiveTab, hideSidebarHandler }) => {
                     <FontAwesomeIcon icon={faTablets} /> Rețete
                 </li>
                 <li onClick={logout}>
-                    <FontAwesomeIcon icon={faArrowLeftLong} /> Logout
+                    <FontAwesomeIcon icon={faArrowLeftLong} /> Deconectare
                 </li>
                 {/* Show hideSidebarHandler only on smaller screens */}
                 {isSmallScreen && (

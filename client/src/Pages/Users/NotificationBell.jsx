@@ -106,11 +106,9 @@ const NotificationBell = () => {
   const toggleNotifications = async () => {
     if (!showNotifications) {
       try {
-        const { success, fetchedNotifications } = await fetchNotifications(
-          currentUser,
-          role,token
+        const {  fetchedNotifications } = await fetchNotifications(token
         );
-        if (success) {
+        if (fetchedNotifications) {
           console.log(fetchedNotifications)
           const normalized = fetchedNotifications.map(normalizeNotification);
           setNotifications(sortNotifications(normalized));
