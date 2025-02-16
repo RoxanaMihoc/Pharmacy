@@ -62,12 +62,14 @@ exports.addToOrders = async (req, res, io, userSockets) => {
     // const presIdExists = cartItems.some((item) => item.presId !== null);
     if ( userSockets[doctorId] && userSockets[doctorId].socketId) {
       let name = firstName +" "+ lastName;
+      console.log("nae",name);
+
       io.to(userSockets[doctorId].socketId).emit("new-order", {
         id: newOrder._id,
         date: date,
         name: name,
         patientId: user,
-        message: `${firstName} ${lastName} a achiziționat o reteta.`,
+        message: `Un pacient a achiziționat o reteta.`,
         orderDetails: {
           phone,
           email,

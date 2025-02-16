@@ -4,10 +4,9 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import "./styles/notification.css";
-import io from "socket.io-client";
 import {fetchNotifications, saveNotificationToDatabase} from "../Notifications/Services/notificationServices";
+import { useSocket } from "../../Context/SocketContext";
 
-const socket = io("http://localhost:3000");
 
 const NotificationBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -17,6 +16,7 @@ const NotificationBell = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();
   const notificationRef = useRef(null);
+  const socket = useSocket();
 
   // Normalize notification structure
   const normalizeNotification = (notification) => {
@@ -78,10 +78,6 @@ const NotificationBell = () => {
       socket.off("prescription-complete");
     };
   }, [currentUser]);
-
-  useEffect(() => {
-    socket.emit("register", currentUser, role);
-  }, [currentUser, role]);
 
   const handleNewNotification = async (notification) => {
     const normalizedNotification = normalizeNotification(notification);

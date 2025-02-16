@@ -17,36 +17,37 @@ import {
 import { addToFavorites } from "../Services/favoritesServices";
 import { addToCart, addToCartF } from "../Services/cartServices";
 import { useCart } from "../../Context/CartContext";
+import { useSocket } from "../../Context/SocketContext";
 
 const ProductPage = () => {
   const [brands, setBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([10, 150]);
   const [displayedPriceRange, setDisplayedPriceRange] = useState([10, 150]);
-  const { currentUser, token } = useAuth();
+  const { currentUser, token, role } = useAuth();
   const { category, subcategory } = useParams();
   const [products, setProducts] = useState([]);
   const prescriptionId = null;
   const { cartItems, setCartItems, totalPrice, setTotalPrice } = useCart();
-
-  // PAGINATION - START
+  const socket = useSocket();
+  console.log("blala",socket);
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(9); // Sau 12, după preferință
-  // PAGINATION - END
+  const [productsPerPage] = useState(9);
 
   console.log(category + " " + subcategory);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedBrands = await fetchBrands(token); // Fetch brands
+        const fetchedBrands = await fetchBrands(token);
         setBrands(fetchedBrands);
 
         const fetchedProducts = await fetchProductsByCategory(
           category,
           subcategory,
           token
-        ); // Fetch products
+        );
         setProducts(fetchedProducts);
         console.log("rani", fetchedProducts);
       } catch (error) {
@@ -54,9 +55,9 @@ const ProductPage = () => {
       }
     };
 
-    fetchData(); // Call the combined fetch function
+    fetchData();
   }, [category, subcategory]);
-
+  
   const handleAddToCart = async (productId) => {
     try {
       const result = await addToCart(
@@ -73,7 +74,6 @@ const ProductPage = () => {
       }
     } catch (error) {
       console.error("Failed to add product to cart:", error.message);
-      // Handle error, show an error message to the user
     }
   };
 
@@ -89,10 +89,8 @@ const ProductPage = () => {
         const result2 = addToCartF(productId, token);
         console.log(result2);
       }
-      // Handle success, update UI or show a message
     } catch (error) {
       console.error("Failed to add product to cart:", error.message);
-      // Handle error, show an error message to the user
     }
   };
 

@@ -61,7 +61,7 @@ export const fetchDoctorName = async (token) => {
     const doctorName = data.doctorNameB;
     console.log("doctor",doctorName);
 
-    return { success: true, doctorName};
+    return  doctorName;
   } catch (error) {
     console.error("Error in fetchDoctorDetails:", error);
     return { success: false, error: error.message };

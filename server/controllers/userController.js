@@ -2,7 +2,6 @@
 const User = require("../models/userModel");
 const Doctor = require("../models/doctorModel");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "09b844471b9798b9e81ae3f67efb02c0196f51291d450fa53359d1e3f2bfa0b9a99b93210585a6d2fe3f79ec340f3c38e2ff4e1e48aabe20f1cd422732863663";
 
 const isValidEmail = (email) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -142,7 +141,7 @@ exports.login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
       },
-      SECRET_KEY,
+      process.env.SECRET_KEY,
       { expiresIn: "24h" }
     );
 

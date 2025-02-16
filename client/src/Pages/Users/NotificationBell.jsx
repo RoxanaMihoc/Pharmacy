@@ -4,13 +4,11 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import "./styles/notification.css";
-import io from "socket.io-client";
 import {
   fetchNotifications,
   saveNotificationToDatabase,
 } from "../Notifications/Services/notificationServices";
-
-const socket = io("http://localhost:3000");
+import { useSocket } from "../../Context/SocketContext";
 
 const NotificationBell = () => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -20,10 +18,10 @@ const NotificationBell = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const history = useHistory();
   const notificationRef = useRef(null);
+  const socket = useSocket();
 
   useEffect(() => {
     console.log("Setting up socket listeners", currentUser, role);
-    socket.emit("register", currentUser, role);
 
     const handleNewNotification = async (notification) => {
       console.log("Notification received:", notification);
@@ -63,7 +61,7 @@ const NotificationBell = () => {
       console.log("Cleaning up socket listeners");
       socket.off("new-prescription", handleNewNotification);
     };
-  }, [notifications, currentUser, role]);
+  }, []);
 
   // Normalize notification structure
   const normalizeNotification = (notification) => {

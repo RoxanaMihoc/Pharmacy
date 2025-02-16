@@ -18,12 +18,12 @@ const PrescriptionsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleId, setVisibleId] = useState(null);
   const { currentUser, role, token } = useAuth();
-  const itemsPerPage = 8; // Define how many prescriptions per page
+  const itemsPerPage = 8;
   const history = useHistory();
-  const [sortOption, setSortOption] = useState(null); // Tracks current sort option
+  const [sortOption, setSortOption] = useState(null);
 
   const sortPrescriptions = (option) => {
-    const sortedPrescriptions = [...prescriptions]; // Create a copy to avoid mutating the state directly
+    const sortedPrescriptions = [...prescriptions];
 
     if (option === "date-newest") {
       sortedPrescriptions.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -32,54 +32,28 @@ const PrescriptionsList = () => {
     }
 
     setPrescriptions(sortedPrescriptions);
-    setSortOption(option); // Update the state with the selected option
+    setSortOption(option);
   };
+
+  useEffect(() => {
+    console.log("Updated pres state:", prescriptions);
+  }, [prescriptions]);
 
   useEffect(() => {
     const fetchAllPrescriptions = async () => {
       try {
-        const { data } = await fetchPrescriptions(
-           token
-        );
-
-        if (data) {
-          setPrescriptions(data);
-          console.log("LALAL",prescriptions[0].patient.firstNme);
-        }
+        const data = await fetchPrescriptions(token);
+        console.log("Fetched Data:", data);
+        setPrescriptions(data); // ✅ Correct: Replace state instead of appending
       } catch (error) {
         console.error("Unexpected error:", error);
       }
     };
 
-    fetchAllPrescriptions();
-  }, []);
-
-  // const fetchSummaryStats = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:3000/home/summary-stats/${currentUser}`,
-  //       {
-  //         method: "GET",
-  //       }
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error(`Failed to fetch summary stats: ${response.status}`);
-  //     }
-  //     const data = await response.json();
-  //     setSummaryStats({
-  //       prescriptionsThisMonth: data.prescriptionsThisMonth || 0,
-  //       patientsRequestingRefill: data.patientsRequestingRefill || 0,
-  //       newPatientRequests: data.newPatientRequests || 0,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error fetching summary stats:", error.message);
-  //   }
-  // };
-
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value.toLowerCase());
-    setCurrentPage(1); // Reset to the first page after filter change
-  };
+    if (token) {
+      fetchAllPrescriptions();
+    }
+  }, [token]);
 
   const filteredPrescriptions = prescriptions.filter(
     (prescription) =>
@@ -221,7 +195,7 @@ const PrescriptionsList = () => {
                         ))}
                       </div>
 
-                      {/* Diagnosis and Investigation Section */}
+
                       <div className="diagnosis-invest">
                         <p>
                           <strong>Diagnostic:</strong> {prescription.diagnosis}
@@ -240,7 +214,6 @@ const PrescriptionsList = () => {
         </tbody>
       </table>
 
-      {/* Pagination */}
       <div className="pagination">
         <span
           className="transparent-button"

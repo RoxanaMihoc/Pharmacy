@@ -36,26 +36,23 @@ const PrescriptionsList = () => {
       }
   
       setPrescriptions(sortedPrescriptions);
-      setSortOption(option); // Update the state with the selected option
+      setSortOption(option);
     };
 
   useEffect(() => {
     const getDoctorForPatient = async () => {
       if (currentUser) {
-        const { success, doctorName} = await fetchDoctorName(token
+        const  doctorName= await fetchDoctorName(token
         );
-        console.log(doctorName)
-
-        if (success) {
-          setDoctor(doctorName); // Set the doctor data in state
-        } else {
-          console.error("Error fetching doctor data");
-        }
+        console.log("lala",doctorName)
+        setDoctor(doctorName);
       }
     };
-
+    if(token)
+    {
     getDoctorForPatient();
-  }, []);
+    }
+  }, [token]);
 
   useEffect(() => {
     const fetchPrescriptionsData = async () => {
@@ -63,7 +60,6 @@ const PrescriptionsList = () => {
         const data = await fetchPrescriptions(token);
         setPrescriptions(data);
 
-        // Find and set the active prescription
         const activePrescription = data.find(
           (p) => p.currentPrescription === true
         );
@@ -84,7 +80,7 @@ const PrescriptionsList = () => {
       const { success } = await markPresAsCurrent(prescriptionId, token);
 
       if (success) {
-        setCurrentPrescriptionId(prescriptionId); // Update the current active prescription ID
+        setCurrentPrescriptionId(prescriptionId);
       }
     } catch (error) {
       console.error("Error marking prescription as current:", error);

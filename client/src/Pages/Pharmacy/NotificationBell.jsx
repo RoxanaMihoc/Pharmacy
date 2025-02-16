@@ -72,7 +72,6 @@ const NotificationBell = () => {
 //   };
 useEffect(() => {
   console.log("Setting up socket listeners", currentUser, role);
-  socket.emit("register", currentUser, role);
 
   const handleNewNotification = (notification) => {
     console.log("Notification received:", notification);
